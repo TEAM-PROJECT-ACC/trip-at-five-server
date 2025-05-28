@@ -8,6 +8,6 @@ public class AccommodationController {
 
   @GetMapping("/")
   public String test() {
-    return "success";    
+    return "Server Connection!!!";    
   }
 }
