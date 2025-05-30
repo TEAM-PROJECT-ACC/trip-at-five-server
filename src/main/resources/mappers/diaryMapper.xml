@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="diaryMapper" >
+	<select id="selectTotalCount" resultType="_int" >
+		SELECT COUNT(*) FROM DIARY_TB WHERE MEM_NO = #{memNo}
+	</select>
+	<select id="selectAllList" resultType="DiaryVO" >
+		SELECT
+			LOG_SQ,
+			LOG_TITLE,
+			LOG_CONT,
+			LOG_REG_DT
+		FROM DIARY_TB WHERE MEM_NO = #{memNo}
+	</select>
+</mapper>
