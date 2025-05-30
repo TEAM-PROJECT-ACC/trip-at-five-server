@@ -1,4 +1,4 @@
-package com.kh.clock.diary.repository;
+package com.kh.clock.diary.domain;
 
 import java.sql.Date;
 import lombok.AllArgsConstructor;
