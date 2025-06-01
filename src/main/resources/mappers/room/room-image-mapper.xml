@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="roomImageMapper">
+	
+	<!-- 객실 이미지 등록 INSERT문 -->
+ 	<insert id="insertRoomImage">
+    	INSERT INTO ROOM_IMAGE_TB VALUES (
+			ROOM_IMG_SEQ.NEXTVAL, 
+			#{roomImgOrgName},
+			#{roomImgPathName},
+			DEFAULT,
+			#{roomNo}
+		)
+  	</insert>
+</mapper>

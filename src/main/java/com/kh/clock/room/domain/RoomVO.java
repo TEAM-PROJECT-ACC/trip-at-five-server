@@ -1,13 +1,12 @@
-package com.kh.clock.room.repository;
+package com.kh.clock.room.domain;
 
-import java.util.List;
-import org.springframework.web.multipart.MultipartFile;
+import java.sql.Date;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RoomDTO {
+public class RoomVO {
   /**
    * roomSq : 객실번호
    * roomName : 객실명
@@ -17,6 +16,7 @@ public class RoomDTO {
    * roomStdPpl : 객실 기준인원
    * roomMaxPpl : 객실 최대인원
    * roomCnt : 객실 수
+   * roomRegDt : 객실 등록일
    * accomNo : 숙박업소번호
    */
   private int roomSq;
@@ -27,5 +27,7 @@ public class RoomDTO {
   private int roomStdPpl;
   private int roomMaxPpl;
   private int roomCnt;
+  private Date roomRegDt;
   private int accomNo;
+
 }

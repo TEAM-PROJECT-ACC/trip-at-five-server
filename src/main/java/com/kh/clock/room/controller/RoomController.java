@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.kh.clock.room.repository.RoomDTO;
+import com.kh.clock.room.domain.RoomVO;
 import com.kh.clock.room.service.RoomServiceImpl;
 
 @RestController
@@ -38,19 +38,20 @@ public class RoomController {
   @PostMapping("")
   public ResponseEntity<Object> insertRoom(
       @PathVariable("accomNo") int accomNo, 
-      @ModelAttribute RoomDTO roomDTO, 
+      @ModelAttribute RoomVO roomVo, 
       @RequestPart("images") MultipartFile[] images) {
     // 데이터 확인하기
-//    System.out.println(roomDTO); 
-    if(images != null) {
-      for(MultipartFile mf : images) System.out.println(mf.getOriginalFilename());
-    }
+//    System.out.println(roomVo); 
+//    if(images != null) {
+//      for(MultipartFile mf : images) System.out.println(mf.getOriginalFilename());
+//    }
     
-    int result = roomService.insertRoom(roomDTO, images);
+    int result = roomService.insertRoom(roomVo, images);
     
-    System.out.println(result);
-
+    if(result > 0) return ResponseEntity.status(HttpStatus.OK).body(roomVo);
+    else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 등록에 실패했습니다.");
     
-    return ResponseEntity.status(HttpStatus.OK).body(roomDTO);
   }
+
+  
 }
