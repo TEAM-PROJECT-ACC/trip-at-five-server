@@ -39,7 +39,9 @@ public class RoomController {
   public ResponseEntity<Object> insertRoom(
       @PathVariable("accomNo") int accomNo, 
       @ModelAttribute RoomVO roomVo, 
-      @RequestPart("images") MultipartFile[] images) {
+   // required = false 으로 해서 필수 항목에서 제외 => null 일 경우 계속 400에러 발생..
+      @RequestPart(value = "images", required = false) MultipartFile[] images) {
+    
     // 데이터 확인하기
 //    System.out.println(roomVo); 
 //    if(images != null) {

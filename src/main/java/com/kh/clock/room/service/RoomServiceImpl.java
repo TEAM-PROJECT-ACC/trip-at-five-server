@@ -32,7 +32,8 @@ public class RoomServiceImpl implements RoomSerivce {
   @Transactional
   public int insertRoom(RoomVO room, MultipartFile[] images) {
     int roomImageResult = 0;
-    List<String> fileUrls = saveRoomImage(images);
+//    System.out.println(room);
+//    System.out.println(images);
     int insertResult = roomDAO.insertRoom(room);
 //    System.out.println(insertResult);
     
@@ -43,18 +44,22 @@ public class RoomServiceImpl implements RoomSerivce {
        */
       int roomNo = room.getRoomSq(); // 트랜잭션 처리로 인해 방금 INSERT 한 객실 번호 값 불러오기
       
-      // 객실 이미지 처리
-      for(int i = 0; i < fileUrls.size(); i++) {
-        roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(images[i].getOriginalFilename(), fileUrls.get(i), roomNo));
-      }
-      
-      // 전달 받은 파일의 갯수와 DB에서 INSERT 한 행의 갯수가 동일하면 저장 성공!
-      if(roomImageResult == fileUrls.size()) {
-        System.out.println("파일 데이터 저장 성공!");
+      // 파일이 있을 경우만 실행
+      if(images != null) {
+        // 객실 이미지 처리
+        List<String> fileUrls = saveRoomImage(images);
+        for(int i = 0; i < fileUrls.size(); i++) {
+          roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(images[i].getOriginalFilename(), fileUrls.get(i), roomNo));
+        }
+        
+        // 전달 받은 파일의 갯수와 DB에서 INSERT 한 행의 갯수가 동일하면 저장 성공!
+        if(roomImageResult == fileUrls.size()) {
+          System.out.println("파일 데이터 저장 성공!");
+        }
       }
     }
     
-    return (insertResult > 0 && roomImageResult == fileUrls.size()) ? 1 : 0;
+    return insertResult;
   }
   // 파일 처리
    private List<String> saveRoomImage(MultipartFile[] mp) {
