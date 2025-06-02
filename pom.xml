@@ -78,12 +78,10 @@
 		    <artifactId>gson</artifactId>
 		</dependency>
 		<!-- 비밀번호 암호화 Security -->
-		<!--
 			<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		-->
 		<!-- 이메일 인증 -->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
