@@ -1,8 +1,20 @@
 package com.kh.clock.accommodation.repository;
 
-import org.springframework.stereotype.Repository;
+import lombok.Data;
 
-@Repository
+@Data
 public class AccomDTO {
-
+  private int accomSq;
+  private String accomName;
+  private String accomDesc;
+  private double accomLon;
+  private double accomLat;
+  private String accomZipCode;
+  private String accomAddr;
+  private String accomPhone;
+  private String pubFacInfo;
+  private String inRoomFacInfo;
+  private String etcFacInfo;
+  private int accomTypeNo;
+  private int locId;
 }

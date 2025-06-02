@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accommodationMapper">
+
+    <select id="selectAccomList" resultType="com.kh.clock.accommodation.repository.AccomDTO">
+        SELECT 
+            ACCOM_SQ AS accomSq,
+            ACCOM_NAME AS accomName,
+            ACCOM_DESC AS accomDesc,
+            ACCOM_LON AS accomLon,
+            ACCOM_LAT AS accomLat,
+            ACCOM_ZIP_CODE AS accomZipCode,
+            ACCOM_ADDR AS accomAddr,
+            ACCOM_PHONE AS accomPhone,
+            ACCOM_REG_DT AS accomRegDt,
+            PUB_FAC_INFO AS pubFacInfo,
+            IN_ROOM_FAC_INFO AS inRoomFacInfo,
+            ETC_FAC_INFO AS etcFacInfo,
+            ACCOM_TYPE_NO AS accomTypeNo,
+            LOC_ID AS locId
+        FROM ACCOM
+        ORDER BY ACCOM_SQ DESC
+    </select>
+
+    <select id="selectAccomDetail" parameterType="int" resultType="com.kh.clock.accommodation.repository.AccomDTO">
+        SELECT 
+            ACCOM_SQ AS accomSq,
+            ACCOM_NAME AS accomName,
+            ACCOM_DESC AS accomDesc,
+            ACCOM_LON AS accomLon,
+            ACCOM_LAT AS accomLat,
+            ACCOM_ZIP_CODE AS accomZipCode,
+            ACCOM_ADDR AS accomAddr,
+            ACCOM_PHONE AS accomPhone,
+            ACCOM_REG_DT AS accomRegDt,
+            PUB_FAC_INFO AS pubFacInfo,
+            IN_ROOM_FAC_INFO AS inRoomFacInfo,
+            ETC_FAC_INFO AS etcFacInfo,
+            ACCOM_TYPE_NO AS accomTypeNo,
+            LOC_ID AS locId
+        FROM ACCOM
+        WHERE ACCOM_SQ = #{accomSq}
+    </select>
+
+    <insert id="insertAccom" parameterType="com.kh.clock.accommodation.repository.AccomDTO">
+        INSERT INTO ACCOM (
+            ACCOM_SQ,
+            ACCOM_NAME,
+            ACCOM_DESC,
+            ACCOM_LON,
+            ACCOM_LAT,
+            ACCOM_ZIP_CODE,
+            ACCOM_ADDR,
+            ACCOM_PHONE,
+            PUB_FAC_INFO,
+            IN_ROOM_FAC_INFO,
+            ETC_FAC_INFO,
+            ACCOM_TYPE_NO,
+            LOC_ID
+        ) VALUES (
+            SEQ_ACCOM_SQ.NEXTVAL,
+            #{accomName},
+            #{accomDesc},
+            #{accomLon},
+            #{accomLat},
+            #{accomZipCode},
+            #{accomAddr},
+            #{accomPhone},
+            #{pubFacInfo},
+            #{inRoomFacInfo},
+            #{etcFacInfo},
+            #{accomTypeNo},
+            #{locId}
+        )
+    </insert>
+
+    <update id="updateAccom" parameterType="com.kh.clock.accommodation.repository.AccomDTO">
+        UPDATE ACCOM
+        SET 
+            ACCOM_NAME = #{accomName},
+            ACCOM_DESC = #{accomDesc},
+            ACCOM_LON = #{accomLon},
+            ACCOM_LAT = #{accomLat},
+            ACCOM_ZIP_CODE = #{accomZipCode},
+            ACCOM_ADDR = #{accomAddr},
+            ACCOM_PHONE = #{accomPhone},
+            PUB_FAC_INFO = #{pubFacInfo},
+            IN_ROOM_FAC_INFO = #{inRoomFacInfo},
+            ETC_FAC_INFO = #{etcFacInfo},
+            ACCOM_TYPE_NO = #{accomTypeNo},
+            LOC_ID = #{locId}
+        WHERE ACCOM_SQ = #{accomSq}
+    </update>
+
+    <delete id="deleteAccom" parameterType="int">
+        DELETE FROM ACCOM
+        WHERE ACCOM_SQ = #{accomSq}
+    </delete>
+    
+    <select id="searchAccom">
+    
+    </select>
+</mapper>
