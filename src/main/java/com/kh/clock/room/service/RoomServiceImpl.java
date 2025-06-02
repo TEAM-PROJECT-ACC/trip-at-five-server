@@ -9,8 +9,10 @@ import com.kh.clock.common.file.OclockFileUtils;
 import com.kh.clock.common.file.UploadFileType;
 import com.kh.clock.room.domain.RoomVO;
 import com.kh.clock.room.repository.dao.RoomDAO;
+import com.kh.clock.room.repository.dto.GetRoomDTO;
 import com.kh.clock.room.repository.dto.RoomDTO;
 import com.kh.clock.room.repository.dto.RoomImageDTO;
+import com.kh.clock.room.repository.dto.RoomListDTO;
 
 @Service
 public class RoomServiceImpl implements RoomSerivce {
@@ -23,6 +25,16 @@ public class RoomServiceImpl implements RoomSerivce {
     this.roomDAO = roomDAO;
     this.oFileUtils = oFileUtils;
     this.roomImageService = roomImageService;
+  }
+
+  /**
+   * 전체 목록 조회
+   */
+  @Override
+  public List<RoomListDTO> selectAllList(int accomNo) {
+    List<RoomListDTO> roomList = roomDAO.selectAllList(accomNo);
+    
+    return roomList != null ? roomList : null;
   }
 
   /**
@@ -97,8 +109,8 @@ public class RoomServiceImpl implements RoomSerivce {
   }
 
   @Override
-  public int findByRoomSq(int accomNo) {
-    return roomDAO.findByAccomNo(accomNo);
+  public RoomVO findRoomByAccomNoAndRoomSq(GetRoomDTO getRoomDTO) {
+    return roomDAO.findRoomByAccomNoAndRoomSq(getRoomDTO);
   }
 
 }

@@ -1,8 +1,11 @@
 package com.kh.clock.room.repository.dao;
 
+import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import com.kh.clock.room.domain.RoomVO;
+import com.kh.clock.room.repository.dto.GetRoomDTO;
+import com.kh.clock.room.repository.dto.RoomListDTO;
 
 @Repository
 public class RoomDAO {
@@ -20,5 +23,13 @@ public class RoomDAO {
   // 숙박업소 아이디로 객실찾기
   public int findByAccomNo(int accomNo) {
     return sqlSession.selectOne("roomMapper.findByAccomNo", accomNo);
+  }
+
+  public List<RoomListDTO> selectAllList(int accomNo) {
+    return sqlSession.selectList("roomMapper.selectAllList", accomNo);
+  }
+
+  public RoomVO findRoomByAccomNoAndRoomSq(GetRoomDTO getRoomDTO) {
+    return sqlSession.selectOne("roomMapper.findRoomByAccomNoAndRoomSq", getRoomDTO);
   }
 }
