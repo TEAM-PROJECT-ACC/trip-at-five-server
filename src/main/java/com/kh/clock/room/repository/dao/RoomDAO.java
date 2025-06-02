@@ -5,6 +5,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import com.kh.clock.room.domain.RoomVO;
 import com.kh.clock.room.repository.dto.GetRoomDTO;
+import com.kh.clock.room.repository.dto.RoomDetailDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
 
 @Repository
@@ -29,7 +30,7 @@ public class RoomDAO {
     return sqlSession.selectList("roomMapper.selectAllList", accomNo);
   }
 
-  public RoomVO findRoomByAccomNoAndRoomSq(GetRoomDTO getRoomDTO) {
+  public RoomDetailDTO findRoomByAccomNoAndRoomSq(GetRoomDTO getRoomDTO) {
     return sqlSession.selectOne("roomMapper.findRoomByAccomNoAndRoomSq", getRoomDTO);
   }
 }

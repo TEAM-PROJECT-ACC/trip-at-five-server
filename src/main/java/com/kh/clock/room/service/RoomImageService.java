@@ -1,5 +1,6 @@
 package com.kh.clock.room.service;
 
+import java.util.List;
 import com.kh.clock.room.repository.dto.RoomImageDTO;
 
 public interface RoomImageService {
@@ -11,4 +12,11 @@ public interface RoomImageService {
    * @return
    */
   int insertRoomImage(RoomImageDTO roomimageDTO);
+  
+  /**
+   * 특정 객실 이미지 목록 조회
+   * @param roomSq : 객실번호
+   * @return
+   */
+  List<RoomImageDTO> findRoomImageByRoomSq(int roomSq);
 }

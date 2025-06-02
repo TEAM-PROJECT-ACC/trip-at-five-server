@@ -1,5 +1,6 @@
 package com.kh.clock.room.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.kh.clock.room.domain.RoomVO;
 import com.kh.clock.room.repository.dto.GetRoomDTO;
+import com.kh.clock.room.repository.dto.RoomDetailDTO;
+import com.kh.clock.room.repository.dto.RoomImageDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
+import com.kh.clock.room.service.RoomImageServiceImpl;
 import com.kh.clock.room.service.RoomServiceImpl;
 
 @RestController
@@ -22,9 +26,11 @@ import com.kh.clock.room.service.RoomServiceImpl;
 public class RoomController {
   
   private RoomServiceImpl roomService;
+  private RoomImageServiceImpl roomImageService;
   
-  public RoomController(RoomServiceImpl roomService) {
+  public RoomController(RoomServiceImpl roomService, RoomImageServiceImpl roomImageService) {
     this.roomService = roomService;
+    this.roomImageService = roomImageService;
   }
   
   /**
@@ -55,14 +61,22 @@ public class RoomController {
 //    System.out.println(roomSq);
     
     // 객실 정보 조회
-    RoomVO roomVO = roomService.findRoomByAccomNoAndRoomSq(new GetRoomDTO(accomNo, roomSq));
+    RoomDetailDTO roomDetailDTO = roomService.findRoomByAccomNoAndRoomSq(new GetRoomDTO(accomNo, roomSq));
     
     // 객실 이미지 정보 조회
+    List<RoomImageDTO> roomImageList = roomImageService.findRoomImageByRoomSq(roomSq);
     
-//    System.out.println(roomVO.getRoomName());
-
-    if(roomVO != null) return ResponseEntity.status(HttpStatus.OK).body(roomVO);
-    else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 조회에 실패했습니다.");
+    for(RoomImageDTO ri : roomImageList) System.out.println("파일명 : " + ri); // 디버깅
+    
+    if(roomDetailDTO != null) {
+      List<String> imageNameList = new ArrayList<>();
+      for(int i = 0; i < roomImageList.size(); i++) {
+        imageNameList.add(roomImageList.get(i).getRoomImgPathName());
+      }
+//      System.out.println(roomDetailDTO);
+      roomDetailDTO.setImageList(imageNameList);
+      return ResponseEntity.status(HttpStatus.OK).body(roomDetailDTO);
+    } else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 조회에 실패했습니다.");
   }
   
   /**

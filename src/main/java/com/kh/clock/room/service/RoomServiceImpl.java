@@ -11,6 +11,7 @@ import com.kh.clock.room.domain.RoomVO;
 import com.kh.clock.room.repository.dao.RoomDAO;
 import com.kh.clock.room.repository.dto.GetRoomDTO;
 import com.kh.clock.room.repository.dto.RoomDTO;
+import com.kh.clock.room.repository.dto.RoomDetailDTO;
 import com.kh.clock.room.repository.dto.RoomImageDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
 
@@ -109,7 +110,7 @@ public class RoomServiceImpl implements RoomSerivce {
   }
 
   @Override
-  public RoomVO findRoomByAccomNoAndRoomSq(GetRoomDTO getRoomDTO) {
+  public RoomDetailDTO findRoomByAccomNoAndRoomSq(GetRoomDTO getRoomDTO) {
     return roomDAO.findRoomByAccomNoAndRoomSq(getRoomDTO);
   }
 

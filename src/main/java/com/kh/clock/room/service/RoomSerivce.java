@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.clock.room.domain.RoomVO;
 import com.kh.clock.room.repository.dto.GetRoomDTO;
 import com.kh.clock.room.repository.dto.RoomDTO;
+import com.kh.clock.room.repository.dto.RoomDetailDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
 
 
@@ -43,5 +44,5 @@ public interface RoomSerivce {
    * @param accomNo : 숙박업소 번호
    * @return
    */
-  RoomVO findRoomByAccomNoAndRoomSq(GetRoomDTO getRoomDTO);
+  RoomDetailDTO findRoomByAccomNoAndRoomSq(GetRoomDTO getRoomDTO);
 }

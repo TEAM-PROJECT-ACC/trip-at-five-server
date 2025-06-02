@@ -10,7 +10,7 @@
 	</select>
 	
 	<!-- 특정 객실 조회 -->
-	<select id="findRoomByAccomNoAndRoomSq" resultType="RoomVO">
+	<select id="findRoomByAccomNoAndRoomSq" resultType="com.kh.clock.room.repository.dto.RoomDetailDTO">
 		SELECT * FROM ROOM_TB WHERE ACCOM_NO = #{accomNo} AND ROOM_SQ = #{roomSq}
 	</select>
 	

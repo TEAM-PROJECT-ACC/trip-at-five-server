@@ -1,5 +1,6 @@
 package com.kh.clock.room.repository.dao;
 
+import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import com.kh.clock.room.repository.dto.RoomImageDTO;
@@ -14,6 +15,10 @@ public class RoomImageDAO {
   
   public int insertRoomImage(RoomImageDTO roomImageDTO) {
     return sqlSession.insert("roomImageMapper.insertRoomImage", roomImageDTO);
+  }
+
+  public List<RoomImageDTO> findRoomImageByRoomSq(int roomNo) {
+    return sqlSession.selectList("roomImageMapper.findRoomImageByRoomSq", roomNo);
   }
 
 }
