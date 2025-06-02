@@ -4,7 +4,7 @@
 -- 25/05/28 ROOM_DESC 컬럼 필요성이 없어서 삭제
 -- 25/05/29 결제 테이블 수정, 숙박업소유형 데이터 변경
 -- 25/05/30 일지 테이블명 오타 & 의미가 맞지 않은 이유로 수정
--- 25/06/02 일지 테이블 컬럼명 수정
+-- 25/06/02 일지 테이블 컬럼명 수정, 회원 테이블 주소 컬럼 크기 600으로 변경
 
 -----------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ CREATE TABLE MEMBER_TB (
     MEM_NICK VARCHAR2(50) NOT NULL,
     CK_MEM_ST VARCHAR2(10) DEFAULT 'ACTIVE' NOT NULL,
     MEM_PHONE VARCHAR2(11),
-    MEM_ADDR VARCHAR2(50),
+    MEM_ADDR VARCHAR2(600),
     MEM_REG_DT DATE DEFAULT SYSDATE NOT NULL,
     MEM_SOC_UID VARCHAR2(50),
     CK_SOC_PLT VARCHAR2(10) DEFAULT 'NORMAL' NOT NULL,
@@ -59,6 +59,8 @@ COMMENT ON COLUMN MEMBER_TB.MEM_INACTIVE_DT IS '비활성화날짜';
 
 DROP SEQUENCE MEM_SEQ;
 CREATE SEQUENCE MEM_SEQ;
+
+--ALTER TABLE MEMBER_TB MODIFY MEM_ADDR VARCHAR2(600);
 -----------------------------------------------------------------------------
 -- DIARY_TB 일지 테이블
 DROP TABLE DIARY_TB;
