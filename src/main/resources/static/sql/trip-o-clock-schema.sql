@@ -5,6 +5,7 @@
 -- 25/05/29 결제 테이블 수정, 숙박업소유형 데이터 변경
 -- 25/05/30 일지 테이블명 오타 & 의미가 맞지 않은 이유로 수정
 -- 25/06/02 일지 테이블 컬럼명 수정, 회원 테이블 주소 컬럼 크기 600으로 변경
+-- 25/06/03 회원테이블 비밀번호 암호화로 인해 데이터 크기 100으로 변경
 
 -----------------------------------------------------------------------------
 
@@ -21,7 +22,7 @@ DROP TABLE MEMBER_TB;
 CREATE TABLE MEMBER_TB (
     MEM_SQ NUMBER,
     MEM_EMAIL_ID VARCHAR2(100) NOT NULL,
-    MEM_PWD VARCHAR2(30) NOT NULL,
+    MEM_PWD VARCHAR2(100) NOT NULL,
     MEM_NICK VARCHAR2(50) NOT NULL,
     CK_MEM_ST VARCHAR2(10) DEFAULT 'ACTIVE' NOT NULL,
     MEM_PHONE VARCHAR2(11),
@@ -61,6 +62,7 @@ DROP SEQUENCE MEM_SEQ;
 CREATE SEQUENCE MEM_SEQ;
 
 --ALTER TABLE MEMBER_TB MODIFY MEM_ADDR VARCHAR2(600);
+--ALTER TABLE MEMBER_TB MODIFY MEM_PWD VARCHAR2(100);
 -----------------------------------------------------------------------------
 -- DIARY_TB 일지 테이블
 DROP TABLE DIARY_TB;
