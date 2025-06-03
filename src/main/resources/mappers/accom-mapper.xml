@@ -19,86 +19,48 @@
         IN_ROOM_FAC_INFO,
         ETC_FAC_INFO,
         ACCOM_TYPE_NO,
-        A.LOC_ID
+        A.LOC_ID,
+        R.ROOM_PRICE
 	    FROM ACCOMMODATION_TB A
 	    JOIN LOCATION_TB L ON A.LOC_ID = L.LOC_ID
+	    JOIN (SELECT ACCOM_NO, MIN(ROOM_PRICE) ROOM_PRICE FROM ROOM_TB GROUP BY ACCOM_NO ) R ON A.ACCOM_SQ = R.ACCOM_NO
 	    WHERE L.LOC_NAME LIKE '%' || #{keyword} || '%'
 	    ORDER BY ACCOM_SQ DESC
     </select>
 
     <select id="selectAccomDetail" parameterType="int" resultType="com.kh.clock.accommodation.repository.AccomDTO">
         SELECT 
-            ACCOM_SQ,
-            ACCOM_NAME,
-            ACCOM_DESC,
-            ACCOM_LON,
-            ACCOM_LAT,
-            ACCOM_ZIP_CODE,
-            ACCOM_ADDR,
-            ACCOM_PHONE,
-            ACCOM_REG_DT,
-            PUB_FAC_INFO,
-            IN_ROOM_FAC_INFO,
-            ETC_FAC_INFO,
-            ACCOM_TYPE_NO,
-            LOC_ID
-        FROM ACCOMMODATION_TB
+        ACCOM_SQ,
+        ACCOM_NAME,
+        ACCOM_DESC,
+        ACCOM_LON,
+        ACCOM_LAT,
+        ACCOM_ZIP_CODE,
+        ACCOM_ADDR,
+        ACCOM_PHONE,
+        ACCOM_REG_DT,
+        PUB_FAC_INFO,
+        IN_ROOM_FAC_INFO,
+        ETC_FAC_INFO,
+        ACCOM_TYPE_NO,
+        A.LOC_ID,
+        R.ROOM_PRICE
+        FROM ACCOMMODATION_TB A
+        JOIN (SELECT ACCOM_NO, MIN(ROOM_PRICE) ROOM_PRICE FROM ROOM_TB GROUP BY ACCOM_NO ) R ON A.ACCOM_SQ = R.ACCOM_NO
         WHERE ACCOM_SQ = #{accomSq}
+        ORDER BY ACCOM_SQ DESC
     </select>
 
     <insert id="insertAccom" parameterType="com.kh.clock.accommodation.repository.AccomDTO">
-        INSERT INTO ACCOM (
-            ACCOM_SQ,
-            ACCOM_NAME,
-            ACCOM_DESC,
-            ACCOM_LON,
-            ACCOM_LAT,
-            ACCOM_ZIP_CODE,
-            ACCOM_ADDR,
-            ACCOM_PHONE,
-            PUB_FAC_INFO,
-            IN_ROOM_FAC_INFO,
-            ETC_FAC_INFO,
-            ACCOM_TYPE_NO,
-            LOC_ID
-        ) VALUES (
-            SEQ_ACCOM_SQ.NEXTVAL,
-            #{accomName},
-            #{accomDesc},
-            #{accomLon},
-            #{accomLat},
-            #{accomZipCode},
-            #{accomAddr},
-            #{accomPhone},
-            #{pubFacInfo},
-            #{inRoomFacInfo},
-            #{etcFacInfo},
-            #{accomTypeNo},
-            #{locId}
-        )
+        
     </insert>
 
     <update id="updateAccom" parameterType="com.kh.clock.accommodation.repository.AccomDTO">
-        UPDATE ACCOM
-        SET 
-            ACCOM_NAME = #{accomName},
-            ACCOM_DESC = #{accomDesc},
-            ACCOM_LON = #{accomLon},
-            ACCOM_LAT = #{accomLat},
-            ACCOM_ZIP_CODE = #{accomZipCode},
-            ACCOM_ADDR = #{accomAddr},
-            ACCOM_PHONE = #{accomPhone},
-            PUB_FAC_INFO = #{pubFacInfo},
-            IN_ROOM_FAC_INFO = #{inRoomFacInfo},
-            ETC_FAC_INFO = #{etcFacInfo},
-            ACCOM_TYPE_NO = #{accomTypeNo},
-            LOC_ID = #{locId}
-        WHERE ACCOM_SQ = #{accomSq}
+        
     </update>
 
     <delete id="deleteAccom" parameterType="int">
-        DELETE FROM ACCOM
-        WHERE ACCOM_SQ = #{accomSq}
+        
     </delete>
 
 </mapper>

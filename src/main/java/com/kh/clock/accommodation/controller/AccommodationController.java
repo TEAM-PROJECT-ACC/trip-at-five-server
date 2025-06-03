@@ -1,9 +1,11 @@
 package com.kh.clock.accommodation.controller;
 
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,10 +25,30 @@ public class AccommodationController {
   public AccommodationController(AccomService accomService) {
     this.accomService=accomService;
   }
-  
+  // 숙박 목록 조회
   @GetMapping
-  public List<AccomDTO> selectAccomList(@ModelAttribute AccomListInfoDTO accomListInfoDTO){
-    return accomService.selectAccomList(accomListInfoDTO);
+  public List<AccomDTO> selectAccomList(@RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "10") int size, @RequestParam(required = false) String keyword){
+    AccomListInfoDTO accomDto = new AccomListInfoDTO();
+
+    accomDto.setPage(page);
+    accomDto.setSize(size);
+    accomDto.setKeyword(keyword);
+    
+    return accomService.selectAccomList(accomDto);
+  }
+  
+  // 숙박 상세 페이지 조회
+  @GetMapping("/{accomSq}")
+  public ResponseEntity<AccomDTO> getAccommodationById(@PathVariable int accomSq) {
+    System.out.println(accomSq);
+    AccomDTO accomDetail = accomService.getAccommodationById(accomSq);
+    
+    if (accomDetail == null) {
+      return ResponseEntity.notFound().build();
+    }
+    
+    return ResponseEntity.ok(accomDetail);
   }
   
   @PostMapping

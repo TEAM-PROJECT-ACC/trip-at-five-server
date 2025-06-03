@@ -4,7 +4,9 @@ import java.util.List;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 public class AccomDAO {
   
@@ -19,12 +21,18 @@ public class AccomDAO {
     int offset = accomListInfoDTO.getPage() * accomListInfoDTO.getSize();
     RowBounds rb = new RowBounds(offset, accomListInfoDTO.getSize());
     
+    log.info("{}", accomListInfoDTO);
+    log.info("{}", offset);
+   
     return sqlSession.selectList("accommodationMapper.selectAccomList", accomListInfoDTO, rb);
   }
  
   // 숙박 상세 조회
   public AccomDTO selectAccomDetail(int accomSq) {
-      return sqlSession.selectOne("accommodationMapper.selectAccomDetail", accomSq);
+    log.info("DAO: accomSq = {}", accomSq);
+    AccomDTO accom = sqlSession.selectOne("accommodationMapper.selectAccomDetail", accomSq);
+    log.info("DAO: accomDetail = {}", accom);
+    return accom;
   }
   
   // 숙박 등록
@@ -47,8 +55,4 @@ public class AccomDAO {
     return sqlSession.selectList("accommodationMapper.searchAccom", searchFilter);
   }
 
-  public List<AccomDTO> filterAccomList() {
-    return sqlSession.selectList("accommodationMapper.filterAccomList");
-  }
-  
 }

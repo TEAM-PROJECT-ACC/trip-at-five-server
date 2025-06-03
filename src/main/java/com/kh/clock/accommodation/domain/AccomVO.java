@@ -20,5 +20,4 @@ public class AccomVO {
     private String etcFacInfo;    // 기타시설 정보
     private int accomTypeNo;      // 숙박업소 유형번호
     private int locId;            // 지역번호
-  
 }
