@@ -22,6 +22,9 @@ public class RoomServiceImpl implements RoomSerivce {
   @Value("${file.dir}")
   private String staticFilePath;
   
+  @Value("${file.delete}")
+  private String deletePath;
+  
   private RoomDAO roomDAO;
   private RoomImageServiceImpl roomImageService;
   private OclockFileUtils oFileUtils; // 해당 클래스에서 @Component를 작성했으므로 의존성 주입 가능! 
@@ -108,7 +111,7 @@ public class RoomServiceImpl implements RoomSerivce {
     return updateResult;
   }
   
-//파일 처리
+// 파일 저장 처리
   private List<String> saveRoomImage(MultipartFile[] mp) {
     String middlePath = UploadFileType.ROOM.getPath(); // 중간 폴더 경로
     String dateFolderPath = oFileUtils.createFilePath(middlePath);
@@ -134,64 +137,67 @@ public class RoomServiceImpl implements RoomSerivce {
   @Override
   @Transactional
   public int deleteRoomAndRoomImageByAccomNoAndRoomSq(RoomIdentifierDTO roomIdenDTO) {
-    int deleteResult = roomDAO.deleteRoomAndRoomImageByAccomNoAndRoomSq(roomIdenDTO);
-    System.out.println(deleteResult);
-  
-    if(deleteResult > 0) {
-      int roomNo = roomIdenDTO.getRoomSq();
-      
-      /**
-       * 1. 객실번호로 해당 객실 이미지 조회
-       * 
-       * 2. 객실 이미지 path 값으로 해당 경로에 파일이 있는 지 체크
-       * 
-       * 2-1. 체크 이후 파일 삭제
-       * 
-       * 3. 객실번호로 DB에서 데이터 삭제
-       */
-      
-      List<RoomImageDTO> roomImagePathList = roomImageService.findRoomImageByRoomSq(roomNo);
-      
-      for(RoomImageDTO r : roomImagePathList) System.out.println("삭제를 위해 조회한 이미지 : " + r.getRoomImgPathName());
-      
-      boolean flag = false;
-      for(int i = 0; i < roomImagePathList.size(); i++) {
-        flag = deleteFile(roomImagePathList.get(i).getRoomImgPathName()); // 파일 삭제 함수 호출
-        System.out.println("flag: " + flag);
-        if(flag) {
-          System.out.println(
-              roomImagePathList.get(i).getRoomImgPathName()
-              + " 경로에 있는 " + roomImagePathList.get(i).getRoomImgOrgName()
-              + " 파일을 삭제하지 못했습니다.");
-          break;
-        }
+    /**
+     * 1. 객실번호로 해당 객실 이미지 조회
+     * 
+     * 2. 객실 이미지 path 값으로 해당 경로에 파일이 있는 지 체크
+     * 
+     * 2-1. 체크 이후 파일 삭제
+     * 
+     * 3. 객실번호로 DB에서 데이터 삭제
+     */
+    List<RoomImageDTO> roomImagePathList = roomImageService.findRoomImageByRoomSq(roomIdenDTO.getRoomSq());
+    
+    for(RoomImageDTO r : roomImagePathList) System.out.println("삭제를 위해 조회한 이미지 : " + r.getRoomImgPathName());
+    
+    boolean flag = false;
+    for(int i = 0; i < roomImagePathList.size(); i++) {
+      flag = deleteFile(roomImagePathList.get(i).getRoomImgPathName()); // 파일 삭제 함수 호출
+//      System.out.println("flag: " + flag);
+      if(!flag) {
+        System.out.println(
+            roomImagePathList.get(i).getRoomImgPathName()
+            + " 경로에 있는 " + roomImagePathList.get(i).getRoomImgOrgName()
+            + " 파일을 삭제하지 못했습니다.");
+        break;
       }
-      
-      if(flag) roomImageService.deleteRoomImageByRoomSq(roomNo);
     }
+    
+//    if(flag) roomImageService.deleteRoomImageByRoomSq(roomIdenDTO.getRoomSq());
+    
+    
+    int deleteResult = roomDAO.deleteRoomAndRoomImageByAccomNoAndRoomSq(roomIdenDTO);
+    
     
     return deleteResult;
   }
+  
+  // 파일 삭제
   private boolean deleteFile(String path) {
-    System.out.println(path);
-    File file = new File(path);
-    
-    if(file.exists()) {
-      if(file.delete()) {
-        System.out.println("파일 삭제");
-        return true;
-      } else {
-        System.out.println("파일 삭제 실패");
-      }
-    }
-    return false;
+     String basePath = new File(deletePath).getAbsolutePath(); // 절대경로
+     String fullPath = basePath + File.separator + path;
+  
+     File file = new File(fullPath);
+     System.out.println("삭제 경로: " + file.getPath());
+  
+     if (file.exists()) {
+         if (file.delete()) {
+             System.out.println("파일 삭제 성공");
+             return true;
+         } else {
+             System.out.println("파일 삭제 실패");
+         }
+     } else {
+         System.out.println("파일이 존재하지 않음");
+     }
+  
+     return false;
   }
+
+
 
   @Override
   public RoomDetailDTO findRoomByAccomNoAndRoomSq(RoomIdentifierDTO getRoomDTO) {
     return roomDAO.findRoomByAccomNoAndRoomSq(getRoomDTO);
   }
-
-  
-
 }

@@ -133,12 +133,12 @@ public class RoomController {
     int result = roomService.updateRoom(roomVo, images);
     
     if(result > 0) return ResponseEntity.status(HttpStatus.OK).body(roomVo);
-    else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 등록에 실패했습니다.");
+    else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 수정에 실패했습니다.");
     
   }
   
   /**
-   * 
+   * 객실 정보 삭제
    * @param accomNo
    * @param roomSq
    * @return

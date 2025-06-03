@@ -29,6 +29,7 @@ public interface RoomImageService {
 
   /**
    * 객실 이미지 삭제
+   * => ON DELETE CASCADE 삭제 옵션으로 인해 사용X
    * @param roomNo
    * @return
    */
