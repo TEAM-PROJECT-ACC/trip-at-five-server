@@ -29,10 +29,42 @@ public class DiaryDAO {
    * @param int pageNo
    * @return List<DiaryVO>
    */
-  public List<DiaryVO> selectAllList(int memNo, PageInfo pageInfo) {    
+  public List<DiaryVO> selectAllList(int memNo, PageInfo pageInfo) {
     int offset = (pageInfo.getPageNo() - 1) * pageInfo.getNumOfRows(); 
     RowBounds rowBounds = new RowBounds(offset, pageInfo.getNumOfRows());
     
     return sqlSession.selectList("diaryMapper.selectAllList", memNo, rowBounds);
+  }
+
+  /**
+   * @param diaryDTO
+   * @return DiaryVO
+   */
+  public DiaryVO selectDiary(DiaryVO diaryDTO) {
+    return sqlSession.selectOne("diaryMapper.selectDiary", diaryDTO);
+  }
+
+  /**
+   * @param modifiedDiary
+   * @return int
+   */
+  public int updateDiary(DiaryVO modifiedDiary) {
+    return sqlSession.update("diaryMapper.updateDiary", modifiedDiary);
+  }
+
+  /**
+   * @param diaryDTO
+   * @return int
+   */
+  public int deleteDiary(DiaryVO diaryDTO) {
+    return sqlSession.delete("diaryMapper.deleteDiary", diaryDTO);
+  }
+
+  /**
+   * @param diary
+   * @return int
+   */
+  public int insertDiary(DiaryVO diary) {
+    return sqlSession.insert("diaryMapper.insertDiary", diary);
   }
 }

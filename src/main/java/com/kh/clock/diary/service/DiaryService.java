@@ -10,7 +10,7 @@ public interface DiaryService {
   
   /**
    * @param int memNo
-   * @return totalCount
+   * @return int totalCount
    */
   public int selectTotalCount(int memNo);
   /**
@@ -18,4 +18,31 @@ public interface DiaryService {
    * @return ArrayList<DiaryVO>
    */
   public ArrayList<DiaryVO> selectAllList(int memberNo, PageInfo pageInfo);
+  
+  
+  /**
+   * @param memNo
+   * @param diarySq
+   * @return <DiaryVO>
+   */
+  public DiaryVO selectDiary(DiaryVO diaryDTO);
+  
+  /**
+   * @param modifiedDiary
+   * @return int result
+   */
+  public int updateDiary(DiaryVO modifiedDiary);
+  
+  /**
+   * @param memNo
+   * @param diarySq
+   * @return int result
+   */
+  public int deleteDiary(DiaryVO diaryDTO);
+ 
+  /**
+   * @param diary
+   * @return int result
+   */
+  public int insertDiary(DiaryVO diary);
 }

@@ -1,9 +1,11 @@
 package com.kh.clock.diary.repository;
 
-import java.util.ArrayList;
 import com.kh.clock.diary.domain.DiaryVO;
+import lombok.Data;
 
+@Data
 public class DiaryDTO {
-  public int totalCount;                // totalCount
-  public ArrayList<DiaryVO> diaryList;  // ArrayList<DiaryVO>
+  private DiaryVO diary;
+  private int pageNo;
+  private int numOfRows;
 }
