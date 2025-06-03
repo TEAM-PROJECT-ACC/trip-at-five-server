@@ -67,7 +67,7 @@ public class RoomServiceImpl implements RoomSerivce {
       // 파일이 있을 경우만 실행
       if(images != null) {
         // 객실 이미지 처리
-        List<String> fileUrls = saveRoomImage(images);
+        List<String> fileUrls = oFileUtils.saveRoomImage(images, UploadFileType.ROOM.getPath());
         for(int i = 0; i < fileUrls.size(); i++) {
           roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(images[i].getOriginalFilename(), fileUrls.get(i), roomNo));
         }
@@ -97,7 +97,7 @@ public class RoomServiceImpl implements RoomSerivce {
       // 파일이 있을 경우만 실행
       if(images != null) {
         // 객실 이미지 처리
-        List<String> fileUrls = saveRoomImage(images);
+        List<String> fileUrls = oFileUtils.saveRoomImage(images, UploadFileType.ROOM.getPath());
         for(int i = 0; i < fileUrls.size(); i++) {
           roomImageResult += roomImageService.updateRoomImage(new RoomImageDTO(images[i].getOriginalFilename(), fileUrls.get(i), roomNo));
         }
@@ -109,29 +109,6 @@ public class RoomServiceImpl implements RoomSerivce {
     }
   
     return updateResult;
-  }
-  
-// 파일 저장 처리
-  private List<String> saveRoomImage(MultipartFile[] mp) {
-    String middlePath = UploadFileType.ROOM.getPath(); // 중간 폴더 경로
-    String dateFolderPath = oFileUtils.createFilePath(middlePath);
-    
-    List<String> fileUrls = new ArrayList<>();
- 
-    for (MultipartFile file : mp) {
-        String fileName = OclockFileUtils.changeFileName(file);
-        
-//        System.out.println("변환된 파일 명 : " + fileName);
-        
-        oFileUtils.saveFile(file, dateFolderPath, fileName, UploadFileType.ROOM.getPath());
-        String fileUrl = staticFilePath + middlePath + "/" + dateFolderPath + "/" + fileName; // DB에 저장할 파일 경로
-        
-//        System.out.println("fileUrl : " + fileUrl);
-        
-        fileUrls.add(fileUrl); // DB에 저장할 값을 리스트에 담기
-    }
-    
-    return fileUrls;
   }
 
   @Override

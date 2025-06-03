@@ -7,7 +7,9 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Component
 public class OclockFileUtils {
+  @Value("${file.dir}")
+  private String staticFilePath;
   
   private final Path uploadPath;
 
@@ -107,5 +111,31 @@ public class OclockFileUtils {
     } catch (IOException e) {
       throw new RuntimeException("디렉터리 생성 실패: " + relativePath, e);
     }
+  }
+  
+  // 파일 저장 처리
+  public List<String> saveRoomImage(MultipartFile[] mp, String typePath) {
+    String middlePath = UploadFileType.ROOM.getPath(); // 중간 폴더 경로
+    String dateFolderPath = createFilePath(middlePath);
+    
+    List<String> fileUrls = new ArrayList<>();
+ 
+    for (MultipartFile file : mp) {
+        String fileName = OclockFileUtils.changeFileName(file);
+        
+//        System.out.println("변환된 파일 명 : " + fileName);
+        
+        
+        saveFile(file, dateFolderPath, fileName, typePath);
+        
+        
+        String fileUrl = staticFilePath + middlePath + "/" + dateFolderPath + "/" + fileName; // DB에 저장할 파일 경로
+        
+//        System.out.println("fileUrl : " + fileUrl);
+        
+        fileUrls.add(fileUrl); // DB에 저장할 값을 리스트에 담기
+    }
+    
+    return fileUrls;
   }
 }
