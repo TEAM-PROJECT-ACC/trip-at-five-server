@@ -1,9 +1,9 @@
 package com.kh.clock.accommodation.controller;
 
 import java.util.List;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,9 +25,8 @@ public class AccommodationController {
   }
   
   @GetMapping
-  public List<AccomDTO> selectAll(){
-    List<AccomDTO> list = accomService.selectAll();
-    return list;
+  public List<AccomDTO> selectAccomList(@ModelAttribute AccomListInfoDTO accomListInfoDTO){
+    return accomService.selectAccomList(accomListInfoDTO);
   }
   
   @PostMapping
@@ -45,8 +44,4 @@ public class AccommodationController {
     return accomService.deleteAccom(accomSq);
   }
   
-  @PostMapping("/search")
-  public List<AccomDTO> searchAccom(@RequestBody AccomListInfoDTO searchFilter){
-    return accomService.searchAccom(searchFilter);
-  }
 }

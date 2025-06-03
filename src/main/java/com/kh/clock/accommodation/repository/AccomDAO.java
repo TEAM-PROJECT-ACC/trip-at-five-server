@@ -1,6 +1,7 @@
 package com.kh.clock.accommodation.repository;
 
 import java.util.List;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -13,11 +14,14 @@ public class AccomDAO {
     this.sqlSession=sqlSession;
   }
   
-  // 숙박 목록 조회
-  public List<AccomDTO>selectAll() {
-    return sqlSession.selectList("accommodationMapper.selectAccomList");
+  // 숙박 목록 조회(키워드로)
+  public List<AccomDTO> selectAccomList(AccomListInfoDTO accomListInfoDTO) {
+    int offset = accomListInfoDTO.getPage() * accomListInfoDTO.getSize();
+    RowBounds rb = new RowBounds(offset, accomListInfoDTO.getSize());
+    
+    return sqlSession.selectList("accommodationMapper.selectAccomList", accomListInfoDTO, rb);
   }
-	 
+ 
   // 숙박 상세 조회
   public AccomDTO selectAccomDetail(int accomSq) {
       return sqlSession.selectOne("accommodationMapper.selectAccomDetail", accomSq);
@@ -41,6 +45,10 @@ public class AccomDAO {
   // 숙박 검색으로 숙박 목록 조회
   public List<AccomDTO> searchAccom(AccomListInfoDTO searchFilter) {
     return sqlSession.selectList("accommodationMapper.searchAccom", searchFilter);
+  }
+
+  public List<AccomDTO> filterAccomList() {
+    return sqlSession.selectList("accommodationMapper.filterAccomList");
   }
   
 }

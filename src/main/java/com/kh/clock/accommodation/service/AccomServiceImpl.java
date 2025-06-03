@@ -15,33 +15,34 @@ public class AccomServiceImpl implements AccomService {
       this.accomDAO = accomDAO;
   }
 
+  // 숙박 목록 조회(키워드/AccomListInfoDTO)
   @Override
-  public List<AccomDTO> selectAll() {
-      return accomDAO.selectAll();
+  public List<AccomDTO> selectAccomList(AccomListInfoDTO accomListInfoDTO) {
+    return accomDAO.selectAccomList(accomListInfoDTO);
   }
-
+  
+  // 숙박 상세 페이지 조회
   @Override
   public AccomDTO getAccommodationById(int accomSq) {
       return accomDAO.selectAccomDetail(accomSq);
   }
 
+  // 숙박 등록
   @Override
   public int createAccom(AccomDTO accom) {
       return accomDAO.insertAccom(accom);
   }
 
+  // 숙박 정보 수정
   @Override
   public int updateAccom(AccomDTO accom) {
       return accomDAO.updateAccom(accom);
   }
 
+  // 숙박 정보 삭제
   @Override
   public int deleteAccom(int accomSq) {
       return accomDAO.deleteAccom(accomSq);
   }
 
-  @Override
-  public List<AccomDTO> searchAccom(AccomListInfoDTO searchFilter) {
-    return accomDAO.searchAccom(searchFilter);
-  }
 }

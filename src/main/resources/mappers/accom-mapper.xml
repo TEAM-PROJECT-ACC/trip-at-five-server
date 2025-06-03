@@ -4,43 +4,45 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="accommodationMapper">
 
-    <select id="selectAccomList" resultType="com.kh.clock.accommodation.repository.AccomDTO">
-        SELECT 
-            ACCOM_SQ AS accomSq,
-            ACCOM_NAME AS accomName,
-            ACCOM_DESC AS accomDesc,
-            ACCOM_LON AS accomLon,
-            ACCOM_LAT AS accomLat,
-            ACCOM_ZIP_CODE AS accomZipCode,
-            ACCOM_ADDR AS accomAddr,
-            ACCOM_PHONE AS accomPhone,
-            ACCOM_REG_DT AS accomRegDt,
-            PUB_FAC_INFO AS pubFacInfo,
-            IN_ROOM_FAC_INFO AS inRoomFacInfo,
-            ETC_FAC_INFO AS etcFacInfo,
-            ACCOM_TYPE_NO AS accomTypeNo,
-            LOC_ID AS locId
-        FROM ACCOM
-        ORDER BY ACCOM_SQ DESC
+    <select id="selectAccomList" parameterType="com.kh.clock.accommodation.repository.AccomListInfoDTO" resultType="com.kh.clock.accommodation.repository.AccomDTO">
+      SELECT 
+      	ACCOM_SQ,
+        ACCOM_NAME,
+        ACCOM_DESC,
+        ACCOM_LON,
+        ACCOM_LAT,
+        ACCOM_ZIP_CODE,
+        ACCOM_ADDR,
+        ACCOM_PHONE,
+        ACCOM_REG_DT,
+        PUB_FAC_INFO,
+        IN_ROOM_FAC_INFO,
+        ETC_FAC_INFO,
+        ACCOM_TYPE_NO,
+        A.LOC_ID
+	    FROM ACCOMMODATION_TB A
+	    JOIN LOCATION_TB L ON A.LOC_ID = L.LOC_ID
+	    WHERE L.LOC_NAME LIKE '%' || #{keyword} || '%'
+	    ORDER BY ACCOM_SQ DESC
     </select>
 
     <select id="selectAccomDetail" parameterType="int" resultType="com.kh.clock.accommodation.repository.AccomDTO">
         SELECT 
-            ACCOM_SQ AS accomSq,
-            ACCOM_NAME AS accomName,
-            ACCOM_DESC AS accomDesc,
-            ACCOM_LON AS accomLon,
-            ACCOM_LAT AS accomLat,
-            ACCOM_ZIP_CODE AS accomZipCode,
-            ACCOM_ADDR AS accomAddr,
-            ACCOM_PHONE AS accomPhone,
-            ACCOM_REG_DT AS accomRegDt,
-            PUB_FAC_INFO AS pubFacInfo,
-            IN_ROOM_FAC_INFO AS inRoomFacInfo,
-            ETC_FAC_INFO AS etcFacInfo,
-            ACCOM_TYPE_NO AS accomTypeNo,
-            LOC_ID AS locId
-        FROM ACCOM
+            ACCOM_SQ,
+            ACCOM_NAME,
+            ACCOM_DESC,
+            ACCOM_LON,
+            ACCOM_LAT,
+            ACCOM_ZIP_CODE,
+            ACCOM_ADDR,
+            ACCOM_PHONE,
+            ACCOM_REG_DT,
+            PUB_FAC_INFO,
+            IN_ROOM_FAC_INFO,
+            ETC_FAC_INFO,
+            ACCOM_TYPE_NO,
+            LOC_ID
+        FROM ACCOMMODATION_TB
         WHERE ACCOM_SQ = #{accomSq}
     </select>
 
@@ -98,8 +100,5 @@
         DELETE FROM ACCOM
         WHERE ACCOM_SQ = #{accomSq}
     </delete>
-    
-    <select id="searchAccom">
-    
-    </select>
+
 </mapper>

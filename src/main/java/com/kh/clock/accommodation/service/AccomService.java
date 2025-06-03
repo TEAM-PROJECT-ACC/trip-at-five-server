@@ -6,7 +6,8 @@ import com.kh.clock.accommodation.repository.AccomListInfoDTO;
 
 public interface AccomService {
   
-  List<AccomDTO> selectAll();
+  // 숙박 목록 조회(키워드로 목록 조회)
+  List<AccomDTO> selectAccomList(AccomListInfoDTO accomListInfoDTO);
   
   AccomDTO getAccommodationById(int accomSq);
   
@@ -16,5 +17,4 @@ public interface AccomService {
   
   int deleteAccom(int accomSq);
 
-  List<AccomDTO> searchAccom(AccomListInfoDTO searchFilter);
 }
