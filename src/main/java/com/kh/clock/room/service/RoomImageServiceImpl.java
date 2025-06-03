@@ -27,4 +27,9 @@ public class RoomImageServiceImpl implements RoomImageService {
     return roomImageDAO.findRoomImageByRoomSq(roomSq);
   }
 
+  @Override
+  public int updateRoomImage(RoomImageDTO roomImageDTO) {
+    return roomImageDAO.updateRoomImage(roomImageDTO);
+  }
+
 }

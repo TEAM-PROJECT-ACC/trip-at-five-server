@@ -30,7 +30,7 @@ public interface RoomSerivce {
    * @param room : 객실 정보
    * @return 1 성공, 0 실패
    */
-  int updateRoom(RoomDTO room);
+  int updateRoom(RoomVO roomVo, MultipartFile[] images);
   
   /**
    * 객실 삭제

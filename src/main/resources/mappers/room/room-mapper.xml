@@ -42,4 +42,16 @@
   	<select id="findByAccomNo" resultType="_int">
   		SELECT ROOM_SQ FROM ROOM_TB WHERE ACCOM_NO = #{accomNo} GROUP BY ROOM_SQ
   	</select>
+  	
+  	<update id="updateRoom">
+  		UPDATE ROOM_TB SET
+  			ROOM_NAME = #{roomName},
+  			ROOM_PRICE = #{roomPrice},
+  			ROOM_CHK_IN = #{roomChkIn},
+  			ROOM_CHK_OUT = #{roomChkOut},
+  			ROOM_STD_PPL = #{roomStdPpl},
+  			ROOM_MAX_PPL = #{roomMaxPpl},
+  			ROOM_CNT = #{roomCnt}
+  		WHERE ACCOM_NO = #{accomNo} AND ROOM_SQ = #{roomSq}
+  	</update>
 </mapper>

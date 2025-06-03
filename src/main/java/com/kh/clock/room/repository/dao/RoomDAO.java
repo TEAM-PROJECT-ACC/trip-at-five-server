@@ -33,4 +33,9 @@ public class RoomDAO {
   public RoomDetailDTO findRoomByAccomNoAndRoomSq(GetRoomDTO getRoomDTO) {
     return sqlSession.selectOne("roomMapper.findRoomByAccomNoAndRoomSq", getRoomDTO);
   }
+
+  // 객실 수정
+  public int updateRoom(RoomVO room) {
+    return sqlSession.update("roomMapper.updateRoom", room);
+  }
 }

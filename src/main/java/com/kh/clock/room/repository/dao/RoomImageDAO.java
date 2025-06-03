@@ -21,4 +21,8 @@ public class RoomImageDAO {
     return sqlSession.selectList("roomImageMapper.findRoomImageByRoomSq", roomNo);
   }
 
+  public int updateRoomImage(RoomImageDTO roomImageDTO) {
+    return sqlSession.update("roomImageMapper.updateRoomImage", roomImageDTO);
+  }
+
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -62,6 +63,7 @@ public class RoomController {
     
     // 객실 정보 조회
     RoomDetailDTO roomDetailDTO = roomService.findRoomByAccomNoAndRoomSq(new GetRoomDTO(accomNo, roomSq));
+    System.out.println(roomDetailDTO);
     
     // 객실 이미지 정보 조회
     List<RoomImageDTO> roomImageList = roomImageService.findRoomImageByRoomSq(roomSq);
@@ -105,5 +107,30 @@ public class RoomController {
     
   }
 
+  /**
+   * 객실 수정
+   * @param accomNo 숙박업소번호
+   * @param room 등록할 객실 정보
+   * @return 
+   */
+  @PutMapping("")
+  public ResponseEntity<Object> updateRoom(
+      @PathVariable("accomNo") int accomNo, 
+      @ModelAttribute RoomVO roomVo, 
+   // required = false 으로 해서 필수 항목에서 제외 => null 일 경우 계속 400에러 발생..
+      @RequestPart(value = "images", required = false) MultipartFile[] images) {
+    
+    // 데이터 확인하기
+//    System.out.println(roomVo); 
+//    if(images != null) {
+//      for(MultipartFile mf : images) System.out.println(mf.getOriginalFilename());
+//    }
+    
+    int result = roomService.updateRoom(roomVo, images);
+    
+    if(result > 0) return ResponseEntity.status(HttpStatus.OK).body(roomVo);
+    else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 등록에 실패했습니다.");
+    
+  }
   
 }

@@ -19,4 +19,12 @@
 			#{roomNo}
 		)
   	</insert>
+  	
+  	<!-- 객실 이미지 수정 UPDATE문 -->
+  	<update id="updateRoomImage">
+  		UPDATE ROOM_IMAGE_TB SET 
+			ROOM_IMG_ORG_NAME = #{roomImgOrgName},
+			ROOM_IMG_PATH_NAME = #{roomImgPathName}
+		WHERE ROOM_NO = #{roomNo}
+  	</update>
 </mapper>

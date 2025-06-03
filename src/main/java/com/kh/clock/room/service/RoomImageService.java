@@ -19,4 +19,11 @@ public interface RoomImageService {
    * @return
    */
   List<RoomImageDTO> findRoomImageByRoomSq(int roomSq);
+  
+  /**
+   * 객실 이미지 수정
+   * @param roomImageDTO 객실이미지 정보
+   * @return
+   */
+  int updateRoomImage(RoomImageDTO roomImageDTO);
 }
