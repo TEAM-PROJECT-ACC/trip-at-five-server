@@ -67,12 +67,12 @@ public class RoomController {
     
     // 객실 정보 조회
     RoomDetailDTO roomDetailDTO = roomService.findRoomByAccomNoAndRoomSq(new RoomIdentifierDTO(accomNo, roomSq));
-    System.out.println(roomDetailDTO);
+//    System.out.println(roomDetailDTO);
     
     // 객실 이미지 정보 조회
     List<RoomImageDTO> roomImageList = roomImageService.findRoomImageByRoomSq(roomSq);
     
-    for(RoomImageDTO ri : roomImageList) System.out.println("파일명 : " + ri); // 디버깅
+//    for(RoomImageDTO ri : roomImageList) System.out.println("파일명 : " + ri); // 디버깅
     
     if(roomDetailDTO != null) {
       List<String> imageNameList = new ArrayList<>();
@@ -145,8 +145,8 @@ public class RoomController {
    */
   @DeleteMapping("")
   public ResponseEntity<Object> deleteRoom(@RequestBody Map<String, Object> requestData) {
-    System.out.println(requestData.get("accomId"));
-    System.out.println(requestData.get("roomId"));
+//    System.out.println(requestData.get("accomId"));
+//    System.out.println(requestData.get("roomId"));
     
     int result = roomService.deleteRoomAndRoomImageByAccomNoAndRoomSq(
         new RoomIdentifierDTO(

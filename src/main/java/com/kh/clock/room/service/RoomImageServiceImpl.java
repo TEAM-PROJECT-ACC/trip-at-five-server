@@ -23,7 +23,6 @@ public class RoomImageServiceImpl implements RoomImageService {
 
   @Override
   public List<RoomImageDTO> findRoomImageByRoomSq(int roomSq) {
-    System.out.println("roomSq : " + roomSq);
     return roomImageDAO.findRoomImageByRoomSq(roomSq);
   }
 

@@ -49,10 +49,10 @@ public class RoomServiceImpl implements RoomSerivce {
   @Transactional
   public int insertRoom(RoomVO room, MultipartFile[] images) {
     int roomImageResult = 0;
-    System.out.println(room);
-    System.out.println(images);
+//    System.out.println(room);
+//    System.out.println(images);
     int insertResult = roomDAO.insertRoom(room);
-    System.out.println("insertResult : " + insertResult);
+//    System.out.println("insertResult : " + insertResult);
     
     if(insertResult > 0) {
       /**
@@ -152,10 +152,13 @@ public class RoomServiceImpl implements RoomSerivce {
       
       List<RoomImageDTO> roomImagePathList = roomImageService.findRoomImageByRoomSq(roomNo);
       
+      for(RoomImageDTO r : roomImagePathList) System.out.println("삭제를 위해 조회한 이미지 : " + r.getRoomImgPathName());
+      
       boolean flag = false;
       for(int i = 0; i < roomImagePathList.size(); i++) {
         flag = deleteFile(roomImagePathList.get(i).getRoomImgPathName()); // 파일 삭제 함수 호출
-        if(!flag) {
+        System.out.println("flag: " + flag);
+        if(flag) {
           System.out.println(
               roomImagePathList.get(i).getRoomImgPathName()
               + " 경로에 있는 " + roomImagePathList.get(i).getRoomImgOrgName()
@@ -170,6 +173,7 @@ public class RoomServiceImpl implements RoomSerivce {
     return deleteResult;
   }
   private boolean deleteFile(String path) {
+    System.out.println(path);
     File file = new File(path);
     
     if(file.exists()) {
