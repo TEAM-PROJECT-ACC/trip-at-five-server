@@ -54,4 +54,9 @@
   			ROOM_CNT = #{roomCnt}
   		WHERE ACCOM_NO = #{accomNo} AND ROOM_SQ = #{roomSq}
   	</update>
+  	
+  	<delete id="deleteRoomAndRoomImageByAccomNoAndRoomSq" parameterType="com.kh.clock.room.repository.dto.RoomIdentifierDTO">
+  		DELETE FROM ROOM_TB
+  		WHERE ACCOM_NO = #{accomNo} AND ROOM_SQ = #{roomSq}
+  	</delete>
 </mapper>

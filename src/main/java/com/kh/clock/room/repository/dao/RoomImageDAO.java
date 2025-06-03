@@ -25,4 +25,8 @@ public class RoomImageDAO {
     return sqlSession.update("roomImageMapper.updateRoomImage", roomImageDTO);
   }
 
+  public int deleteRoomImageByRoomSq(int roomNo) {
+    return sqlSession.delete("deleteRoomImageByRoomSq", roomNo);
+  }
+
 }

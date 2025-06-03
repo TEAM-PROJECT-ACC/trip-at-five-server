@@ -4,7 +4,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import com.kh.clock.room.domain.RoomVO;
-import com.kh.clock.room.repository.dto.GetRoomDTO;
+import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
 import com.kh.clock.room.repository.dto.RoomDetailDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
 
@@ -30,12 +30,19 @@ public class RoomDAO {
     return sqlSession.selectList("roomMapper.selectAllList", accomNo);
   }
 
-  public RoomDetailDTO findRoomByAccomNoAndRoomSq(GetRoomDTO getRoomDTO) {
+  // 객실 상세 조회
+  public RoomDetailDTO findRoomByAccomNoAndRoomSq(RoomIdentifierDTO getRoomDTO) {
     return sqlSession.selectOne("roomMapper.findRoomByAccomNoAndRoomSq", getRoomDTO);
   }
 
   // 객실 수정
   public int updateRoom(RoomVO room) {
     return sqlSession.update("roomMapper.updateRoom", room);
+  }
+
+  // 객실 삭제
+  public int deleteRoomAndRoomImageByAccomNoAndRoomSq(RoomIdentifierDTO roomIdenDTO) {
+    System.out.println(roomIdenDTO);
+    return sqlSession.delete("roomMapper.deleteRoomAndRoomImageByAccomNoAndRoomSq", roomIdenDTO);
   }
 }

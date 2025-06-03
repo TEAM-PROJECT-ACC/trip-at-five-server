@@ -2,21 +2,25 @@ package com.kh.clock.room.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.kh.clock.room.domain.RoomVO;
-import com.kh.clock.room.repository.dto.GetRoomDTO;
 import com.kh.clock.room.repository.dto.RoomDetailDTO;
+import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
 import com.kh.clock.room.repository.dto.RoomImageDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
 import com.kh.clock.room.service.RoomImageServiceImpl;
@@ -62,7 +66,7 @@ public class RoomController {
 //    System.out.println(roomSq);
     
     // 객실 정보 조회
-    RoomDetailDTO roomDetailDTO = roomService.findRoomByAccomNoAndRoomSq(new GetRoomDTO(accomNo, roomSq));
+    RoomDetailDTO roomDetailDTO = roomService.findRoomByAccomNoAndRoomSq(new RoomIdentifierDTO(accomNo, roomSq));
     System.out.println(roomDetailDTO);
     
     // 객실 이미지 정보 조회
@@ -131,6 +135,26 @@ public class RoomController {
     if(result > 0) return ResponseEntity.status(HttpStatus.OK).body(roomVo);
     else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 등록에 실패했습니다.");
     
+  }
+  
+  /**
+   * 
+   * @param accomNo
+   * @param roomSq
+   * @return
+   */
+  @DeleteMapping("")
+  public ResponseEntity<Object> deleteRoom(@RequestBody Map<String, Object> requestData) {
+    System.out.println(requestData.get("accomId"));
+    System.out.println(requestData.get("roomId"));
+    
+    int result = roomService.deleteRoomAndRoomImageByAccomNoAndRoomSq(
+        new RoomIdentifierDTO(
+            Integer.parseInt(requestData.get("accomId").toString()), 
+            Integer.parseInt(requestData.get("roomId").toString())));
+    
+    if(result > 0) return ResponseEntity.status(HttpStatus.OK).body(result);
+    else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 삭제에 실패했습니다.");
   }
   
 }

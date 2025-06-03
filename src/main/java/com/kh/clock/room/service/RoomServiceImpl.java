@@ -1,5 +1,6 @@
 package com.kh.clock.room.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,9 +11,8 @@ import com.kh.clock.common.file.OclockFileUtils;
 import com.kh.clock.common.file.UploadFileType;
 import com.kh.clock.room.domain.RoomVO;
 import com.kh.clock.room.repository.dao.RoomDAO;
-import com.kh.clock.room.repository.dto.GetRoomDTO;
-import com.kh.clock.room.repository.dto.RoomDTO;
 import com.kh.clock.room.repository.dto.RoomDetailDTO;
+import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
 import com.kh.clock.room.repository.dto.RoomImageDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
 
@@ -85,32 +85,27 @@ public class RoomServiceImpl implements RoomSerivce {
     int roomImageResult = 0;
 //  System.out.println(room);
 //  System.out.println(images);
-  int insertResult = roomDAO.updateRoom(room);
-//  System.out.println(insertResult);
+    int updateResult = roomDAO.updateRoom(room);
+//  System.out.println(updateResult);
   
-  if(insertResult > 0) {
-    /**
-     * TODO: 객실은 저장이 됨. 하지만 가장 최근에 저장한 객실ID값으로 객실이미지를 저장해야하는 것을 해야함
-     * => 트랜잭션 처리로 해결 완료
-     */
-    int roomNo = room.getRoomSq(); // 트랜잭션 처리로 인해 방금 INSERT 한 객실 번호 값 불러오기
-    
-    // 파일이 있을 경우만 실행
-    if(images != null) {
-      // 객실 이미지 처리
-      List<String> fileUrls = saveRoomImage(images);
-      for(int i = 0; i < fileUrls.size(); i++) {
-        roomImageResult += roomImageService.updateRoomImage(new RoomImageDTO(images[i].getOriginalFilename(), fileUrls.get(i), roomNo));
-      }
+    if(updateResult > 0) {
+      int roomNo = room.getRoomSq();
       
-      // 전달 받은 파일의 갯수와 DB에서 INSERT 한 행의 갯수가 동일하면 저장 성공!
-      if(roomImageResult == fileUrls.size()) {
-        System.out.println("파일 데이터 저장 성공!");
+      // 파일이 있을 경우만 실행
+      if(images != null) {
+        // 객실 이미지 처리
+        List<String> fileUrls = saveRoomImage(images);
+        for(int i = 0; i < fileUrls.size(); i++) {
+          roomImageResult += roomImageService.updateRoomImage(new RoomImageDTO(images[i].getOriginalFilename(), fileUrls.get(i), roomNo));
+        }
+        
+        if(roomImageResult == fileUrls.size()) {
+          System.out.println("파일 데이터 저장 성공!");
+        }
       }
     }
-  }
   
-  return insertResult;
+    return updateResult;
   }
   
 //파일 처리
@@ -137,13 +132,59 @@ public class RoomServiceImpl implements RoomSerivce {
   }
 
   @Override
-  public int deleteRoom(int roomSq) {
-    // TODO Auto-generated method stub
-    return 0;
+  @Transactional
+  public int deleteRoomAndRoomImageByAccomNoAndRoomSq(RoomIdentifierDTO roomIdenDTO) {
+    int deleteResult = roomDAO.deleteRoomAndRoomImageByAccomNoAndRoomSq(roomIdenDTO);
+    System.out.println(deleteResult);
+  
+    if(deleteResult > 0) {
+      int roomNo = roomIdenDTO.getRoomSq();
+      
+      /**
+       * 1. 객실번호로 해당 객실 이미지 조회
+       * 
+       * 2. 객실 이미지 path 값으로 해당 경로에 파일이 있는 지 체크
+       * 
+       * 2-1. 체크 이후 파일 삭제
+       * 
+       * 3. 객실번호로 DB에서 데이터 삭제
+       */
+      
+      List<RoomImageDTO> roomImagePathList = roomImageService.findRoomImageByRoomSq(roomNo);
+      
+      boolean flag = false;
+      for(int i = 0; i < roomImagePathList.size(); i++) {
+        flag = deleteFile(roomImagePathList.get(i).getRoomImgPathName()); // 파일 삭제 함수 호출
+        if(!flag) {
+          System.out.println(
+              roomImagePathList.get(i).getRoomImgPathName()
+              + " 경로에 있는 " + roomImagePathList.get(i).getRoomImgOrgName()
+              + " 파일을 삭제하지 못했습니다.");
+          break;
+        }
+      }
+      
+      if(flag) roomImageService.deleteRoomImageByRoomSq(roomNo);
+    }
+    
+    return deleteResult;
+  }
+  private boolean deleteFile(String path) {
+    File file = new File(path);
+    
+    if(file.exists()) {
+      if(file.delete()) {
+        System.out.println("파일 삭제");
+        return true;
+      } else {
+        System.out.println("파일 삭제 실패");
+      }
+    }
+    return false;
   }
 
   @Override
-  public RoomDetailDTO findRoomByAccomNoAndRoomSq(GetRoomDTO getRoomDTO) {
+  public RoomDetailDTO findRoomByAccomNoAndRoomSq(RoomIdentifierDTO getRoomDTO) {
     return roomDAO.findRoomByAccomNoAndRoomSq(getRoomDTO);
   }
 

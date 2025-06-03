@@ -28,8 +28,15 @@ public class RoomImageServiceImpl implements RoomImageService {
   }
 
   @Override
+  @Transactional(propagation = Propagation.REQUIRED)
   public int updateRoomImage(RoomImageDTO roomImageDTO) {
     return roomImageDAO.updateRoomImage(roomImageDTO);
+  }
+
+  @Override
+  @Transactional(propagation = Propagation.REQUIRED)
+  public int deleteRoomImageByRoomSq(int roomNo) {
+    return roomImageDAO.deleteRoomImageByRoomSq(roomNo);
   }
 
 }

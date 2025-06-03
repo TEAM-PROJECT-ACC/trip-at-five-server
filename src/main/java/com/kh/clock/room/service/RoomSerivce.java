@@ -3,7 +3,7 @@ package com.kh.clock.room.service;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 import com.kh.clock.room.domain.RoomVO;
-import com.kh.clock.room.repository.dto.GetRoomDTO;
+import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
 import com.kh.clock.room.repository.dto.RoomDTO;
 import com.kh.clock.room.repository.dto.RoomDetailDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
@@ -34,15 +34,17 @@ public interface RoomSerivce {
   
   /**
    * 객실 삭제
-   * @param roomSq 해당 객실 키 값
+   * @param accomNo 해당 숙박 키 값
+   * @param roomNo 해당 객실 키 값
    * @return 1 성공, 0 실패
    */
-  int deleteRoom(int roomSq);
+  int deleteRoomAndRoomImageByAccomNoAndRoomSq(RoomIdentifierDTO roomIdenDTO);
   
   /**
    * 숙박업소번호로 객실번호 찾기
    * @param accomNo : 숙박업소 번호
    * @return
    */
-  RoomDetailDTO findRoomByAccomNoAndRoomSq(GetRoomDTO getRoomDTO);
+  RoomDetailDTO findRoomByAccomNoAndRoomSq(RoomIdentifierDTO getRoomDTO);
+
 }

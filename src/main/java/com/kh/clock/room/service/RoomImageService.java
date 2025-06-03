@@ -26,4 +26,11 @@ public interface RoomImageService {
    * @return
    */
   int updateRoomImage(RoomImageDTO roomImageDTO);
+
+  /**
+   * 객실 이미지 삭제
+   * @param roomNo
+   * @return
+   */
+  int deleteRoomImageByRoomSq(int roomNo);
 }
