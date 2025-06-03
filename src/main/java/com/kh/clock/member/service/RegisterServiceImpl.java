@@ -7,11 +7,11 @@ import com.kh.clock.member.repository.RegisterDTO;
 import lombok.RequiredArgsConstructor;
 
 @Service
-public class MemberServiceImpl implements MemberService {
+public class RegisterServiceImpl implements RegisterService {
 
 	private  final MemberDAO memberDAO;
 	
-	public MemberServiceImpl(MemberDAO memberDAO) {
+	public RegisterServiceImpl(MemberDAO memberDAO) {
 		this.memberDAO = memberDAO;
 	}
 

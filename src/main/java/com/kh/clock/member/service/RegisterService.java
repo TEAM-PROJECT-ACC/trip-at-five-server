@@ -2,7 +2,7 @@ package com.kh.clock.member.service;
 
 import com.kh.clock.member.repository.RegisterDTO;
 
-public interface MemberService {
+public interface RegisterService {
 
 	/* 이메일 중복 체크 */
 	public int emailDuplicationCheck(String email);

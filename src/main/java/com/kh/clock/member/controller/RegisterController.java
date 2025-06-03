@@ -1,77 +1,82 @@
 package com.kh.clock.member.controller;
 
+import java.lang.ProcessBuilder.Redirect;
 import java.util.Map;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.clock.member.repository.RegisterDTO;
-import com.kh.clock.member.service.MemberServiceImpl;
+import com.kh.clock.member.service.RegisterServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/register")
 @RequiredArgsConstructor
-public class MemberController {
+public class RegisterController {
 
-	private final MemberServiceImpl mService;
+	private final RegisterServiceImpl mService;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+	/* 이메일 중복 체크 */
 	@PostMapping("/emailDuplication")
 	public int emailDuplicationCheck(@RequestBody Map<String, Object> requestBody) {
 
 		String email = (String) requestBody.get("email");
-		RegisterDTO r = new RegisterDTO();
+		RegisterDTO register = new RegisterDTO();
 
 		int result = mService.emailDuplicationCheck(email);
 
 		if (result > 0) {
-			r.setEmailCount(result);
+			register.setEmailCount(result);
 		}
 
-		return r.getEmailCount();
+		return register.getEmailCount();
 	}
 
+	/* 닉네임 중복 체크 */
 	@PostMapping("/nickNameDuplicationCheck")
 	public int nickNameDuplicationCheck(@RequestBody Map<String, Object> requestBody) {
 
 		String nick = (String) requestBody.get("nick");
 
-		System.out.println(nick);
-
-		RegisterDTO r = new RegisterDTO();
+		RegisterDTO register = new RegisterDTO();
 
 		int result = mService.nickNameDuplicationCheck(nick);
 
-		System.out.println(result);
-
 		if (result > 0) {
-			r.setNickCount(result);
+			register.setNickCount(result);
 		}
 
-		return r.getNickCount();
+		return register.getNickCount();
 
 	}
 
+	/* 회원가입 */
 	@PostMapping("/send")
 	public int registerSend(@RequestBody RegisterDTO registerdto) {
 
 		System.out.println(registerdto);
 
-		RegisterDTO register = registerdto;
+		String encPwd = bCryptPasswordEncoder.encode(registerdto.getPwd());
+		System.out.println("encPwd : " + encPwd);
+		registerdto.setPwd(encPwd);
 
-		int result = mService.registerSend(register);
+		int result = mService.registerSend(registerdto);
 
-		System.out.println(result);
+		if (result > 0) {
+			registerdto.setNickCount(result);
+		}
 
-//		if (result > 0) {
-//			r.setNickCount(result);
-//		}
-
-		return 2;
+		return result;
 
 	}
+
+
 }
