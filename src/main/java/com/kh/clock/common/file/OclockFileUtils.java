@@ -113,7 +113,7 @@ public class OclockFileUtils {
     }
   }
   
-  // 파일 저장 처리
+  // 파일 처리
   public List<String> saveRoomImage(MultipartFile[] mp, String typePath) {
     String middlePath = UploadFileType.ROOM.getPath(); // 중간 폴더 경로
     String dateFolderPath = createFilePath(middlePath);

@@ -90,6 +90,20 @@ public class RoomServiceImpl implements RoomSerivce {
 //  System.out.println(images);
     int updateResult = roomDAO.updateRoom(room);
 //  System.out.println(updateResult);
+    
+    /**
+     * 객실 이미지 업데이트 처리 로직
+     * 
+     * 1. 객실번호 값으로 객실 이미지 데이터 목록을 조회
+     * 
+     * 2. 조회된 데이터 목록의 이미지 원본명과 images 의 이미지 원본명을 조회된 데이터 수만큼 반복하고
+     *      그 안에서 images 크기만큼 반복하여 비교한다.
+     * 
+     * 2-1. 원본명이 서로 동일 => continue
+     *      원본명이 불일치 => 삭제할 
+     * 
+     * 2-2. 
+     */
   
     if(updateResult > 0) {
       int roomNo = room.getRoomSq();
