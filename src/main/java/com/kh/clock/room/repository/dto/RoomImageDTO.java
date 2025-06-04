@@ -14,8 +14,8 @@ public class RoomImageDTO {
    * roomImgPathName : 객실이미지변환명
    * roomNo : 객실번호
    */
+  private String roomImgHashCd;
   private String roomImgOrgName;
   private String roomImgPathName;
-  private String hashCode;
   private int roomNo;
 }

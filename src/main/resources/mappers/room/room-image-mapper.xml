@@ -11,11 +11,13 @@
 	
 	<!-- 객실 이미지 등록 INSERT문 -->
  	<insert id="insertRoomImage">
-    	INSERT INTO ROOM_IMAGE_TB VALUES (
+    	INSERT INTO ROOM_IMAGE_TB 
+    	(ROOM_IMG_SQ, ROOM_IMG_HASH_CD, ROOM_IMG_ORG_NAME, ROOM_IMG_PATH_NAME, ROOM_IMG_REG_DT, ROOM_NO) 
+    	VALUES (
 			ROOM_IMG_SEQ.NEXTVAL, 
+			#{roomImgHashCd},
 			#{roomImgOrgName},
 			#{roomImgPathName},
-			#{hashCode},
 			DEFAULT,
 			#{roomNo}
 		)
