@@ -51,19 +51,4 @@ public class AccommodationController {
     return ResponseEntity.ok(accomDetail);
   }
   
-  @PostMapping
-  public int createAccom(@RequestBody AccomDTO accom) {
-    return accomService.createAccom(accom);
-  }
-  
-  @PutMapping
-  public int updateAccom(@RequestBody AccomDTO accom) {
-    return accomService.updateAccom(accom);
-  }
-  
-  @DeleteMapping
-  public int deleteAccom(@RequestParam int accomSq) {
-    return accomService.deleteAccom(accomSq);
-  }
-  
 }
