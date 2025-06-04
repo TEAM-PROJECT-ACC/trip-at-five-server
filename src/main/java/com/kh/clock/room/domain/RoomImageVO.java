@@ -1,5 +1,5 @@
 package com.kh.clock.room.domain;
 
-public class Room {
+public class RoomImageVO {
 
 }
