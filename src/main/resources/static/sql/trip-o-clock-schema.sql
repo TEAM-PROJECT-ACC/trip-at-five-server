@@ -6,6 +6,7 @@
 -- 25/05/30 일지 테이블명 오타 & 의미가 맞지 않은 이유로 수정
 -- 25/06/02 일지 테이블 컬럼명 수정, 회원 테이블 주소 컬럼 크기 600으로 변경
 -- 25/06/03 회원테이블 비밀번호 암호화로 인해 데이터 크기 100으로 변경
+-- 25/06/04 객실 이미지 테이블에 hashcode 컬럼 추가
 
 -----------------------------------------------------------------------------
 
@@ -486,6 +487,7 @@ CREATE SEQUENCE ROOM_SEQ;
 DROP TABLE ROOM_IMAGE_TB;
 CREATE TABLE ROOM_IMAGE_TB (
     ROOM_IMG_SQ NUMBER,
+    ROOM_IMG_HASH_CD VARCHAR2(255) NOT NULL,
     ROOM_IMG_ORG_NAME VARCHAR2(500) NOT NULL,
     ROOM_IMG_PATH_NAME VARCHAR2(1000) DEFAULT 'assets/resources/upload/acc/' NOT NULL,
     ROOM_IMG_REG_DT DATE DEFAULT SYSDATE NOT NULL,
@@ -497,6 +499,7 @@ CREATE TABLE ROOM_IMAGE_TB (
 );
 
 COMMENT ON COLUMN ROOM_IMAGE_TB.ROOM_IMG_SQ IS '객실이미지번호';
+COMMENT ON COLUMN ROOM_IMAGE_TB.ROOM_IMG_HASH_CD IS '이미지 파일 HASH CODE';
 COMMENT ON COLUMN ROOM_IMAGE_TB.ROOM_IMG_ORG_NAME IS '이미지 원본 이름';
 COMMENT ON COLUMN ROOM_IMAGE_TB.ROOM_IMG_PATH_NAME IS '이미지 경로';
 COMMENT ON COLUMN ROOM_IMAGE_TB.ROOM_IMG_REG_DT IS '등록일';
