@@ -24,6 +24,9 @@ public class AccomServiceImpl implements AccomService {
   // 숙박 상세 페이지 조회
   @Override
   public AccomDTO getAccommodationById(int accomSq) {
+      // 1. 숙박 업체 정보 조회
+    
+    // 2. 해당 숙박 업체의 객실 목록 조회
       return accomDAO.selectAccomDetail(accomSq);
   }
 
