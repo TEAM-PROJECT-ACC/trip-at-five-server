@@ -14,6 +14,7 @@ import com.kh.clock.common.gson.CommonGson;
 import com.kh.clock.common.pageInfo.PageInfo;
 import com.kh.clock.diary.domain.DiaryVO;
 import com.kh.clock.diary.repository.DiaryDTO;
+import com.kh.clock.diary.repository.DiaryListDTO;
 import com.kh.clock.diary.service.DiaryServiceImpl;
 
 @RestController
@@ -26,10 +27,9 @@ public class DiaryController {
   }
   
   /**
-   * 나의 일지 전체 수 조회
-   * [GET] selectTotalCount
-   * @param memNo
-   * @return int count
+   * [GET] 일지 전체 수 조회
+   * @param memNo 로그인 회원 번호
+   * @return count 전체 목록 개수
    */
   @GetMapping("select/all/count")
   public int selectTotalCount(@RequestParam int memNo) {
@@ -38,30 +38,31 @@ public class DiaryController {
   }
   
   /**
-   * 나의 일지 전체 조회
-   * [GET] selectAllList
+   * [GET] 일지 전체 조회
    * @param int memNo 일지를 조회 할 회원 번호 
    * @param int pageNo 현재 페이지 번호
    * @param int numOfRows 페이지 당 표시 아이템 수
-   * @return String responseData(ArrayList<DiaryVO> diaryList, PageInfo pageInfo)
+   * @return responseData(diaryListDTO: ArrayList<DiaryVO> diaryList, PageInfo pageInfo)
    */
   @GetMapping("select/all")
   public String selectAllList(@RequestParam int memNo, @RequestParam int pageNo, @RequestParam int numOfRows) {
     int totalCount = selectTotalCount(memNo);
+    System.out.println(totalCount);
     PageInfo pageInfo = new PageInfo(totalCount, pageNo, numOfRows);
     Gson gson = CommonGson.getDateFormattedGson("yyyy-MM-dd");
     ArrayList<DiaryVO> diaryList = diaryService.selectAllList(memNo, pageInfo);
-    String responseData = gson.toJson(diaryList);
+    DiaryListDTO diaryListDTO = new DiaryListDTO(diaryList, pageInfo);
+
+    String responseData = gson.toJson(diaryListDTO);
 
     return responseData;
   }
   
   /**
-   * 나의 일지 조회
-   * [GET] selectDiary
+   * [GET] 일지 조회
    * @param int memNo 일지를 조회 할 회원 번호
    * @param int diarySq 조회 할 일지 번호
-   * @return String responseData(DiaryVO)
+   * @return String responseData(DiaryVO) 조회한 일지
    */
   @GetMapping("select/diary")
   public DiaryVO selectDiary(@RequestParam int memNo, @RequestParam int diarySq) {
@@ -76,8 +77,7 @@ public class DiaryController {
   
   
   /**
-   * 나의 일지 수정 
-   * [PUT] modifyDiary
+   * [PUT] 일지 수정
    * @param modifiedDiary 수정된 일지 객체
    * @return String responseData(DiaryVO) 수정 후 새로 조회한 일지 데이터
    */
@@ -90,15 +90,16 @@ public class DiaryController {
       String responseData = gson.toJson(diary);
       return responseData;
     } else {
-      return ""; // TODO: error 처리
+      return ""; // TODO: 수정 실패 시 에러 처리
     }
   }
   
   /**
-   * @param memNo
-   * @param diarySq
-   * @param pageNo
-   * @param numOfRows
+   * [DELETE] 일지 삭제
+   * @param memNo 로그인 회원 번호
+   * @param diarySq 삭제할 대상 일지 번호
+   * @param pageNo 삭제 후 이동할 페이지 번호
+   * @param numOfRows 페이지 당 표시 일지 수
    * @return Stirng responseData(ArrayList<DiaryVO>) 삭제 후 새로 조회한 일지 목록
    */
   @DeleteMapping("delete/diary")
@@ -117,19 +118,24 @@ public class DiaryController {
       int totalCount = selectTotalCount(memNo);
       PageInfo pageInfo = new PageInfo(totalCount, pageNo, numOfRows);
       ArrayList<DiaryVO> diaryList = diaryService.selectAllList(memNo, pageInfo);
-      String responseData = gson.toJson(diaryList);
+      DiaryListDTO diaryListDTO = new DiaryListDTO(diaryList, pageInfo);
+      String responseData = gson.toJson(diaryListDTO);
       return responseData;
     } else {
-      return "";      
+      return ""; // TODO: 삭제 실패 시 에러 처리
     }
   }
   
+  /**
+   * [POST] 새 일지 추가
+   * @param diaryDTO (DiaryVO, pageInfo) 새 일지 객체, 이동할 페이지 정보(pageNo, numOfRows)
+   * @return responseData diaryListDTO (ArrayList<DiaryVO>, pageInfo) 새 일지 추가 후 새로 조회한 일지 목록
+   */
   @PostMapping("insert/diary")
   public String insertDiary(@RequestBody DiaryDTO diaryDTO) {
     Gson gson = CommonGson.getDateFormattedGson("yyyy-MM-dd");
     DiaryVO diary = diaryDTO.getDiary();
-    System.out.println(diary);
-    
+
     int result = diaryService.insertDiary(diary);
     if(result > 0) {
       int memNo = diary.getMemNo();
@@ -139,10 +145,13 @@ public class DiaryController {
       
       PageInfo pageInfo = new PageInfo(totalCount, pageNo, numOfRows);
       ArrayList<DiaryVO> diaryList = diaryService.selectAllList(memNo, pageInfo);
-      
-      String responseData = gson.toJson(diaryList);
+      DiaryListDTO diaryListDTO = new DiaryListDTO(diaryList, pageInfo);
+
+      String responseData = gson.toJson(diaryListDTO);
       return responseData;
+    } else {
+      return ""; // TODO: 추가 실패 시 에러 처리
     }
-    return "";
   }
 }
+
