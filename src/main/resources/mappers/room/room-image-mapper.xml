@@ -15,6 +15,7 @@
 			ROOM_IMG_SEQ.NEXTVAL, 
 			#{roomImgOrgName},
 			#{roomImgPathName},
+			#{hashCode},
 			DEFAULT,
 			#{roomNo}
 		)

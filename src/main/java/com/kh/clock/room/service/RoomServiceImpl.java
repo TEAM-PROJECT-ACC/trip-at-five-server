@@ -1,6 +1,10 @@
 package com.kh.clock.room.service;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +28,9 @@ public class RoomServiceImpl implements RoomSerivce {
   
   @Value("${file.delete}")
   private String deletePath;
+  
+  @Value("${algorithm}")
+  private String algorithm;
   
   private RoomDAO roomDAO;
   private RoomImageServiceImpl roomImageService;
@@ -57,27 +64,34 @@ public class RoomServiceImpl implements RoomSerivce {
     int insertResult = roomDAO.insertRoom(room);
 //    System.out.println("insertResult : " + insertResult);
     
-    if(insertResult > 0) {
+
+    List<RoomImageDTO> roomImageList = roomImageService.findRoomImageByRoomSq(room.getRoomSq());
+    
+//    for(RoomImageDTO r : roomImagePathList) System.out.println("삭제를 위해 조회한 이미지 : " + r.getRoomImgPathName());
+    
+    insertImageFun(insertResult, roomImageList, room.getRoomSq(), images);
+    
+//    if(insertResult > 0) {
       /**
        * TODO: 객실은 저장이 됨. 하지만 가장 최근에 저장한 객실ID값으로 객실이미지를 저장해야하는 것을 해야함
        * => 트랜잭션 처리로 해결 완료
        */
-      int roomNo = room.getRoomSq(); // 트랜잭션 처리로 인해 방금 INSERT 한 객실 번호 값 불러오기
+//      int roomNo = room.getRoomSq(); // 트랜잭션 처리로 인해 방금 INSERT 한 객실 번호 값 불러오기
       
-      // 파일이 있을 경우만 실행
-      if(images != null) {
-        // 객실 이미지 처리
-        List<String> fileUrls = oFileUtils.saveRoomImage(images, UploadFileType.ROOM.getPath());
-        for(int i = 0; i < fileUrls.size(); i++) {
-          roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(images[i].getOriginalFilename(), fileUrls.get(i), roomNo));
-        }
-        
-        // 전달 받은 파일의 갯수와 DB에서 INSERT 한 행의 갯수가 동일하면 저장 성공!
-        if(roomImageResult == fileUrls.size()) {
-          System.out.println("파일 데이터 저장 성공!");
-        }
-      }
-    }
+//      // 파일이 있을 경우만 실행
+//      if(images != null) {
+//        // 객실 이미지 처리
+//        List<String> fileUrls = oFileUtils.saveRoomImage(images, UploadFileType.ROOM.getPath());
+//        for(int i = 0; i < fileUrls.size(); i++) {
+//          roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(images[i].getOriginalFilename(), fileUrls.get(i), roomNo));
+//        }
+//        
+//        // 전달 받은 파일의 갯수와 DB에서 INSERT 한 행의 갯수가 동일하면 저장 성공!
+//        if(roomImageResult == fileUrls.size()) {
+//          System.out.println("파일 데이터 저장 성공!");
+//        }
+//      }
+//    }
     
     return insertResult;
   }
@@ -85,7 +99,6 @@ public class RoomServiceImpl implements RoomSerivce {
   @Override
   @Transactional
   public int updateRoom(RoomVO room, MultipartFile[] images) {
-    int roomImageResult = 0;
 //  System.out.println(room);
 //  System.out.println(images);
     int updateResult = roomDAO.updateRoom(room);
@@ -104,16 +117,44 @@ public class RoomServiceImpl implements RoomSerivce {
      * 
      * 2-2. 
      */
+    List<RoomImageDTO> roomImageList = roomImageService.findRoomImageByRoomSq(room.getRoomSq());
+    
+//    for(RoomImageDTO r : roomImagePathList) System.out.println("삭제를 위해 조회한 이미지 : " + r.getRoomImgPathName());
+    
+    insertImageFun(updateResult, roomImageList, room.getRoomSq(), images);
   
-    if(updateResult > 0) {
-      int roomNo = room.getRoomSq();
+    return updateResult;
+  }
+  
+  private void insertImageFun(int judge, List<RoomImageDTO> roomImageList, int typeNumKey, MultipartFile[] images) {
+    int roomImageResult = 0;
+    List<MultipartFile> newImageList = new ArrayList<>();
+    List<String> newHashCodeList = new ArrayList<>();
+    if(judge > 0) {
       
       // 파일이 있을 경우만 실행
       if(images != null) {
+
+        // 이미지 처리 전 이미지의 해시값으로 중복 여부를 판단해서 중복 없는 이미지만 등록
+        for(int i = 0; i < images.length; i++) {
+          for(int j = 0; j < roomImageList.size(); j++) {
+            // hash 코드 구하기
+            String hashValue = getHashValue(images[i].getOriginalFilename());
+            System.out.println("구한 hash값 : " + hashValue);
+            System.out.println("저장된 hash값 : " + roomImageList.get(j).getHashCode());
+            
+            // hash 코드를 비교해서 다를 경우 새로운 파일로 인식하여 새로 저장할 배열에 추가
+            if(!hashValue.equals(roomImageList.get(j).getHashCode())) {
+              newImageList.add(images[i]);
+              newHashCodeList.add(hashValue);
+            }
+          }
+        }
+        
         // 객실 이미지 처리
-        List<String> fileUrls = oFileUtils.saveRoomImage(images, UploadFileType.ROOM.getPath());
+        List<String> fileUrls = oFileUtils.saveRoomImage(newImageList, UploadFileType.ROOM.getPath());    
         for(int i = 0; i < fileUrls.size(); i++) {
-          roomImageResult += roomImageService.updateRoomImage(new RoomImageDTO(images[i].getOriginalFilename(), fileUrls.get(i), roomNo));
+          roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(newImageList.get(i).getOriginalFilename(), fileUrls.get(i), newHashCodeList.get(i), typeNumKey));
         }
         
         if(roomImageResult == fileUrls.size()) {
@@ -121,8 +162,42 @@ public class RoomServiceImpl implements RoomSerivce {
         }
       }
     }
+  }
   
-    return updateResult;
+  private String getHashValue(String fileName) {
+    String hashValue = "";
+    try {
+        MessageDigest digest = MessageDigest.getInstance(algorithm);
+
+        try (FileInputStream fis = new FileInputStream(fileName)) {
+            byte[] buffer = new byte[16384];
+            int bytesRead;
+
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                digest.update(buffer, 0, bytesRead);
+            }
+        }
+
+        byte[] hash = digest.digest();
+
+        // 해시 값을 16진수 문자열로 변환
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+
+        System.out.println(algorithm + " 해시 값: " + hexString.toString());
+        hashValue = hexString.toString();
+    } catch (NoSuchAlgorithmException e) {
+        System.err.println("알고리즘을 찾을 수 없습니다: " + e.getMessage());
+    } catch (IOException e) {
+        System.err.println("파일 입출력 오류: " + e.getMessage());
+    }
+    return hashValue;
   }
 
   @Override

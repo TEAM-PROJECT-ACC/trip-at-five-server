@@ -114,13 +114,13 @@ public class OclockFileUtils {
   }
   
   // 파일 처리
-  public List<String> saveRoomImage(MultipartFile[] mp, String typePath) {
+  public List<String> saveRoomImage(List<MultipartFile> newImageList, String typePath) {
     String middlePath = UploadFileType.ROOM.getPath(); // 중간 폴더 경로
     String dateFolderPath = createFilePath(middlePath);
     
     List<String> fileUrls = new ArrayList<>();
  
-    for (MultipartFile file : mp) {
+    for (MultipartFile file : newImageList) {
         String fileName = OclockFileUtils.changeFileName(file);
         
 //        System.out.println("변환된 파일 명 : " + fileName);

@@ -129,7 +129,7 @@ public class RoomController {
 //    if(images != null) {
 //      for(MultipartFile mf : images) System.out.println(mf.getOriginalFilename());
 //    }
-    
+//    
     int result = roomService.updateRoom(roomVo, images);
     
     if(result > 0) return ResponseEntity.status(HttpStatus.OK).body(roomVo);

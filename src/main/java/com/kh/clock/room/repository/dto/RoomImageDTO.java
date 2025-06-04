@@ -16,5 +16,6 @@ public class RoomImageDTO {
    */
   private String roomImgOrgName;
   private String roomImgPathName;
+  private String hashCode;
   private int roomNo;
 }
