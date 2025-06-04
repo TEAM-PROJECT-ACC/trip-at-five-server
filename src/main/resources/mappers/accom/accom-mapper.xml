@@ -20,39 +20,53 @@
         ETC_FAC_INFO,
         ACCOM_TYPE_NO,
         A.LOC_ID,
-        R.ROOM_PRICE
-	    FROM ACCOMMODATION_TB A
-	    JOIN LOCATION_TB L ON A.LOC_ID = L.LOC_ID
-	    JOIN (SELECT ACCOM_NO, MIN(ROOM_PRICE) ROOM_PRICE FROM ROOM_TB GROUP BY ACCOM_NO ) R ON A.ACCOM_SQ = R.ACCOM_NO
+        R.ROOM_PRICE,
+        R.ROOM_CHK_IN,
+        R.ROOM_CHK_OUT
+	  FROM ACCOMMODATION_TB A
+	  JOIN LOCATION_TB L ON A.LOC_ID = L.LOC_ID
+	  JOIN (
+    	SELECT R1.ACCOM_NO, R1.ROOM_PRICE, R1.ROOM_CHK_IN, R1.ROOM_CHK_OUT
+    	FROM (
+        	SELECT R.*,
+            	ROW_NUMBER() OVER (PARTITION BY R.ACCOM_NO ORDER BY R.ROOM_PRICE ASC) AS RN
+        	FROM ROOM_TB R
+    	) R1
+    	WHERE R1.RN = 1
+	  ) R ON A.ACCOM_SQ = R.ACCOM_NO
 	    WHERE L.LOC_NAME LIKE '%' || #{keyword} || '%'
 	    ORDER BY ACCOM_SQ DESC
     </select>
 
     <select id="selectAccomDetail" parameterType="int" resultType="com.kh.clock.accommodation.repository.AccomDTO">
         SELECT 
-        ACCOM_SQ,
-        ACCOM_NAME,
-        ACCOM_DESC,
-        ACCOM_LON,
-        ACCOM_LAT,
-        ACCOM_ZIP_CODE,
-        ACCOM_ADDR,
-        ACCOM_PHONE,
-        ACCOM_REG_DT,
-        PUB_FAC_INFO,
-        IN_ROOM_FAC_INFO,
-        ETC_FAC_INFO,
-        ACCOM_TYPE_NO,
+        A.ACCOM_SQ,
+        A.ACCOM_NAME,
+        A.ACCOM_DESC,
+        A.ACCOM_LON,
+        A.ACCOM_LAT,
+        A.ACCOM_ZIP_CODE,
+        A.ACCOM_ADDR,
+        A.ACCOM_PHONE,
+        A.ACCOM_REG_DT,
+        A.PUB_FAC_INFO,
+        A.IN_ROOM_FAC_INFO,
+        A.ETC_FAC_INFO,
+        A.ACCOM_TYPE_NO,
         A.LOC_ID,
-        R.ROOM_PRICE,
-        RR.*
+        R.ROOM_PRICE
         FROM ACCOMMODATION_TB A
         JOIN (SELECT ACCOM_NO, MIN(ROOM_PRICE) ROOM_PRICE FROM ROOM_TB GROUP BY ACCOM_NO ) R ON A.ACCOM_SQ = R.ACCOM_NO
-        JOIN (SELECT * FROM ROOM_TB) RR ON A.ACCOM_SQ = RR.ACCOM_NO
         WHERE A.ACCOM_SQ = #{accomSq}
         ORDER BY A.ACCOM_SQ DESC
     </select>
 
+	<select id="selectRoomList" parameterType="int" resultType="com.kh.clock.room.domain.RoomVO">
+		SELECT *
+		FROM ROOM_TB
+		WHERE ACCOM_NO = #{accomNo}
+		ORDER BY ACCOM_NO DESC
+	</select>
     <insert id="insertAccom" parameterType="com.kh.clock.accommodation.repository.AccomDTO">
         
     </insert>

@@ -1,5 +1,7 @@
 package com.kh.clock.accommodation.repository;
 
+import java.util.List;
+import com.kh.clock.room.domain.RoomVO;
 import lombok.Data;
 
 @Data
@@ -16,13 +18,9 @@ public class AccomDTO {
   private String inRoomFacInfo;
   private String etcFacInfo;
   private int accomTypeNo;
-  private int locId;
-  private int roomSq;
-  private String roomName;
+  
   private int roomPrice;
   private String roomChkIn;
   private String roomChkOut;
-  private int roomStdPpl;
-  private int roomMaxPpl;
-  
+  private List<RoomVO> roomList;
 }

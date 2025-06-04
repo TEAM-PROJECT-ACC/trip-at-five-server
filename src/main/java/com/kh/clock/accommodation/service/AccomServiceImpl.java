@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.kh.clock.accommodation.repository.AccomDAO;
 import com.kh.clock.accommodation.repository.AccomDTO;
 import com.kh.clock.accommodation.repository.AccomListInfoDTO;
+import com.kh.clock.room.domain.RoomVO;
 
 @Service
 public class AccomServiceImpl implements AccomService {
@@ -18,16 +19,20 @@ public class AccomServiceImpl implements AccomService {
   // 숙박 목록 조회(키워드/AccomListInfoDTO)
   @Override
   public List<AccomDTO> selectAccomList(AccomListInfoDTO accomListInfoDTO) {
-    return accomDAO.selectAccomList(accomListInfoDTO);
+      return accomDAO.selectAccomList(accomListInfoDTO);
   }
   
   // 숙박 상세 페이지 조회
   @Override
   public AccomDTO getAccommodationById(int accomSq) {
-      // 1. 숙박 업체 정보 조회
-    
+    // 1. 숙박 업체 정보 조회
+      AccomDTO accomDetail = accomDAO.selectAccomDetail(accomSq);
+      
     // 2. 해당 숙박 업체의 객실 목록 조회
-      return accomDAO.selectAccomDetail(accomSq);
+      List<RoomVO> accomRoom = accomDAO.selectRoomList(accomSq);
+      accomDetail.setRoomList(accomRoom);
+      
+      return accomDetail;
   }
 
   // 숙박 등록
