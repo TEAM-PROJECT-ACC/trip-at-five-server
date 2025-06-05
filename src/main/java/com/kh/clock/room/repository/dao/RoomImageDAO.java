@@ -14,6 +14,7 @@ public class RoomImageDAO {
   }
   
   public int insertRoomImage(RoomImageDTO roomImageDTO) {
+    System.out.println("roomImageDTO : " + roomImageDTO);
     return sqlSession.insert("roomImageMapper.insertRoomImage", roomImageDTO);
   }
 
