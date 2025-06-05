@@ -17,13 +17,14 @@ import com.kh.clock.room.repository.dto.RoomImageDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
 
 @Service
-public class RoomServiceImpl implements RoomSerivce {
+public class RoomServiceImpl implements RoomService {
   
   @Value("${file.dir}")
   private String staticFilePath;
   
   @Value("${file.delete}")
   private String deletePath;
+  
   
   private RoomDAO roomDAO;
   private RoomImageServiceImpl roomImageService;
@@ -51,78 +52,126 @@ public class RoomServiceImpl implements RoomSerivce {
   @Override
   @Transactional
   public int insertRoom(RoomVO room, MultipartFile[] images) {
-    int roomImageResult = 0;
 //    System.out.println(room);
 //    System.out.println(images);
     int insertResult = roomDAO.insertRoom(room);
 //    System.out.println("insertResult : " + insertResult);
     
-    if(insertResult > 0) {
-      /**
-       * TODO: 객실은 저장이 됨. 하지만 가장 최근에 저장한 객실ID값으로 객실이미지를 저장해야하는 것을 해야함
-       * => 트랜잭션 처리로 해결 완료
-       */
-      int roomNo = room.getRoomSq(); // 트랜잭션 처리로 인해 방금 INSERT 한 객실 번호 값 불러오기
-      
-      // 파일이 있을 경우만 실행
-      if(images != null) {
-        // 객실 이미지 처리
-        List<String> fileUrls = oFileUtils.saveRoomImage(images, UploadFileType.ROOM.getPath());
-        for(int i = 0; i < fileUrls.size(); i++) {
-          roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(images[i].getOriginalFilename(), fileUrls.get(i), roomNo));
-        }
-        
-        // 전달 받은 파일의 갯수와 DB에서 INSERT 한 행의 갯수가 동일하면 저장 성공!
-        if(roomImageResult == fileUrls.size()) {
-          System.out.println("파일 데이터 저장 성공!");
-        }
-      }
-    }
+    insertImageFun(insertResult, room.getRoomSq(), images);
     
     return insertResult;
   }
-
+  
   @Override
   @Transactional
   public int updateRoom(RoomVO room, MultipartFile[] images) {
-    int roomImageResult = 0;
-//  System.out.println(room);
-//  System.out.println(images);
-    int updateResult = roomDAO.updateRoom(room);
-//  System.out.println(updateResult);
+    int updateResult = roomDAO.updateRoom(room); // 객실 정보 업데이트
+
+    List<RoomImageDTO> roomImageList = roomImageService.findRoomImageByRoomSq(room.getRoomSq());
     
-    /**
-     * 객실 이미지 업데이트 처리 로직
-     * 
-     * 1. 객실번호 값으로 객실 이미지 데이터 목록을 조회
-     * 
-     * 2. 조회된 데이터 목록의 이미지 원본명과 images 의 이미지 원본명을 조회된 데이터 수만큼 반복하고
-     *      그 안에서 images 크기만큼 반복하여 비교한다.
-     * 
-     * 2-1. 원본명이 서로 동일 => continue
-     *      원본명이 불일치 => 삭제할 
-     * 
-     * 2-2. 
-     */
+    additionalImageFun(updateResult, roomImageList, room.getRoomSq(), images);
   
-    if(updateResult > 0) {
-      int roomNo = room.getRoomSq();
+    return updateResult;
+  }
+  
+  /**
+   * 이미지 등록 함수
+   * @param judge : 실행 판단 값
+   * @param typeNumKey : 유형번호값(숙박번호, 객실번호, 이용후기번호)
+   * @param images : 새로 들어온 이미지 목록
+   */
+  private void insertImageFun(int judge, int typeNumKey, MultipartFile[] images) {
+    int roomImageResult = 0;
+    List<MultipartFile> newImageList = new ArrayList<>();
+    if(judge > 0) {
       
       // 파일이 있을 경우만 실행
       if(images != null) {
-        // 객실 이미지 처리
-        List<String> fileUrls = oFileUtils.saveRoomImage(images, UploadFileType.ROOM.getPath());
-        for(int i = 0; i < fileUrls.size(); i++) {
-          roomImageResult += roomImageService.updateRoomImage(new RoomImageDTO(images[i].getOriginalFilename(), fileUrls.get(i), roomNo));
+        String typePath = UploadFileType.ROOM.getPath();
+        
+        // hash 코드 구하기
+        List<String> hashCodeList = oFileUtils.getHashCodeList(images, typePath);
+
+        for(int i = 0; i < images.length; i++) {
+          System.out.println("구한 hash값 : " + hashCodeList.get(i));
+          System.out.println("images[i] : " + images[i]);
+          newImageList.add(images[i]);
         }
         
+        // 객실 이미지 처리
+        List<String> fileUrls = oFileUtils.saveRoomImage(newImageList, typePath);    
+        for(int i = 0; i < fileUrls.size(); i++) {
+          roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(hashCodeList.get(i), newImageList.get(i).getOriginalFilename(), fileUrls.get(i), typeNumKey));
+        }
+        // 전달 받은 파일의 갯수와 DB에서 INSERT 한 행의 갯수가 동일하면 저장 성공!
         if(roomImageResult == fileUrls.size()) {
           System.out.println("파일 데이터 저장 성공!");
+          
+          // 임시 폴더 내 파일 삭제
+          oFileUtils.deleteTempFolder(newImageList, hashCodeList, typePath);
         }
       }
     }
+  }
   
-    return updateResult;
+  /**
+   * 추가 이미지 hashCode 값 비교 후 새로운 이미지만 INSERT 처리 메서드
+   * @param judge
+   * @param roomImageList : 유형번호값으로 조회한 이미지 목록
+   * @param typeNumKey : 유형번호값(숙박번호, 객실번호, 이용후기번호)
+   * @param images : 새로 요청받은 이미지 배열
+   */
+  private void additionalImageFun(int judge, List<RoomImageDTO> roomImageList, int typeNumKey, MultipartFile[] images) {
+    int roomImageResult = 0;
+    List<MultipartFile> newImageList = new ArrayList<>();
+    
+    if(judge > 0) {
+      
+      // 파일이 있을 경우만 실행
+      if(images != null) {
+        String typePath = UploadFileType.ROOM.getPath();
+
+        // 이미지 처리 전 이미지의 해시값으로 중복 여부를 판단해서 중복 없는 이미지만 등록
+        // hash 코드를 비교해서 다를 경우 새로운 파일로 인식하여 새로 저장할 배열에 추가
+
+        // 새로 요청받은 이미지 배열의 해시값 리스트
+        List<String> hashCodeList = oFileUtils.getHashCodeList(images, typePath);
+        
+        // 해시값 비교
+        for(int i = 0; i < hashCodeList.size(); i++) {
+          int count = 0;
+          System.out.println(hashCodeList.get(i));
+          System.out.println(roomImageList.get(i).getRoomImgHashCd());
+          for(int j = 0; j < roomImageList.size(); j++) {
+            if(hashCodeList.get(i).equals(roomImageList.get(j).getRoomImgHashCd())) {
+              System.out.println("값이 일치");
+              count++;
+            } 
+          }
+          
+          if(count == 0) newImageList.add(images[i]); 
+        }
+        
+        // 객실 이미지 처리
+        if(newImageList.size() > 0) {
+          List<String> fileUrls = oFileUtils.saveRoomImage(newImageList, UploadFileType.ROOM.getPath());    
+          for(int i = 0; i < fileUrls.size(); i++) {
+            roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(hashCodeList.get(i), newImageList.get(i).getOriginalFilename(), fileUrls.get(i), typeNumKey));
+          }
+          
+          if(roomImageResult == fileUrls.size()) {
+            System.out.println("파일 데이터 저장 성공!");
+          }
+        } else {
+       // 임시 폴더 내 파일 삭제
+          for(int i = 0; i < images.length; i++) {
+            newImageList.add(images[i]);
+          }
+        }
+
+        oFileUtils.deleteTempFolder(newImageList, hashCodeList, typePath);
+      }
+    }
   }
 
   @Override

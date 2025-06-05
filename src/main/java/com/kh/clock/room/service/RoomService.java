@@ -9,7 +9,7 @@ import com.kh.clock.room.repository.dto.RoomDetailDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
 
 
-public interface RoomSerivce {
+public interface RoomService {
   /**
    * 객실 목록 전체 조회
    * @param accomNo : 숙박업소번호
