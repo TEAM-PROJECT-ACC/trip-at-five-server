@@ -74,6 +74,12 @@ public class RoomServiceImpl implements RoomService {
     return updateResult;
   }
   
+  /**
+   * 이미지 등록 함수
+   * @param judge : 실행 판단 값
+   * @param typeNumKey : 유형번호값(숙박번호, 객실번호, 이용후기번호)
+   * @param images : 새로 들어온 이미지 목록
+   */
   private void insertImageFun(int judge, int typeNumKey, MultipartFile[] images) {
     int roomImageResult = 0;
     List<MultipartFile> newImageList = new ArrayList<>();
@@ -111,40 +117,59 @@ public class RoomServiceImpl implements RoomService {
   /**
    * 추가 이미지 hashCode 값 비교 후 새로운 이미지만 INSERT 처리 메서드
    * @param judge
-   * @param roomImageList : 해당 번호값으로 조회한 이미지 목록
-   * @param typeNumKey : 숙박인지 객실인지
+   * @param roomImageList : 유형번호값으로 조회한 이미지 목록
+   * @param typeNumKey : 유형번호값(숙박번호, 객실번호, 이용후기번호)
    * @param images : 새로 요청받은 이미지 배열
    */
   private void additionalImageFun(int judge, List<RoomImageDTO> roomImageList, int typeNumKey, MultipartFile[] images) {
     int roomImageResult = 0;
     List<MultipartFile> newImageList = new ArrayList<>();
-    List<String> newHashCodeList = oFileUtils.getHashCodeList(images, UploadFileType.ROOM.getPath());
+    
     if(judge > 0) {
       
       // 파일이 있을 경우만 실행
       if(images != null) {
+        String typePath = UploadFileType.ROOM.getPath();
 
         // 이미지 처리 전 이미지의 해시값으로 중복 여부를 판단해서 중복 없는 이미지만 등록
+        // hash 코드를 비교해서 다를 경우 새로운 파일로 인식하여 새로 저장할 배열에 추가
+
+        // 새로 요청받은 이미지 배열의 해시값 리스트
+        List<String> hashCodeList = oFileUtils.getHashCodeList(images, typePath);
         
-        for(int i = 0; i < images.length; i++) {
+        // 해시값 비교
+        for(int i = 0; i < hashCodeList.size(); i++) {
+          int count = 0;
+          System.out.println(hashCodeList.get(i));
+          System.out.println(roomImageList.get(i).getRoomImgHashCd());
           for(int j = 0; j < roomImageList.size(); j++) {
-            
-            // hash 코드를 비교해서 다를 경우 새로운 파일로 인식하여 새로 저장할 배열에 추가
-            if(!newHashCodeList.get(i).equals(roomImageList.get(j).getRoomImgHashCd())) {
-              newImageList.add(images[i]);
-            } else newHashCodeList.remove(i);
+            if(hashCodeList.get(i).equals(roomImageList.get(j).getRoomImgHashCd())) {
+              System.out.println("값이 일치");
+              count++;
+            } 
           }
+          
+          if(count == 0) newImageList.add(images[i]); 
         }
         
         // 객실 이미지 처리
-        List<String> fileUrls = oFileUtils.saveRoomImage(newImageList, UploadFileType.ROOM.getPath());    
-        for(int i = 0; i < fileUrls.size(); i++) {
-          roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(newImageList.get(i).getOriginalFilename(), fileUrls.get(i), newHashCodeList.get(i), typeNumKey));
+        if(newImageList.size() > 0) {
+          List<String> fileUrls = oFileUtils.saveRoomImage(newImageList, UploadFileType.ROOM.getPath());    
+          for(int i = 0; i < fileUrls.size(); i++) {
+            roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(hashCodeList.get(i), newImageList.get(i).getOriginalFilename(), fileUrls.get(i), typeNumKey));
+          }
+          
+          if(roomImageResult == fileUrls.size()) {
+            System.out.println("파일 데이터 저장 성공!");
+          }
+        } else {
+       // 임시 폴더 내 파일 삭제
+          for(int i = 0; i < images.length; i++) {
+            newImageList.add(images[i]);
+          }
         }
-        
-        if(roomImageResult == fileUrls.size()) {
-          System.out.println("파일 데이터 저장 성공!");
-        }
+
+        oFileUtils.deleteTempFolder(newImageList, hashCodeList, typePath);
       }
     }
   }

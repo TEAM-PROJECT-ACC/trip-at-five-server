@@ -6,7 +6,7 @@
 
 	<!-- 특정 객실 이미지 목록 조회 -->
 	<select id="findRoomImageByRoomSq" resultType="com.kh.clock.room.repository.dto.RoomImageDTO">
-		SELECT ROOM_IMG_ORG_NAME, ROOM_IMG_PATH_NAME, ROOM_NO FROM ROOM_IMAGE_TB WHERE ROOM_NO = #{roomSq} 
+		SELECT ROOM_IMG_HASH_CD, ROOM_IMG_ORG_NAME, ROOM_IMG_PATH_NAME, ROOM_NO FROM ROOM_IMAGE_TB WHERE ROOM_NO = #{roomSq} 
 	</select>
 	
 	<!-- 객실 이미지 등록 INSERT문 -->
