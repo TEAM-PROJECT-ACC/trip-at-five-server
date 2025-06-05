@@ -77,6 +77,24 @@ public class RegisterController {
 		return result;
 
 	}
+	
+	@PostMapping("/kakaoLogin")
+	public int kakaoLogin() {
+		
+		return 0;
+	}
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+

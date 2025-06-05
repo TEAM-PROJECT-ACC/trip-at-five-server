@@ -1,12 +1,16 @@
 package com.kh.clock.member.repository;
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import lombok.AllArgsConstructor;
 
 @Repository
 public class MemberDAO {
 
+	
+	@Autowired
 	private final SqlSession sqlsession;
 	
 	public MemberDAO (SqlSession sqlsession) {
@@ -30,7 +34,7 @@ public class MemberDAO {
 	public int registerSend(RegisterDTO register) {
 
 		int result = sqlsession.insert("mamberMapper.registerSend", register);
-
+		
 		return result;
 	}
 

@@ -21,14 +21,36 @@
 		where mem_nick = #{nickName}
 	</select>
 
+	<select id="kakaoRegisterSelect" resultType="int">
+
+		select count(*)
+		as
+		nickCount
+		from member_tb
+		where mem_nick = #{nickName}
+	</select>
 
 	<insert id="registerSend">
 
 		insert into member_tb
-		(MEM_SQ, MEM_EMAIL_ID, MEM_PWD, MEM_NICK,  MEM_PHONE
+		(MEM_SQ, MEM_EMAIL_ID, MEM_PWD,
+		MEM_NICK, MEM_PHONE
 		, MEM_ADDR, MEM_REG_DT)
 		values (mem_seq.nextval,
 		#{email}, #{pwd}, #{nickName}, #{tel}, #{address}
 		, sysdate)
 	</insert>
+
+	<insert id="kakaoRegister">
+
+		insert into member_tb (mem_sq, mem_email_id, mem_pwd, mem_nick, MEM_SOC_UID,
+		CK_SOC_PLT) values (
+		mem_seq.nextval, #{email}, #{pwd}, #{nickName}, #{snsUid} , #{platformName}
+		)
+	</insert>
+
+
+
+
+
 </mapper>
