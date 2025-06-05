@@ -1,5 +1,6 @@
 package com.kh.clock.common.file;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -101,6 +102,17 @@ public class OclockFileUtils {
         Files.createDirectories(targetLocation.getParent());
 
         // 기존 transferTo 대신 안전하게 byte 복사
+        /**
+         * 한번 temp 폴더에 파일을 생성한 후 다시 원래 파일을 저장하려고 하는 경로에
+         * 파일을 생성하려고 하니 아래의 오류 발생
+         * 
+         * java.io.IOException: java.io.FileNotFoundException:
+         *      임시폴더 경로/upload_7a26c86d_b8a7_404e_ad1b_682a33e9e3c2_00001526.tmp (지정된 파일을 찾을 수 없습니다)
+         * 
+         * 한번 파일을 생성한 후 GC 혹은 스레드 지연으로 해당 임시 파일이 삭제된 것같다
+         * 
+         *  즉, MultipartFile 내부에서 임시 파일을 참조하고 있는데, 해당 임시 파일이 삭제된 상태에서 transferTo()가 호출된 것
+         */
         FileCopyUtils.copy(file.getBytes(), targetLocation.toFile());
         System.out.println("파일 저장 성공: " + targetLocation);
 
@@ -110,7 +122,12 @@ public class OclockFileUtils {
     }
   }
 
-  // 파일 명 변경 메서드
+  /**
+   * 파일 명 변경 메서드
+   * 
+   * @param mFile : 변경할 파일
+   * @return
+   */
   public static String changeFileName(MultipartFile mFile) {
     String originFileName = mFile.getOriginalFilename();
 //    System.out.println("originFileName : " + originFileName);
@@ -121,32 +138,44 @@ public class OclockFileUtils {
     return "Trip-at-five-oclock_" + currentDate + "_" + randomValue + ext;
   }
   
-  // 하위 경로 생성 (날짜 폴더)
-  public String createFilePath(String type) {
+  /**
+   * 하위 경로 생성 (날짜 폴더)
+   * @param type : 숙박/객실/이용후기 UploadFileType 의 path
+   * @return
+   */
+  public String createDateFolderPath() {
     LocalDateTime now = LocalDateTime.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-    String relativePath = formatter.format(now);
-    createFolders(relativePath, type);
+    String dateFolderPath = formatter.format(now);
     
-    return relativePath;
+    return dateFolderPath;
   }
 
-  // 폴더 생성
-  private void createFolders(String relativePath, String type) {
+  /**
+   * 폴더 생성
+   * @param dateFolderPath : 이미지 저장 폴더 생성
+   * @param type : 숙박/객실/이용후기 UploadFileType 의 path
+   */
+  private void createFolders(String dateFolderPath, String type) {
     try {
-      Path folderPath = uploadPath.resolve(type).resolve(relativePath);
+      Path folderPath = uploadPath.resolve(type).resolve(dateFolderPath);
       if (!Files.exists(folderPath)) {
 //        System.out.println("폴더 생성! : " + folderPath);
         Files.createDirectories(folderPath);
       }
     } catch (IOException e) {
-      throw new RuntimeException("디렉터리 생성 실패: " + relativePath, e);
+      throw new RuntimeException("디렉터리 생성 실패: " + dateFolderPath, e);
     }
   }
   
-  // 임시 폴더 생성
-  public Path createTempFolder() {
-    Path folderPath = uploadPath.resolve("temp");
+  /**
+   * 임시 폴더 생성 (해시값을 추출하기 위해 특정 위치에 파일 저장하기 위함)
+   * @param dateFolderPath 
+   * @param typePath 
+   * @return
+   */
+  public Path createTempFolder(String dateFolderPath, String typePath) {
+    Path folderPath = uploadPath.resolve("temp").resolve(typePath).resolve(dateFolderPath);
     try {
       if (!Files.exists(folderPath)) {
         System.out.println("폴더 생성! : " + folderPath); // 생성 완료
@@ -160,10 +189,15 @@ public class OclockFileUtils {
     return folderPath;
   }
   
-  // 파일 처리
+  /**
+   * 파일 처리
+   * @param newImageList : 새로 저장할 파일 목록
+   * @param typePath : 숙박/객실/이용후기 UploadFileType 의 path
+   * @return
+   */
   public List<String> saveRoomImage(List<MultipartFile> newImageList, String typePath) {
-    String middlePath = UploadFileType.ROOM.getPath(); // 중간 폴더 경로
-    String dateFolderPath = createFilePath(middlePath);
+    String dateFolderPath = createDateFolderPath();
+    createFolders(dateFolderPath, typePath);
     
     List<String> fileUrls = new ArrayList<>();
  
@@ -171,16 +205,16 @@ public class OclockFileUtils {
       System.out.println("file : " + newImageList.get(i).getOriginalFilename());
       String fileName = OclockFileUtils.changeFileName(newImageList.get(i));
       
-      System.out.println("newImageList.get(i) : " + newImageList.get(i));
-      System.out.println("dateFolderPath : " + dateFolderPath);
-      System.out.println("fileName : " + fileName);
-      System.out.println("typePath ： " + typePath);
+//      System.out.println("newImageList.get(i) : " + newImageList.get(i));
+//      System.out.println("dateFolderPath : " + dateFolderPath);
+//      System.out.println("fileName : " + fileName);
+//      System.out.println("typePath ： " + typePath);
       
       saveFile(newImageList.get(i), dateFolderPath, fileName, typePath);
       
-      String fileUrl = staticFilePath + middlePath + "/" + dateFolderPath + "/" + fileName; // DB에 저장할 파일 경로
+      String fileUrl = staticFilePath + typePath + "/" + dateFolderPath + "/" + fileName; // DB에 저장할 파일 경로
       
-      System.out.println("fileUrl : " + fileUrl);
+//      System.out.println("fileUrl : " + fileUrl);
       
       fileUrls.add(fileUrl); // DB에 저장할 값을 리스트에 담기
     }
@@ -188,16 +222,23 @@ public class OclockFileUtils {
     return fileUrls;
   }
   
-  // 파일 임시 처리 (해쉬코드를 위해서)
-  public List<String> getHashCodeList(MultipartFile[] imageList) {
-    Path tempFolderPath = createTempFolder();
+  /**
+   * 파일 임시 처리 (해쉬코드를 위해서)
+   * @param imageList : 해쉬값을 구하기 위한 이미지 배열
+   * @param typePath : 숙박/객실/이용후기 UploadFileType 의 path
+   * @return
+   */
+  public List<String> getHashCodeList(MultipartFile[] imageList, String typePath) {
+    String dateFolderPath = createDateFolderPath();
+    Path tempFolderPath = createTempFolder(dateFolderPath, typePath); // 임시 폴더 생성
     System.out.println("tempFolderPath : " + tempFolderPath);
 
     List<String> hashCodeList = new ArrayList<>();
     for(MultipartFile image : imageList) {
-      String fileUrl = tempFolderPath + "\\" + image.getOriginalFilename();
+//      String fileUrl = tempFolderPath + "\\" + image.getOriginalFilename();
+      String fileUrl = tempFolderPath.resolve(image.getOriginalFilename()).toString();
       
-      saveFile(image, "", image.getOriginalFilename(), "temp");
+      saveFile(image, dateFolderPath, image.getOriginalFilename(), ("temp/" + typePath));
       
       String hashCode = getHashValue(fileUrl);
       System.out.println("hashCode : " + hashCode);
@@ -209,13 +250,18 @@ public class OclockFileUtils {
     return hashCodeList;
   }
   
-  private String getHashValue(String fileName) {
-    System.out.println("fileName : " + fileName);
+  /**
+   * 해시 값 구하기
+   * @param fileUrl : 파일 경로
+   * @return
+   */
+  private String getHashValue(String fileUrl) {
+    System.out.println("fileUrl : " + fileUrl);
     String hashValue = "";
     try {
         MessageDigest digest = MessageDigest.getInstance(algorithm);
 
-        try (FileInputStream fis = new FileInputStream(fileName)) {
+        try (FileInputStream fis = new FileInputStream(fileUrl)) {
             byte[] buffer = new byte[16384];
             int bytesRead;
 
@@ -239,29 +285,50 @@ public class OclockFileUtils {
         System.out.println(algorithm + " 해시 값: " + hexString.toString());
         hashValue = hexString.toString();
     } catch (NoSuchAlgorithmException e) {
-        System.err.println("알고리즘을 찾을 수 없습니다: " + e.getMessage());
+        System.err.println("알고리즘을 찾을 수 없음: " + e.getMessage());
     } catch (IOException e) {
         System.err.println("파일 입출력 오류: " + e.getMessage());
     }
     return hashValue;
   }
 
-  public void deleteTempFolder(List<MultipartFile> newImageList) {
-    Path folderPath = uploadPath.resolve("temp");
+  /**
+   * 임시 폴더 내 임시 파일 삭제
+   * 
+   * 방금 추가한 파일을 임시 폴더에서 찾고 해당 파일의 해시값을 구해서 리스트에 저장한다
+   * 
+   * 구한 해시 리스트와 매개변수로 전달받은 해시리스트와 비교해서 일치할 경우 삭제한다
+   * 
+   * @param newImageList : 파일 리스트
+   * @param hashCodeList : 해시코드 리스트
+   * @param typePath : 숙박/객실/이용후기 UploadFileType 의 path
+   */
+  public void deleteTempFolder(List<MultipartFile> newImageList, List<String> hashCodeList, String typePath) {
+    String dateFolderPath = createDateFolderPath();
+    Path folderPath = uploadPath.resolve("temp").resolve(typePath).resolve(dateFolderPath);
+//    System.out.println("folderPath : " + folderPath);
+
+    List<String> fileHashList = new ArrayList<>();
     
     try (Stream<Path> paths = Files.list(folderPath)) {
       paths.forEach(path -> {
-        System.out.println(path.getFileName()); // 정상출력 확인 완료
+//        System.out.println("path.getFileName() : " + path.getFileName().toString()); // 정상출력 확인 완료
+        fileHashList.add(getHashValue(folderPath + "\\" + path.getFileName()));
       });
     } catch (IOException e) {
-      // TODO Auto-generated catch block
+      System.out.println("오류 : " + e.getMessage());
       e.printStackTrace();
     }
     
-    try {
-      Files.deleteIfExists(folderPath);
-    } catch (IOException e) {
-      e.printStackTrace();
+    for(int i = 0; i < fileHashList.size(); i++) {
+//      System.out.println("folderPath.resolve(newImageList.get(i).getOriginalFilename()).toString() : " + folderPath.resolve(newImageList.get(i).getOriginalFilename()).toString());
+//      System.out.println("fileHashList.get(i) : " + fileHashList.get(i));
+//      System.out.println("hashCodeList.get(i) : " + hashCodeList.get(i));
+      for(int j = 0; j < hashCodeList.size(); j++) {
+        if(fileHashList.get(i).equals(hashCodeList.get(j))) {
+          new File(folderPath.resolve(newImageList.get(j).getOriginalFilename()).toString()).delete();
+        }
+      }
     }
   }
 }
