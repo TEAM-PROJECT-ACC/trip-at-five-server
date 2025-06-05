@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="diaryMapper" >
+	<select id="selectTotalCount" resultType="_int" >
+		SELECT COUNT(*) FROM DIARY_TB WHERE MEM_NO = #{memNo}
+	</select>
+	<select id="selectAllList" resultType="DiaryVO" >
+		SELECT
+			DIARY_SQ,
+			DIARY_TITLE,
+			DIARY_CONT,
+			DIARY_REG_DT,
+			MEM_NO
+		FROM 
+			DIARY_TB 
+		WHERE 
+			MEM_NO = #{memNo}
+		ORDER BY DIARY_SQ DESC
+	</select>
+	<select id="selectDiary" resultType="DiaryVO" >
+		SELECT 
+			DIARY_SQ,
+			DIARY_TITLE,
+			DIARY_CONT,
+			DIARY_REG_DT,
+			MEM_NO
+		FROM 
+			DIARY_TB 
+		WHERE 
+			MEM_NO = #{memNo} 
+			AND DIARY_SQ = #{diarySq}
+	</select>
+	<update id="updateDiary">
+		UPDATE 
+			DIARY_TB 
+		SET	
+			DIARY_TITLE = #{diaryTitle}, 
+			DIARY_CONT = #{diaryCont} 
+		WHERE
+			DIARY_SQ = #{diarySq} 
+			AND MEM_NO = #{memNo}
+	</update>
+	<delete id="deleteDiary">
+		DELETE 
+		FROM 
+			DIARY_TB
+		WHERE
+			MEM_NO = #{memNo}
+			AND DIARY_SQ = #{diarySq} 
+	</delete>
+	<insert id="insertDiary" >
+		INSERT INTO 
+			DIARY_TB (
+				DIARY_SQ, 
+				DIARY_TITLE, 
+				DIARY_CONT, 
+				DIARY_REG_DT, 
+				MEM_NO
+			)
+		VALUES (
+			DIARY_SEQ.NEXTVAL,
+			#{diaryTitle},
+			#{diaryCont},
+			SYSDATE,
+			#{memNo}
+		)
+	</insert>
+</mapper>
