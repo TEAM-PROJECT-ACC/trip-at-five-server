@@ -62,6 +62,18 @@ public class RoomServiceImpl implements RoomService {
     return insertResult;
   }
   
+  @Override
+  @Transactional
+  public int updateRoom(RoomVO room, MultipartFile[] images) {
+    int updateResult = roomDAO.updateRoom(room); // 객실 정보 업데이트
+
+    List<RoomImageDTO> roomImageList = roomImageService.findRoomImageByRoomSq(room.getRoomSq());
+    
+    additionalImageFun(updateResult, roomImageList, room.getRoomSq(), images);
+  
+    return updateResult;
+  }
+  
   private void insertImageFun(int judge, int typeNumKey, MultipartFile[] images) {
     int roomImageResult = 0;
     List<MultipartFile> newImageList = new ArrayList<>();
@@ -94,18 +106,6 @@ public class RoomServiceImpl implements RoomService {
         }
       }
     }
-  }
-  
-  @Override
-  @Transactional
-  public int updateRoom(RoomVO room, MultipartFile[] images) {
-    int updateResult = roomDAO.updateRoom(room); // 객실 정보 업데이트
-
-    List<RoomImageDTO> roomImageList = roomImageService.findRoomImageByRoomSq(room.getRoomSq());
-    
-    additionalImageFun(updateResult, roomImageList, room.getRoomSq(), images);
-  
-    return updateResult;
   }
   
   /**
