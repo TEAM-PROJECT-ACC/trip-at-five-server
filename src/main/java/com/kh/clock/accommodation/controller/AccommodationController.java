@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.kh.clock.accommodation.repository.AccomDTO;
-import com.kh.clock.accommodation.repository.AccomListInfoDTO;
+import com.kh.clock.accommodation.repository.dto.AccomDTO;
+import com.kh.clock.accommodation.repository.dto.AccomListInfoDTO;
 import com.kh.clock.accommodation.service.AccomService;
 
 @RestController
@@ -47,7 +47,6 @@ public class AccommodationController {
     if (accomDetail == null) {
       return ResponseEntity.notFound().build();
     }
-    
     return ResponseEntity.ok(accomDetail);
   }
   

@@ -1,11 +1,10 @@
-package com.kh.clock.accommodation.repository;
+package com.kh.clock.accommodation.repository.dto;
 
-import java.util.List;
-import com.kh.clock.room.domain.RoomVO;
+import java.sql.Date;
 import lombok.Data;
 
 @Data
-public class AccomDTO {
+public class AccomAdminDetailDTO {
   private int accomSq;
   private String accomName;
   private String accomDesc;
@@ -14,13 +13,9 @@ public class AccomDTO {
   private String accomZipCode;
   private String accomAddr;
   private String accomPhone;
+  private Date accomRegDt;
   private String pubFacInfo;
   private String inRoomFacInfo;
   private String etcFacInfo;
   private int accomTypeNo;
-  
-  private int roomPrice;
-  private String roomChkIn;
-  private String roomChkOut;
-  private List<RoomVO> roomList;
 }

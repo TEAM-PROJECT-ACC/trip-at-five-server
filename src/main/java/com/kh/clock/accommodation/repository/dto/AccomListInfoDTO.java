@@ -1,4 +1,4 @@
-package com.kh.clock.accommodation.repository;
+package com.kh.clock.accommodation.repository.dto;
 
 import lombok.Data;
 

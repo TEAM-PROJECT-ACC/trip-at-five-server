@@ -3,8 +3,8 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="accommodationMapper">
-
-    <select id="selectAccomList" parameterType="com.kh.clock.accommodation.repository.AccomListInfoDTO" resultType="com.kh.clock.accommodation.repository.AccomDTO">
+	<!-- 사용자 페이지 숙박 목록 조회(키워드/검색 데이터) -->
+    <select id="selectAccomList" parameterType="com.kh.clock.accommodation.repository.dto.AccomListInfoDTO" resultType="com.kh.clock.accommodation.repository.dto.AccomDTO">
       SELECT 
       	ACCOM_SQ,
         ACCOM_NAME,
@@ -34,11 +34,12 @@
     	) R1
     	WHERE R1.RN = 1
 	  ) R ON A.ACCOM_SQ = R.ACCOM_NO
-	    WHERE L.LOC_NAME LIKE '%' || #{keyword} || '%'
+	    WHERE ACCOM_ADDR LIKE '%' || #{keyword} || '%'
 	    ORDER BY ACCOM_SQ DESC
     </select>
-
-    <select id="selectAccomDetail" parameterType="int" resultType="com.kh.clock.accommodation.repository.AccomDTO">
+	
+	<!-- 사용자 페이지 숙박 상세 페이지 -->
+    <select id="selectAccomDetail" parameterType="int" resultType="com.kh.clock.accommodation.repository.dto.AccomDTO">
         SELECT 
         A.ACCOM_SQ,
         A.ACCOM_NAME,
@@ -61,22 +62,55 @@
         ORDER BY A.ACCOM_SQ DESC
     </select>
 
+	<!-- 사용자 페이지 숙박 상세 페이지 안의 객실 정보 조회 -->
 	<select id="selectRoomList" parameterType="int" resultType="com.kh.clock.room.domain.RoomVO">
 		SELECT *
 		FROM ROOM_TB
 		WHERE ACCOM_NO = #{accomNo}
 		ORDER BY ACCOM_NO DESC
 	</select>
-    <insert id="insertAccom" parameterType="com.kh.clock.accommodation.repository.AccomDTO">
-        
-    </insert>
-
-    <update id="updateAccom" parameterType="com.kh.clock.accommodation.repository.AccomDTO">
-        
-    </update>
-
-    <delete id="deleteAccom" parameterType="int">
-        
-    </delete>
-
+	
+	<!-- 관리 -->
+	<select id="selectAdminAccomList" parameterType="com.kh.clock.accommodation.repository.dto.AccomAdminSearchDTO" resultType="com.kh.clock.accommodation.repository.dto.AccomAdminListDTO">
+		SELECT 
+			A.ACCOM_SQ,
+			A.ACCOM_NAME,
+			A.ACCOM_ADDR,
+			A.ACCOM_PHONE,
+			T.ACCOM_TYPE_NAME,
+			R.ROOM_PRICE
+		FROM ACCOMMODATION_TB A
+		LEFT JOIN LOCATION_TB L ON A.LOC_ID = L.LOC_ID
+		LEFT JOIN (SELECT R.ACCOM_NO, MIN(R.ROOM_PRICE) AS ROOM_PRICE FROM ROOM_TB R GROUP BY R.ACCOM_NO) R ON A.ACCOM_SQ = R.ACCOM_NO
+		LEFT JOIN ACCOMMODATION_TYPE_TB T ON A.ACCOM_TYPE_NO = T.ACCOM_TYPE_SQ
+		<where>
+			<if test="keyword != null and keyword != ''">
+				AND (
+					A.ACCOM_NAME LIKE '%' || #{keyword} || '%'
+					OR A.ACCOM_ADDR LIKE  #{keyword} || '%'
+				)
+			</if>
+	</where>
+		ORDER BY A.ACCOM_SQ DESC
+	</select>
+    
+	<select id="selectAdminAccomDetail" parameterType="int" resultType="com.kh.clock.accommodation.repository.dto.AccomAdminDetailDTO">
+		SELECT
+			ACCOM_SQ,
+			ACCOM_NAME,
+			ACCOM_DESC,
+			ACCOM_LON,
+			ACCOM_LAT,
+			ACCOM_ZIP_CODE,
+			ACCOM_ADDR,
+			ACCOM_PHONE,
+			ACCOM_REG_DT,
+			PUB_FAC_INFO,
+			IN_ROOM_FAC_INFO,
+			ETC_FAC_INFO,
+			ACCOM_TYPE_NO
+		FROM ACCOMMODATION_TB
+		WHERE ACCOM_SQ = #{accomSq}
+		ORDER BY ACCOM_SQ DESC
+	</select>
 </mapper>
