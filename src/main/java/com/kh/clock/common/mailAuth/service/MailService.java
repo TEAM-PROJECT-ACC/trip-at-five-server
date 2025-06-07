@@ -18,7 +18,7 @@ import jakarta.mail.internet.MimeMessage;
 @Service
 public class MailService {
 
-    private final SecurityConfig securityConfig;
+	private final SecurityConfig securityConfig;
 
 	private final JavaMailSender sender;
 
@@ -38,9 +38,9 @@ public class MailService {
 
 		// 인증 정보 생성 --> AuthData
 		AuthDataVo authData = new AuthDataVo();
-		String code = authData.getCode();	
+		String code = authData.getCode();
 
-	    System.out.println(code);
+		System.out.println(code);
 		// 메일 내용 작성
 		String subject = "[여행다섯시] 인증 코드";
 		String[] to = { email };
@@ -64,8 +64,8 @@ public class MailService {
 		// Map에서 email에 해당하는 이증 저옵가 있는 지 체크
 
 		AuthDataVo authData = authInfo.get(email);
-		
-		System.out.println("email : "+email+" code: "+code);
+
+		System.out.println("email : " + email + " code: " + code);
 		System.out.println("authData: " + authData);
 
 		if (authData == null)
@@ -76,13 +76,11 @@ public class MailService {
 			authInfo.remove(email);
 			return false;
 		}
-		
-		
+
 		if (!authData.getCode().equals(code)) {
 			authInfo.remove(email);
 			return false;
 		}
-		
 
 //			 if (code.equals(authData.getCode())) {
 //				 authInfo.remove(email);
