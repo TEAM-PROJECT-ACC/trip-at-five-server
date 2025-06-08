@@ -22,6 +22,7 @@ import com.kh.clock.room.repository.dto.RoomDetailDTO;
 import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
 import com.kh.clock.room.repository.dto.RoomImageDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
+import com.kh.clock.room.repository.dto.RoomSearchDTO;
 import com.kh.clock.room.service.RoomImageServiceImpl;
 import com.kh.clock.room.service.RoomServiceImpl;
 
@@ -43,10 +44,16 @@ public class RoomController {
    * @return
    */
   @GetMapping("")
-  public ResponseEntity<Object> selectRoomList(@PathVariable("accomNo") int accomNo, @RequestParam(value="currentPage") int currentPage) {
-//    System.out.println("GetMapping : " + accomNo);
+  public ResponseEntity<Object> selectRoomList(
+    @PathVariable(value="accomNo", required=true) int accomNo,
+    @RequestParam(value="currentPage", required = false, defaultValue="1") int currentPage,
+    @RequestParam(value="keyword", required = false, defaultValue = "") String keyword
+  ) {
+    System.out.println("GetMapping : " + accomNo);
 //    System.out.println((currentPage != 0 ? currentPage : "null입니다."));
-    List<RoomListDTO> roomList = roomService.selectAllList(accomNo);
+    List<RoomListDTO> roomList = roomService.selectAllList(new RoomSearchDTO(accomNo, keyword));
+    
+    for(RoomListDTO rlDTO : roomList) System.out.println(rlDTO.toString());
 
     if(roomList != null) return ResponseEntity.status(HttpStatus.OK).body(roomList);
     else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 전체 조회에 실패했습니다.");

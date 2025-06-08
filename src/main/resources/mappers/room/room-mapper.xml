@@ -6,7 +6,9 @@
 
 	<!-- 객실 전체 조회 -->
 	<select id="selectAllList" resultType="com.kh.clock.room.repository.dto.RoomListDTO">
-		SELECT ROOM_SQ, ROOM_NAME, ROOM_CNT, ROOM_PRICE FROM ROOM_TB WHERE ACCOM_NO = #{accomNo}
+		SELECT ROOM_SQ, ROOM_NAME, ROOM_CNT, ROOM_PRICE
+		FROM ROOM_TB
+		WHERE ACCOM_NO = #{accomNo} AND ROOM_NAME LIKE '%${keyword}%'
 	</select>
 	
 	<!-- 특정 객실 조회 -->

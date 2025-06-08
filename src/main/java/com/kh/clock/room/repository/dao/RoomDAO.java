@@ -7,6 +7,7 @@ import com.kh.clock.room.domain.RoomVO;
 import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
 import com.kh.clock.room.repository.dto.RoomDetailDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
+import com.kh.clock.room.repository.dto.RoomSearchDTO;
 
 @Repository
 public class RoomDAO {
@@ -26,8 +27,8 @@ public class RoomDAO {
     return sqlSession.selectOne("roomMapper.findByAccomNo", accomNo);
   }
 
-  public List<RoomListDTO> selectAllList(int accomNo) {
-    return sqlSession.selectList("roomMapper.selectAllList", accomNo);
+  public List<RoomListDTO> selectAllList(RoomSearchDTO roomSearchDTO) {
+    return sqlSession.selectList("roomMapper.selectAllList", roomSearchDTO);
   }
 
   // 객실 상세 조회

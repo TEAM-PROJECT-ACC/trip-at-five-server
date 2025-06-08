@@ -15,6 +15,7 @@ import com.kh.clock.room.repository.dto.RoomDetailDTO;
 import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
 import com.kh.clock.room.repository.dto.RoomImageDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
+import com.kh.clock.room.repository.dto.RoomSearchDTO;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -40,8 +41,8 @@ public class RoomServiceImpl implements RoomService {
    * 전체 목록 조회
    */
   @Override
-  public List<RoomListDTO> selectAllList(int accomNo) {
-    List<RoomListDTO> roomList = roomDAO.selectAllList(accomNo);
+  public List<RoomListDTO> selectAllList(RoomSearchDTO roomSearchDTO) {
+    List<RoomListDTO> roomList = roomDAO.selectAllList(roomSearchDTO);
     
     return roomList != null ? roomList : null;
   }
