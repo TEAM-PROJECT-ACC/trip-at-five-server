@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mamberMapper">
 
 	<select id="emailDuplication" resultType="int">
@@ -10,6 +8,7 @@
 		emailCount
 		from member_tb
 		where mem_email_id = #{email}
+		<!--and ck_soc_plt = #{platformName} -->
 	</select>
 
 
@@ -41,16 +40,22 @@
 		, sysdate)
 	</insert>
 
-	<insert id="kakaoRegister">
+	<insert id="snsRegister">
 
-		insert into member_tb (mem_sq, mem_email_id, mem_pwd, mem_nick, MEM_SOC_UID,
+		insert into member_tb (mem_sq, mem_email_id, mem_pwd, mem_nick,
+		MEM_SOC_UID,
 		CK_SOC_PLT) values (
-		mem_seq.nextval, #{email}, #{pwd}, #{nickName}, #{snsUid} , #{platformName}
+		mem_seq.nextval, #{email}, #{pwd}, #{nickName}, #{snsUid} ,
+		#{platformName}
 		)
 	</insert>
 
 
+	<select id="loginInfo" resultType="MemberVO">
 
+		select * from member_tb where mem_email_id = #{email}
+
+	</select>
 
 
 </mapper>

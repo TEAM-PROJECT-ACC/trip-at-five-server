@@ -1,14 +1,11 @@
 package com.kh.clock.member.controller;
 
-import java.lang.ProcessBuilder.Redirect;
 import java.util.Map;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.clock.member.repository.RegisterDTO;
@@ -19,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/register")
 @RequiredArgsConstructor
-public class RegisterController {
+public class MemberRegisterController {
 
 	private final RegisterServiceImpl mService;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -60,12 +57,13 @@ public class RegisterController {
 
 	/* 회원가입 */
 	@PostMapping("/send")
-	public int registerSend(@RequestBody RegisterDTO registerdto) {
+	public int registerSend(@RequestBody RegisterDTO registerdto) throws Exception {
 
 		System.out.println(registerdto);
 
 		String encPwd = bCryptPasswordEncoder.encode(registerdto.getPwd());
 		System.out.println("encPwd : " + encPwd);
+
 		registerdto.setPwd(encPwd);
 
 		int result = mService.registerSend(registerdto);
@@ -77,24 +75,5 @@ public class RegisterController {
 		return result;
 
 	}
-	
-	@PostMapping("/kakaoLogin")
-	public int kakaoLogin() {
-		
-		return 0;
-	}
-
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,14 +1,18 @@
 package com.kh.clock.member.service;
 
-import com.kh.clock.member.repository.SnsLoginDTO;
+import com.kh.clock.member.domain.MemberVO;
+import com.kh.clock.member.repository.LoginDTO;
 
 public interface LoginService {
 
 	/* 카카오 유저 가입 여부 확인  */
-	int kakaoRegisterSelect(SnsLoginDTO kakaoLoginDTO);
+	int snsRegisterSelect(LoginDTO loginDTO);
 
 	
-	int kakaoRegister(SnsLoginDTO kakaoLoginDTO);
+	int snsRegister(LoginDTO kakaoLoginDTO);
+
+
+	MemberVO loginInfo(LoginDTO userInfo);
 
 	
 }

@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member {
+public class MemberVO {
 
-  
+	private int memSq;
     private String memEmailId;
     private String memPwd;
     private String memNick;

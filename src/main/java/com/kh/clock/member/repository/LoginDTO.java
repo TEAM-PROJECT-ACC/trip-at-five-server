@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SnsLoginDTO {
+public class LoginDTO {
 
+	
 	private String email;
 	private String pwd;
 	private String nickName;
