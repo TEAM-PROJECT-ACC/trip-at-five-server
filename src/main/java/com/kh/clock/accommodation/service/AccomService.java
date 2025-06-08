@@ -21,4 +21,13 @@ public interface AccomService {
   // 관리자 페이지 숙박 상세 조회
   AccomAdminDetailDTO selectAdminAccomDetailByAccomSq(int accomSq);
 
+  // 관리자 페이지 숙박 상세 수정
+  int updateAdminAccomDetail(AccomAdminDetailDTO updatedAccomInfo);
+
+  // 관리자 페이지 숙박 정보 삭제
+  int deleteAdminAccom(int accomSq);
+
+  // 관리자 페이지 숙박 정보 등록
+  int insertAdminAccom(AccomAdminDetailDTO accomDto);
+
 }

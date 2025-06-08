@@ -113,4 +113,60 @@
 		WHERE ACCOM_SQ = #{accomSq}
 		ORDER BY ACCOM_SQ DESC
 	</select>
+	
+	<update id="updateAdminAccomDetail">
+		UPDATE ACCOMMODATION_TB
+    	SET
+	        accom_name = #{accomName},
+	        accom_desc = #{accomDesc},
+	        accom_lat = #{accomLat},
+	        accom_lon = #{accomLon},
+	        accom_addr = #{accomAddr},
+	        accom_phone = #{accomPhone},
+	        pub_fac_info = #{pubFacInfo},
+	        in_room_fac_info = #{inRoomFacInfo},
+	        etc_fac_info = #{etcFacInfo},
+	        accom_type_no = #{accomTypeNo}
+    	WHERE accom_sq = #{accomSq}
+	</update>
+	
+	<delete id="deleteAdminRoom" parameterType="int" >
+		DELETE FROM ROOM_TB WHERE ACCOM_NO = #{accomSq}
+	</delete>
+	
+	<delete id="deleteAdminAccom" parameterType="int" >
+		DELETE FROM ACCOMMODATION_TB WHERE ACCOM_SQ = #{accomSq}
+	</delete>
+	
+	<insert id="insertAdminAccom" parameterType="com.kh.clock.accommodation.repository.dto.AccomAdminDetailDTO">
+	    INSERT INTO ACCOMMODATION_TB (
+	      ACCOM_SQ,
+	      ACCOM_NAME,
+	      ACCOM_DESC,
+	      ACCOM_LON,
+	      ACCOM_LAT,
+	      ACCOM_ZIP_CODE,
+	      ACCOM_ADDR,
+	      ACCOM_PHONE,
+	      ACCOM_REG_DT,
+	      PUB_FAC_INFO,
+	      IN_ROOM_FAC_INFO,
+	      ETC_FAC_INFO,
+	      ACCOM_TYPE_NO
+	    ) VALUES (
+	      ACCOM_SEQ.NEXTVAL,
+	      #{accomName},
+	      #{accomDesc},
+	      #{accomLon},
+	      #{accomLat},
+	      #{accomZipCode},
+	      #{accomAddr},
+	      #{accomPhone},
+	      SYSDATE,
+	      #{pubFacInfo},
+	      #{inRoomFacInfo},
+	      #{etcFacInfo},
+	      #{accomTypeNo}
+	    )
+	</insert>
 </mapper>

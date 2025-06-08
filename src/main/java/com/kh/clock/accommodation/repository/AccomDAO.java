@@ -65,6 +65,24 @@ public class AccomDAO {
     return sqlSession.selectOne("accommodationMapper.selectAdminAccomDetail", accomSq);
   }
 
+  // 관리자 숙박 상세 수정
+  public int updateAdminAccomDetail(AccomAdminDetailDTO updatedAccomInfo) {
+    return sqlSession.update("accommodationMapper.updateAdminAccomDetail", updatedAccomInfo);
+  }
+
+  // 관리자 숙박 삭제
+  public int deleteAdminAccom(int accomSq) {
+    return sqlSession.delete("accommodationMapper.deleteAdminAccom", accomSq);
+  }
   
+  // 관리자 숙박 삭제를 위한 객실 정보 삭제 우선
+  public int deleteAdminRoom(int accomSq) {
+    return sqlSession.delete("accommodationMapper.deleteAdminRoom", accomSq);
+  }
+
+  // 관리자 숙박 등록
+  public int insertAdminAccom(AccomAdminDetailDTO accomDto) {
+    return sqlSession.insert("accommodationMapper.insertAdminAccom", accomDto);
+  }
 
 }

@@ -49,6 +49,24 @@ public class AccomServiceImpl implements AccomService {
   public AccomAdminDetailDTO selectAdminAccomDetailByAccomSq(int accomSq) {
     return accomDAO.selectAdminAccomDetailByAccomSq(accomSq);
   }
-  
 
+  // 관리자 숙박 상세 수정
+  @Override
+  public int updateAdminAccomDetail(AccomAdminDetailDTO updatedAccomInfo) {
+    return accomDAO.updateAdminAccomDetail(updatedAccomInfo);
+  }
+
+  // 관리자 숙박 삭제
+  @Override
+  public int deleteAdminAccom(int accomSq) {
+    accomDAO.deleteAdminRoom(accomSq);
+    return accomDAO.deleteAdminAccom(accomSq);
+  }
+
+  // 관리자 숙박 정보 등록
+  @Override
+  public int insertAdminAccom(AccomAdminDetailDTO accomDto) {
+    return accomDAO.insertAdminAccom(accomDto);
+  }
+  
 }
