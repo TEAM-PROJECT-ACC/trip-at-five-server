@@ -60,7 +60,6 @@ public class AccomServiceImpl implements AccomService {
   // 관리자 숙박 삭제
   @Override
   public int deleteAdminAccom(int accomSq) {
-    //accomDAO.deleteAdminRoom(accomSq);
     return accomDAO.deleteAdminAccom(accomSq);
   }
 

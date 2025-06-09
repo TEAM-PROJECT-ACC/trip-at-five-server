@@ -75,7 +75,6 @@
 		    ROOM_MAX_PPL,
 		    ROOM_CNT,
 		    ROOM_REG_DT,
-		    <!-- ACCOM_NO AS accomNo --> 
 		    ACCOM_NO
 		FROM ROOM_TB
 		WHERE ACCOM_NO = #{accomNo}
