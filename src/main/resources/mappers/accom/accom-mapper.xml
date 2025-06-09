@@ -42,6 +42,7 @@
     <select id="selectAccomDetail" parameterType="int" resultType="com.kh.clock.accommodation.repository.dto.AccomDTO">
         SELECT 
         A.ACCOM_SQ,
+        A.ACCOM_SQ AS accomNo,
         A.ACCOM_NAME,
         A.ACCOM_DESC,
         A.ACCOM_LON,
@@ -64,7 +65,17 @@
 
 	<!-- 사용자 페이지 숙박 상세 페이지 안의 객실 정보 조회 -->
 	<select id="selectRoomList" parameterType="int" resultType="com.kh.clock.room.domain.RoomVO">
-		SELECT *
+		SELECT
+			ROOM_SQ,
+		    ROOM_NAME,
+		    ROOM_PRICE,
+		    ROOM_CHK_IN,
+		    ROOM_CHK_OUT,
+		    ROOM_STD_PPL,
+		    ROOM_MAX_PPL,
+		    ROOM_CNT,
+		    ROOM_REG_DT,
+		    ACCOM_NO AS accomNo
 		FROM ROOM_TB
 		WHERE ACCOM_NO = #{accomNo}
 		ORDER BY ACCOM_NO DESC

@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import com.kh.clock.accommodation.repository.dto.AccomAdminDetailDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminListDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminSearchDTO;
@@ -65,10 +67,14 @@ public class AdminAccommodationController {
     }
   }
   
-  // 숙박 업체 정보 등록
+  // 숙박 업체 정보 (등록)
   @PostMapping("/new")
-  public ResponseEntity<String> registerAccommodation(@RequestBody AccomAdminDetailDTO accomDto) {
-    int result = accomService.insertAdminAccom(accomDto);
+  public ResponseEntity<Object> insertAdminAccom(@RequestBody AccomAdminDetailDTO accomDto, 
+                  @RequestPart(value = "images", required = false) MultipartFile[] images) {
+    if(images != null) {
+      for(MultipartFile mf : images) System.out.println(mf.getOriginalFilename());
+    }
+    int result = accomService.insertAdminAccom(accomDto, images);
     if (result > 0) {
       return ResponseEntity.ok("등록 완료");
     } else {

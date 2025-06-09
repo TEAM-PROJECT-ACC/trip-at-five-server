@@ -1,6 +1,7 @@
 package com.kh.clock.accommodation.service;
 
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 import com.kh.clock.accommodation.repository.dto.AccomAdminDetailDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminListDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminSearchDTO;
@@ -28,6 +29,6 @@ public interface AccomService {
   int deleteAdminAccom(int accomSq);
 
   // 관리자 페이지 숙박 정보 등록
-  int insertAdminAccom(AccomAdminDetailDTO accomDto);
+  int insertAdminAccom(AccomAdminDetailDTO accomDto, MultipartFile[] images);
 
 }

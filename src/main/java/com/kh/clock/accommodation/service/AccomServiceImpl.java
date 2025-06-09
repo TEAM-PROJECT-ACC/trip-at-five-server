@@ -2,6 +2,7 @@ package com.kh.clock.accommodation.service;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import com.kh.clock.accommodation.repository.AccomDAO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminDetailDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminListDTO;
@@ -59,13 +60,13 @@ public class AccomServiceImpl implements AccomService {
   // 관리자 숙박 삭제
   @Override
   public int deleteAdminAccom(int accomSq) {
-    accomDAO.deleteAdminRoom(accomSq);
+    //accomDAO.deleteAdminRoom(accomSq);
     return accomDAO.deleteAdminAccom(accomSq);
   }
 
-  // 관리자 숙박 정보 등록
+  //관리자 숙박 정보 등록
   @Override
-  public int insertAdminAccom(AccomAdminDetailDTO accomDto) {
+  public int insertAdminAccom(AccomAdminDetailDTO accomDto, MultipartFile[] images) {
     return accomDAO.insertAdminAccom(accomDto);
   }
   
