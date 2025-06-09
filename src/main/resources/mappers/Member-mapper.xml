@@ -8,7 +8,6 @@
 		emailCount
 		from member_tb
 		where mem_email_id = #{email}
-		<!--and ck_soc_plt = #{platformName} -->
 	</select>
 
 
@@ -16,15 +15,6 @@
 
 		select count(*)
 		as nickCount
-		from member_tb
-		where mem_nick = #{nickName}
-	</select>
-
-	<select id="kakaoRegisterSelect" resultType="int">
-
-		select count(*)
-		as
-		nickCount
 		from member_tb
 		where mem_nick = #{nickName}
 	</select>
@@ -42,10 +32,12 @@
 
 	<insert id="snsRegister">
 
-		insert into member_tb (mem_sq, mem_email_id, mem_pwd, mem_nick,
+		insert into member_tb (mem_sq, mem_email_id, mem_pwd,
+		mem_nick,
 		MEM_SOC_UID,
 		CK_SOC_PLT) values (
-		mem_seq.nextval, #{email}, #{pwd}, #{nickName}, #{snsUid} ,
+		mem_seq.nextval, #{email},
+		#{pwd}, #{nickName}, #{snsUid} ,
 		#{platformName}
 		)
 	</insert>
@@ -53,7 +45,8 @@
 
 	<select id="loginInfo" resultType="MemberVO">
 
-		select * from member_tb where mem_email_id = #{email}
+		select * from member_tb where
+		mem_email_id = #{email}
 
 	</select>
 

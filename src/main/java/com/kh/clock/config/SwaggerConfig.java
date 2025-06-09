@@ -18,7 +18,7 @@ public class SwaggerConfig {
 
 	@Bean
 	public OpenAPI cusomOpenApi() {
-		return new OpenAPI().info(new Info().title("trip-at-five").version("1.0").description("백엔드 api"));
+		return new OpenAPI().info(new Info().title("trip-at-five").version("1.0").description("백엔드 api 및 객체 모음"));
 	}
 	
 	public ApiResponse createApiResponse(String message, Content content){

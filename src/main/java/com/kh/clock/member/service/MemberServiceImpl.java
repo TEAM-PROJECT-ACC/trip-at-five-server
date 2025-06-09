@@ -1,20 +1,46 @@
 package com.kh.clock.member.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.kh.clock.member.domain.MemberVO;
+import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.repository.MemberDAO;
 import com.kh.clock.member.repository.RegisterDTO;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
-public class RegisterServiceImpl implements RegisterService {
+@RequiredArgsConstructor
+public class MemberServiceImpl implements MemberService {
 
+	@Autowired
 	private  final MemberDAO memberDAO;
-	
-	public RegisterServiceImpl(MemberDAO memberDAO) {
-		this.memberDAO = memberDAO;
+
+	@Override
+	public int snsRegisterSelect(LoginDTO loginDTO) {
+
+		int result = memberDAO.snsRegisterSelect(loginDTO);
+
+		return result;
 	}
 
+	@Override
+	public int snsRegister(LoginDTO kakaoLoginDTO) {
+
+		int result = memberDAO.snsRegister(kakaoLoginDTO);
+
+		return result;
+	}
+
+	@Override
+	public MemberVO loginInfo(LoginDTO userInfo) {
+
+		MemberVO result = memberDAO.loginInfo(userInfo);
+
+		return result;
+	}
+	
 	@Override
 	public int emailDuplicationCheck(String email) {
 

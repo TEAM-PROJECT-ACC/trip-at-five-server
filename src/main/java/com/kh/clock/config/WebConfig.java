@@ -3,7 +3,10 @@ package com.kh.clock.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.kh.clock.intercetor.LoginInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -15,6 +18,14 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addMapping("/**").allowedOrigins(origins).allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE")
 				.allowedHeaders("*").allowCredentials(true);
 
+	}
+	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		// registry.addInterceptor(new LoginInterceptor())
+		registry.addInterceptor(new LoginInterceptor())
+				.addPathPatterns("/login/logout");
+				
 	}
 
 }

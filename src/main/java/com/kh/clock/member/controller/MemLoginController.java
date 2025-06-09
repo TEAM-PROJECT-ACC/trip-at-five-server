@@ -2,6 +2,7 @@ package com.kh.clock.member.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,12 +12,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kh.clock.member.domain.MemberVO;
 import com.kh.clock.member.repository.LoginDTO;
-import com.kh.clock.member.service.LoginService;
+import com.kh.clock.member.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/login")
@@ -25,25 +25,32 @@ class MemLoginController {
 
 	@Autowired
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
-	private final LoginService lService;
+	private final MemberService mService;
 
 	@PostMapping("/nomal")
-	public int nomalLogin(@RequestBody LoginDTO userInfo, HttpServletRequest request, HttpSession session)
+	public String nomalLogin(@RequestBody LoginDTO userInfo, HttpServletRequest request, HttpSession session)
 			throws Exception {
 
-		MemberVO loginUser = lService.loginInfo(userInfo);
+		MemberVO loginUser = mService.loginInfo(userInfo);
 
-		if (loginUser != null) {
+		System.out.println(loginUser);
+		if (loginUser == null) {
 
-			return loginUser.getMemSq();
+			return "IdFail";
+		} else if (!bCryptPasswordEncoder.matches(userInfo.getPwd(), loginUser.getMemPwd())) {
+
+			return "pwdFail";
+		} else {
+			session.setAttribute("loginUser", loginUser);
+
+			String result = Integer.toString(loginUser.getMemSq());
+			return result;
 		}
-
-		return 0;
 
 	}
 
 	@PostMapping("/kakao")
-	public int kakaoLogin(@RequestBody String kakaoInfo, HttpServletRequest request, HttpSession session) {
+	public String kakaoLogin(@RequestBody String kakaoInfo, HttpServletRequest request, HttpSession session) {
 
 		JsonObject kakaoObj = JsonParser.parseString(kakaoInfo).getAsJsonObject();
 
@@ -60,10 +67,12 @@ class MemLoginController {
 		kakaoLoginDTO.setPlatformName("KAKAO");
 		System.out.println(kakaoLoginDTO);
 
-		int result = lService.snsRegisterSelect(kakaoLoginDTO);
-		System.out.println(result);
+		int register = mService.snsRegisterSelect(kakaoLoginDTO);
+		MemberVO loginUser = mService.loginInfo(kakaoLoginDTO);
 
-		if (result == 0) {
+		System.out.println(register);
+
+		if (loginUser == null) {
 			/* 회원가입처리 */
 			String tempPassword = "kakao_" + System.currentTimeMillis();
 			String encPwd = bCryptPasswordEncoder.encode(tempPassword);
@@ -73,17 +82,21 @@ class MemLoginController {
 			kakaoLoginDTO.setSnsUid(kakaoUid);
 
 			System.out.println("회원가입 쪽 : " + kakaoLoginDTO);
-			lService.snsRegister(kakaoLoginDTO);
+			mService.snsRegister(kakaoLoginDTO);
 
+		} else if (!loginUser.getCkSocPlt().equals("KAKAO")) {
+
+			return loginUser.getCkSocPlt();
 		}
 
-		MemberVO loginUser = lService.loginInfo(kakaoLoginDTO);
-		return loginUser.getMemSq();
+		session = request.getSession();
+		session.setAttribute("loginUser", loginUser);
+		return Integer.toString(loginUser.getMemSq());
 
 	}
 
 	@PostMapping("/naver")
-	public int naverLogin(@RequestBody String naverInfo) {
+	public String naverLogin(@RequestBody String naverInfo, HttpServletRequest request, HttpSession session) {
 
 		JsonObject naverObj = JsonParser.parseString(naverInfo).getAsJsonObject();
 
@@ -107,10 +120,13 @@ class MemLoginController {
 
 		System.out.println(naverLoginDTO);
 
-		int result = lService.snsRegisterSelect(naverLoginDTO);
-		System.out.println(result);
+		int register = mService.snsRegisterSelect(naverLoginDTO);
+		MemberVO loginUser = mService.loginInfo(naverLoginDTO);
 
-		if (result == 0) {
+		System.out.println(register);
+		System.out.println(loginUser);
+
+		if (loginUser == null) {
 			/* 회원가입처리 */
 			String tempPassword = "kakao_" + System.currentTimeMillis();
 			String encPwd = bCryptPasswordEncoder.encode(tempPassword);
@@ -119,17 +135,22 @@ class MemLoginController {
 			naverLoginDTO.setNickName(nickName);
 			naverLoginDTO.setSnsUid(naverUid);
 
-			lService.snsRegister(naverLoginDTO);
+			System.out.println("회원가입 쪽 : " + naverLoginDTO);
+			mService.snsRegister(naverLoginDTO);
 
+		} else if (!loginUser.getCkSocPlt().equals("NAVER")) {
+
+			return loginUser.getCkSocPlt();
 		}
-		
-		MemberVO loginUser = lService.loginInfo(naverLoginDTO);
-		return loginUser.getMemSq();
+
+		session = request.getSession();
+		session.setAttribute("loginUser", loginUser);
+		return Integer.toString(loginUser.getMemSq());
 
 	}
 
 	@PostMapping("/google")
-	public int googleLogin(@RequestBody String googleInfo) {
+	public String googleLogin(@RequestBody String googleInfo, HttpServletRequest request, HttpSession session) {
 
 		JsonObject googleObj = JsonParser.parseString(googleInfo).getAsJsonObject();
 
@@ -148,10 +169,13 @@ class MemLoginController {
 		googleLoginDTO.setEmail(email);
 		googleLoginDTO.setPlatformName("GOOGLE");
 
-		int result = lService.snsRegisterSelect(googleLoginDTO);
-		System.out.println(result);
+		int register = mService.snsRegisterSelect(googleLoginDTO);
+		MemberVO loginUser = mService.loginInfo(googleLoginDTO);
 
-		if (result == 0) {
+		System.out.println(register);
+		System.out.println(loginUser);
+
+		if (loginUser == null) {
 			/* 회원가입처리 */
 			String tempPassword = "kakao_" + System.currentTimeMillis();
 			String encPwd = bCryptPasswordEncoder.encode(tempPassword);
@@ -160,20 +184,24 @@ class MemLoginController {
 			googleLoginDTO.setNickName(name);
 			googleLoginDTO.setSnsUid(naverUid);
 
-			lService.snsRegister(googleLoginDTO);
-			MemberVO loginUser = lService.loginInfo(googleLoginDTO);
 			System.out.println("회원가입 쪽 : " + googleLoginDTO);
+			mService.snsRegister(googleLoginDTO);
 
-			return loginUser.getMemSq();
+		} else if (!loginUser.getCkSocPlt().equals("GOOGLE")) {
 
-		} else {
-			return 0;
+			return loginUser.getCkSocPlt();
 		}
+
+		session = request.getSession();
+		session.setAttribute("loginUser", loginUser);
+		return Integer.toString(loginUser.getMemSq());
 
 	}
 
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
+		// 세션영역 비우기
+		session.invalidate();
 
 		return "ok";
 	}

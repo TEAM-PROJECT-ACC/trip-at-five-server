@@ -2,6 +2,7 @@ package com.kh.clock.member.controller;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.clock.member.repository.RegisterDTO;
-import com.kh.clock.member.service.RegisterServiceImpl;
+import com.kh.clock.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +19,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberRegisterController {
 
-	private final RegisterServiceImpl mService;
+	@Autowired
+	private final MemberService mService;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	/* 이메일 중복 체크 */
