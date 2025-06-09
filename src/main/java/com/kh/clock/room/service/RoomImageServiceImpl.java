@@ -1,18 +1,23 @@
 package com.kh.clock.room.service;
 
 import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import com.kh.clock.common.file.OclockFileUtils;
+import com.kh.clock.common.file.dto.ImageFileDTO;
 import com.kh.clock.room.repository.dao.RoomImageDAO;
 import com.kh.clock.room.repository.dto.RoomImageDTO;
 
 @Service
 public class RoomImageServiceImpl implements RoomImageService {
   private RoomImageDAO roomImageDAO;
+  OclockFileUtils oFileUtils;
   
-  public RoomImageServiceImpl(RoomImageDAO roomImageDAO) {
+  public RoomImageServiceImpl(RoomImageDAO roomImageDAO, OclockFileUtils oFileUtils) {
     this.roomImageDAO = roomImageDAO;
+    this.oFileUtils = oFileUtils;
   }
 
   /**
@@ -43,12 +48,19 @@ public class RoomImageServiceImpl implements RoomImageService {
 
   /**
    * 객실 이미지 삭제
-   * => ON DELETE CASCADE 삭제옵션 때문에 사용X
+   * @param imageList 
    */
   @Override
-  @Transactional(propagation = Propagation.REQUIRED)
-  public int deleteRoomImageByRoomSq(int roomNo) {
-    return roomImageDAO.deleteRoomImageByRoomSq(roomNo);
+  public int deleteRoomImageByRoomSq(List<ImageFileDTO> imageList) {
+    int result = 0;
+    for(int i = 0; i < imageList.size(); i++) {
+      oFileUtils.deleteFile(imageList.get(i).getImagePath());
+      
+      result += roomImageDAO.deleteRoomImageByRoomSq(imageList.get(i));
+    }
+    
+//    return 1;
+    return result;
   }
 
 }
