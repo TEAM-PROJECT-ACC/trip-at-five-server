@@ -41,6 +41,7 @@ class MemLoginController {
 
 			return "pwdFail";
 		} else {
+			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
 
 			String result = Integer.toString(loginUser.getMemSq());

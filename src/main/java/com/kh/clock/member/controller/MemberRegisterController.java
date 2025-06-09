@@ -70,11 +70,13 @@ public class MemberRegisterController {
 
 		int result = mService.registerSend(registerdto);
 
+		System.out.println(result);
 		if (result > 0) {
-			registerdto.setNickCount(result);
-		}
+			return result;
+		} else {
 
-		return result;
+			return result;
+		}
 
 	}
 
