@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class AccomDTO {
   private int accomSq;
-  private int accomNo;
+//  private int accomNo;
   private String accomName;
   private String accomDesc;
   private double accomLon;

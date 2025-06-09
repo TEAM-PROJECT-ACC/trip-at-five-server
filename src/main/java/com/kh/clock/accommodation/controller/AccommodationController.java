@@ -44,6 +44,8 @@ public class AccommodationController {
     System.out.println(accomSq);
     AccomDTO accomDetail = accomService.getAccommodationById(accomSq);
     
+    System.out.println("teest : " + accomDetail);
+    
     if (accomDetail == null) {
       return ResponseEntity.notFound().build();
     }
