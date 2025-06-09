@@ -2,9 +2,13 @@ package com.kh.clock.accommodation.service;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import com.kh.clock.accommodation.repository.AccomDAO;
-import com.kh.clock.accommodation.repository.AccomDTO;
-import com.kh.clock.accommodation.repository.AccomListInfoDTO;
+import com.kh.clock.accommodation.repository.dto.AccomAdminDetailDTO;
+import com.kh.clock.accommodation.repository.dto.AccomAdminListDTO;
+import com.kh.clock.accommodation.repository.dto.AccomAdminSearchDTO;
+import com.kh.clock.accommodation.repository.dto.AccomDTO;
+import com.kh.clock.accommodation.repository.dto.AccomListInfoDTO;
 import com.kh.clock.room.domain.RoomVO;
 
 @Service
@@ -35,22 +39,34 @@ public class AccomServiceImpl implements AccomService {
       return accomDetail;
   }
 
-  // 숙박 등록
+  // 관리자 숙박 목록 조회
   @Override
-  public int createAccom(AccomDTO accom) {
-      return accomDAO.insertAccom(accom);
+  public List<AccomAdminListDTO> selectAdminAccomList(AccomAdminSearchDTO accomSearchDTO) {
+    return accomDAO.selectAdminAccomList(accomSearchDTO);
   }
 
-  // 숙박 정보 수정
+  // 관리자 숙박 상세 조회(숙박업체 번호로 조회)
   @Override
-  public int updateAccom(AccomDTO accom) {
-      return accomDAO.updateAccom(accom);
+  public AccomAdminDetailDTO selectAdminAccomDetailByAccomSq(int accomSq) {
+    return accomDAO.selectAdminAccomDetailByAccomSq(accomSq);
   }
 
-  // 숙박 정보 삭제
+  // 관리자 숙박 상세 수정
   @Override
-  public int deleteAccom(int accomSq) {
-      return accomDAO.deleteAccom(accomSq);
+  public int updateAdminAccomDetail(AccomAdminDetailDTO updatedAccomInfo) {
+    return accomDAO.updateAdminAccomDetail(updatedAccomInfo);
   }
 
+  // 관리자 숙박 삭제
+  @Override
+  public int deleteAdminAccom(int accomSq) {
+    return accomDAO.deleteAdminAccom(accomSq);
+  }
+
+  //관리자 숙박 정보 등록
+  @Override
+  public int insertAdminAccom(AccomAdminDetailDTO accomDto, MultipartFile[] images) {
+    return accomDAO.insertAdminAccom(accomDto);
+  }
+  
 }
