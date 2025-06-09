@@ -141,8 +141,8 @@ public class RoomServiceImpl implements RoomService {
         // 해시값 비교
         for(int i = 0; i < hashCodeList.size(); i++) {
           int count = 0;
-          System.out.println(hashCodeList.get(i));
-          System.out.println(roomImageList.get(i).getRoomImgHashCd());
+//          System.out.println(hashCodeList.get(i));
+//          System.out.println(roomImageList.get(i).getRoomImgHashCd());
           for(int j = 0; j < roomImageList.size(); j++) {
             if(hashCodeList.get(i).equals(roomImageList.get(j).getRoomImgHashCd())) {
               System.out.println("값이 일치");
