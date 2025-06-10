@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import com.kh.clock.common.file.dto.ImageFileDTO;
 import com.kh.clock.room.domain.RoomVO;
 import com.kh.clock.room.repository.dto.RoomDetailDTO;
 import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
@@ -81,11 +82,11 @@ public class RoomController {
 //    for(RoomImageDTO ri : roomImageList) System.out.println("파일명 : " + ri); // 디버깅
     
     if(roomDetailDTO != null) {
-      List<String> imageNameList = new ArrayList<>();
+      List<ImageFileDTO> imageNameList = new ArrayList<>();
       for(int i = 0; i < roomImageList.size(); i++) {
-        imageNameList.add(roomImageList.get(i).getRoomImgPathName());
+        imageNameList.add(new ImageFileDTO(roomImageList.get(i).getRoomNo(), roomImageList.get(i).getRoomImgHashCd(), roomImageList.get(i).getRoomImgPathName()));
       }
-//      System.out.println(roomDetailDTO);
+
       roomDetailDTO.setImageList(imageNameList);
       return ResponseEntity.status(HttpStatus.OK).body(roomDetailDTO);
     } else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 조회에 실패했습니다.");

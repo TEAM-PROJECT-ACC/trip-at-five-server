@@ -30,4 +30,8 @@
 			ROOM_IMG_PATH_NAME = #{roomImgPathName}
 		WHERE ROOM_NO = #{roomNo}
   	</update>
+  	
+	<delete id="deleteRoomImageByRoomSq">
+		DELETE FROM ROOM_IMAGE_TB WHERE ROOM_NO = #{no} AND ROOM_IMG_HASH_CD = #{hashCode} 
+	</delete>
 </mapper>

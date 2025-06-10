@@ -1,6 +1,7 @@
 package com.kh.clock.room.repository.dto;
 
 import java.util.List;
+import com.kh.clock.common.file.dto.ImageFileDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,6 @@ public class RoomDetailDTO {
   private int roomStdPpl;
   private int roomMaxPpl;
   private int roomCnt;
-  private List<String> imageList;
+  private List<ImageFileDTO> imageList;
   private int accomNo;
 }

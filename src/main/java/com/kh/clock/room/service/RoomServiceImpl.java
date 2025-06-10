@@ -23,9 +23,6 @@ public class RoomServiceImpl implements RoomService {
   @Value("${file.dir}")
   private String staticFilePath;
   
-  @Value("${file.delete}")
-  private String deletePath;
-  
   
   private RoomDAO roomDAO;
   private RoomImageServiceImpl roomImageService;
@@ -193,7 +190,7 @@ public class RoomServiceImpl implements RoomService {
     
     boolean flag = false;
     for(int i = 0; i < roomImagePathList.size(); i++) {
-      flag = deleteFile(roomImagePathList.get(i).getRoomImgPathName()); // 파일 삭제 함수 호출
+      flag = oFileUtils.deleteFile(roomImagePathList.get(i).getRoomImgPathName()); // 파일 삭제 함수 호출
 //      System.out.println("flag: " + flag);
       if(!flag) {
         System.out.println(
@@ -203,40 +200,12 @@ public class RoomServiceImpl implements RoomService {
         break;
       }
     }
-    
-//    if(flag) roomImageService.deleteRoomImageByRoomSq(roomIdenDTO.getRoomSq());
-    
-    
+
     int deleteResult = roomDAO.deleteRoomAndRoomImageByAccomNoAndRoomSq(roomIdenDTO);
-    
     
     return deleteResult;
   }
   
-  // 파일 삭제
-  private boolean deleteFile(String path) {
-     String basePath = new File(deletePath).getAbsolutePath(); // 절대경로
-     String fullPath = basePath + File.separator + path;
-  
-     File file = new File(fullPath);
-     System.out.println("삭제 경로: " + file.getPath());
-  
-     if (file.exists()) {
-         if (file.delete()) {
-             System.out.println("파일 삭제 성공");
-             return true;
-         } else {
-             System.out.println("파일 삭제 실패");
-         }
-     } else {
-         System.out.println("파일이 존재하지 않음");
-     }
-  
-     return false;
-  }
-
-
-
   @Override
   public RoomDetailDTO findRoomByAccomNoAndRoomSq(RoomIdentifierDTO getRoomDTO) {
     return roomDAO.findRoomByAccomNoAndRoomSq(getRoomDTO);

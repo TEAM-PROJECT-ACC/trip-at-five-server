@@ -1,6 +1,8 @@
 package com.kh.clock.room.service;
 
 import java.util.List;
+import java.util.Map;
+import com.kh.clock.common.file.dto.ImageFileDTO;
 import com.kh.clock.room.repository.dto.RoomImageDTO;
 
 public interface RoomImageService {
@@ -29,9 +31,7 @@ public interface RoomImageService {
 
   /**
    * 객실 이미지 삭제
-   * => ON DELETE CASCADE 삭제 옵션으로 인해 사용X
-   * @param roomNo
-   * @return
+   * @param imageList 
    */
-  int deleteRoomImageByRoomSq(int roomNo);
+  int deleteRoomImageByRoomSq(List<ImageFileDTO> imageList);
 }

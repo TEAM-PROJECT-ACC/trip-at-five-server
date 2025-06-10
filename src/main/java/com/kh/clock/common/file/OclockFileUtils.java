@@ -30,6 +30,9 @@ public class OclockFileUtils {
 
   @Value("${algorithm}")
   private String algorithm;
+
+  @Value("${file.delete}")
+  private String deletePath;
   
   private final Path uploadPath;
 
@@ -330,5 +333,26 @@ public class OclockFileUtils {
         }
       }
     }
+  }
+  
+  //파일 삭제
+  public boolean deleteFile(String path) {
+     String basePath = new File(deletePath).getAbsolutePath(); // 절대경로
+     String fullPath = basePath + File.separator + path;
+   
+     File file = new File(fullPath);
+     System.out.println("삭제 경로: " + file.getPath());
+   
+     if (file.exists()) {
+         if (file.delete()) {
+             System.out.println("파일 삭제 성공");
+             return true;
+         } else {
+             System.out.println("파일 삭제 실패");
+         }
+     } else {
+         System.out.println("파일이 존재하지 않음");
+     }
+     return false;
   }
 }
