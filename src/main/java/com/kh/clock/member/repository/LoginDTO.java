@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginDTO {
 
-	
 	private String email;
 	private String pwd;
 	private String nickName;
 	private String snsUid;
 	private String platformName;
-
 
 }

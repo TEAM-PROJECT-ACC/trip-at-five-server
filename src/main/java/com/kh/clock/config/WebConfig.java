@@ -19,13 +19,13 @@ public class WebConfig implements WebMvcConfigurer {
 				.allowedHeaders("*").allowCredentials(true);
 
 	}
-	
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		// registry.addInterceptor(new LoginInterceptor())
-		registry.addInterceptor(new LoginInterceptor())
-				.addPathPatterns("/login/logout");
-				
+		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/login/logout").excludePathPatterns("/email/*")
+		;
+
 	}
 
 }

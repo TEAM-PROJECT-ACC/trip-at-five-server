@@ -12,17 +12,17 @@ import lombok.NoArgsConstructor;
 public class MemberVO {
 
 	private int memSq;
-    private String memEmailId;
-    private String memPwd;
-    private String memNick;
-    private String ckMemSt;
-    private String memPhone;
-    private String memAddr;
-    private Date memRegDt;
-    private String memSocUid;
-    private String ckSocPlt;
-    private String socRefTkn;
-    private Date memUpdatedDt;
-    private Date memInactiveDt;
-    
+	private String memEmailId;
+	private String memPwd;
+	private String memNick;
+	private String ckMemSt;
+	private String memPhone;
+	private String memAddr;
+	private Date memRegDt;
+	private String memSocUid;
+	private String ckSocPlt;
+	private String socRefTkn;
+	private Date memUpdatedDt;
+	private Date memInactiveDt;
+
 }

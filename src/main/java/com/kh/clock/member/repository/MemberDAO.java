@@ -4,6 +4,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.clock.member.domain.AdminVO;
 import com.kh.clock.member.domain.MemberVO;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +20,6 @@ public class MemberDAO {
 	}
 
 	public int emailDuplicationCheck(String email) {
-		//
 
 		int result = sqlsession.selectOne("mamberMapper.emailDuplication", email);
 
@@ -56,6 +56,17 @@ public class MemberDAO {
 	public MemberVO loginInfo(LoginDTO userInfo) {
 
 		MemberVO result = sqlsession.selectOne("mamberMapper.loginInfo", userInfo);
+		return result;
+	}
+
+	public AdminVO adminInfo(LoginDTO userInfo) {
+		AdminVO result = sqlsession.selectOne("mamberMapper.adminInfo", userInfo);
+		return result;
+	}
+
+	public int updatePwd(LoginDTO userInfo) {
+		int result = sqlsession.update("mamberMapper.updatePwd", userInfo);
+
 		return result;
 	}
 

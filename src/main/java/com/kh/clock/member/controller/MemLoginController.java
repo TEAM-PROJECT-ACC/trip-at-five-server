@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.kh.clock.member.domain.AdminVO;
 import com.kh.clock.member.domain.MemberVO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.service.MemberService;
@@ -34,7 +35,7 @@ class MemLoginController {
 	public ResponseEntity<HashMap<String, Object>> nomalLogin(@RequestBody LoginDTO userInfo,
 			HttpServletRequest request, HttpSession session) throws Exception {
 
-		MemberVO loginUser = mService.loginInfo(userInfo);
+		MemberVO loginUser = mService.userInfo(userInfo);
 		HashMap<String, Object> hashMap = new HashMap<>();
 
 		if (loginUser == null) {
@@ -54,6 +55,40 @@ class MemLoginController {
 			hashMap.put("memSq", loginUser.getMemSq());
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
+			hashMap.put("memType", "user");
+			return ResponseEntity.ok(hashMap);
+		}
+
+	}
+
+	@PostMapping("/admin")
+	public ResponseEntity<HashMap<String, Object>> adminLogin(@RequestBody LoginDTO userInfo,
+			HttpServletRequest request, HttpSession session) throws Exception {
+
+		AdminVO loginUser = mService.adminInfo(userInfo);
+		HashMap<String, Object> hashMap = new HashMap<>();
+
+		System.out.println("admin ");
+		System.out.println(loginUser);
+
+		if (loginUser == null) {
+
+			hashMap.put("IdFail", "IdFail");
+
+			return ResponseEntity.ok(hashMap);
+
+		} else if (!userInfo.getPwd().equals(loginUser.getAdminPwd())) {
+
+			hashMap.put("pwdFail", "pwdFail");
+			return ResponseEntity.ok(hashMap);
+		} else {
+			session = request.getSession();
+			session.setAttribute("adminUser", loginUser);
+
+			hashMap.put("adminSq", loginUser.getAdminSq());
+			hashMap.put("adminEmailId", loginUser.getAdminEmailId());
+			hashMap.put("inqCtgCd", loginUser.getInqCtgCd());
+			hashMap.put("memType", "admin");
 			return ResponseEntity.ok(hashMap);
 		}
 
@@ -77,8 +112,7 @@ class MemLoginController {
 		kakaoLoginDTO.setEmail(email);
 		kakaoLoginDTO.setPlatformName("KAKAO");
 
-		int register = mService.snsRegisterSelect(kakaoLoginDTO);
-		MemberVO loginUser = mService.loginInfo(kakaoLoginDTO);
+		MemberVO loginUser = mService.userInfo(kakaoLoginDTO);
 		HashMap<String, Object> hashMap = new HashMap<>();
 
 		if (loginUser == null) {
@@ -91,7 +125,7 @@ class MemLoginController {
 			kakaoLoginDTO.setSnsUid(kakaoUid);
 
 			mService.snsRegister(kakaoLoginDTO);
-			loginUser = mService.loginInfo(kakaoLoginDTO);
+			loginUser = mService.userInfo(kakaoLoginDTO);
 
 		} else if (!loginUser.getCkSocPlt().equals("KAKAO")) {
 
@@ -103,6 +137,7 @@ class MemLoginController {
 			hashMap.put("memSq", loginUser.getMemSq());
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
+			hashMap.put("memType", "user");
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
@@ -128,8 +163,7 @@ class MemLoginController {
 		naverLoginDTO.setEmail(email);
 		naverLoginDTO.setPlatformName("NAVER");
 
-		int register = mService.snsRegisterSelect(naverLoginDTO);
-		MemberVO loginUser = mService.loginInfo(naverLoginDTO);
+		MemberVO loginUser = mService.userInfo(naverLoginDTO);
 		HashMap<String, Object> hashMap = new HashMap<>();
 
 		if (loginUser == null) {
@@ -142,7 +176,7 @@ class MemLoginController {
 			naverLoginDTO.setSnsUid(naverUid);
 
 			mService.snsRegister(naverLoginDTO);
-			loginUser = mService.loginInfo(naverLoginDTO);
+			loginUser = mService.userInfo(naverLoginDTO);
 
 		} else if (!loginUser.getCkSocPlt().equals("NAVER")) {
 
@@ -154,6 +188,7 @@ class MemLoginController {
 			hashMap.put("memSq", loginUser.getMemSq());
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
+			hashMap.put("memType", "user");
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
@@ -178,8 +213,7 @@ class MemLoginController {
 		googleLoginDTO.setEmail(email);
 		googleLoginDTO.setPlatformName("GOOGLE");
 
-		int register = mService.snsRegisterSelect(googleLoginDTO);
-		MemberVO loginUser = mService.loginInfo(googleLoginDTO);
+		MemberVO loginUser = mService.userInfo(googleLoginDTO);
 		HashMap<String, Object> hashMap = new HashMap<>();
 
 		if (loginUser == null) {
@@ -203,6 +237,7 @@ class MemLoginController {
 			hashMap.put("memSq", loginUser.getMemSq());
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
+			hashMap.put("memType", "user");
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
