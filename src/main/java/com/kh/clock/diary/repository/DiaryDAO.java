@@ -30,7 +30,7 @@ public class DiaryDAO {
    * @return List<DiaryVO>
    */
   public List<DiaryVO> selectAllList(int memNo, PageInfo pageInfo) {
-    int offset = (pageInfo.getPageNo() - 1) * pageInfo.getNumOfRows(); 
+	  int offset = (pageInfo.getPageNo() - 1) * pageInfo.getNumOfRows(); 
     RowBounds rowBounds = new RowBounds(offset, pageInfo.getNumOfRows());
     
     return sqlSession.selectList("diaryMapper.selectAllList", memNo, rowBounds);
