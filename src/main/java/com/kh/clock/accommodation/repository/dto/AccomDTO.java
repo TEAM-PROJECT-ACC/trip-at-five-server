@@ -18,6 +18,7 @@ public class AccomDTO {
   private String inRoomFacInfo;
   private String etcFacInfo;
   private int accomTypeNo;
+  private int locId;
   
   private int roomPrice;
   private String roomChkIn;
