@@ -34,7 +34,7 @@
     	) R1
     	WHERE R1.RN = 1
 	  ) R ON A.ACCOM_SQ = R.ACCOM_NO
-	    WHERE ACCOM_ADDR LIKE '%' || #{keyword} || '%'
+	    WHERE (ACCOM_ADDR LIKE '%' || #{keyword} || '%' OR ACCOM_NAME LIKE '%' || #{keyword} || '%')
 	    ORDER BY ACCOM_SQ DESC
     </select>
 	
