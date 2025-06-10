@@ -11,11 +11,10 @@ import lombok.AllArgsConstructor;
 @Repository
 public class MemberDAO {
 
-	
 	@Autowired
 	private final SqlSession sqlsession;
-	
-	public MemberDAO (SqlSession sqlsession) {
+
+	public MemberDAO(SqlSession sqlsession) {
 		this.sqlsession = sqlsession;
 	}
 
@@ -36,19 +35,19 @@ public class MemberDAO {
 	public int registerSend(RegisterDTO register) {
 
 		int result = sqlsession.insert("mamberMapper.registerSend", register);
-		
+
 		return result;
 	}
-	
+
 	public int snsRegisterSelect(LoginDTO loginDTO) {
-		
+
 		int result = sqlsession.selectOne("mamberMapper.emailDuplication", loginDTO);
 
 		return result;
 	}
-	
+
 	public int snsRegister(LoginDTO kakaoLoginDTO) {
-		
+
 		int result = sqlsession.insert("mamberMapper.snsRegister", kakaoLoginDTO);
 
 		return result;

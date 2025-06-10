@@ -82,13 +82,6 @@ public class MailService {
 			return false;
 		}
 
-//			 if (code.equals(authData.getCode())) {
-//				 authInfo.remove(email);
-//				 return true;
-//			 } else { 
-//				 return false;
-//			 }
-
 		if (code.equals(authData.getCode())) {
 			authInfo.remove(email);
 		}

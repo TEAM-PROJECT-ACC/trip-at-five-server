@@ -11,5 +11,5 @@ public class RegisterDTO {
 	private int nickCount;
 	private String tel;
 	private String address;
-	
+
 }

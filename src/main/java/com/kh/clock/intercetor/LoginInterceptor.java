@@ -25,10 +25,7 @@ public class LoginInterceptor implements HandlerInterceptor  {
 		// 세션에 로그인 정보가 있는 지 확인
 		HttpSession session = request.getSession();
 		MemberVO loginUser = (MemberVO)session.getAttribute("loginUser");
-		
-		System.out.println("로그인 인터셉터");
-		System.out.println(loginUser);
-		
+			
 		if (loginUser == null ) { // 로그인 정보가 없는 경우
 			
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

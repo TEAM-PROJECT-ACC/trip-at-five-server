@@ -1,6 +1,9 @@
 package com.kh.clock.member.controller;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,30 +31,37 @@ class MemLoginController {
 	private final MemberService mService;
 
 	@PostMapping("/nomal")
-	public String nomalLogin(@RequestBody LoginDTO userInfo, HttpServletRequest request, HttpSession session)
-			throws Exception {
+	public ResponseEntity<HashMap<String, Object>> nomalLogin(@RequestBody LoginDTO userInfo,
+			HttpServletRequest request, HttpSession session) throws Exception {
 
 		MemberVO loginUser = mService.loginInfo(userInfo);
+		HashMap<String, Object> hashMap = new HashMap<>();
 
-		System.out.println(loginUser);
 		if (loginUser == null) {
 
-			return "IdFail";
+			hashMap.put("IdFail", "IdFail");
+
+			return ResponseEntity.ok(hashMap);
+
 		} else if (!bCryptPasswordEncoder.matches(userInfo.getPwd(), loginUser.getMemPwd())) {
 
-			return "pwdFail";
+			hashMap.put("pwdFail", "pwdFail");
+			return ResponseEntity.ok(hashMap);
 		} else {
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
 
-			String result = Integer.toString(loginUser.getMemSq());
-			return result;
+			hashMap.put("memSq", loginUser.getMemSq());
+			hashMap.put("memEmailId", loginUser.getMemEmailId());
+			hashMap.put("memNick", loginUser.getMemNick());
+			return ResponseEntity.ok(hashMap);
 		}
 
 	}
 
 	@PostMapping("/kakao")
-	public String kakaoLogin(@RequestBody String kakaoInfo, HttpServletRequest request, HttpSession session) {
+	public ResponseEntity<HashMap<String, Object>> kakaoLogin(@RequestBody String kakaoInfo, HttpServletRequest request,
+			HttpSession session) {
 
 		JsonObject kakaoObj = JsonParser.parseString(kakaoInfo).getAsJsonObject();
 
@@ -66,12 +76,10 @@ class MemLoginController {
 		LoginDTO kakaoLoginDTO = new LoginDTO();
 		kakaoLoginDTO.setEmail(email);
 		kakaoLoginDTO.setPlatformName("KAKAO");
-		System.out.println(kakaoLoginDTO);
 
 		int register = mService.snsRegisterSelect(kakaoLoginDTO);
 		MemberVO loginUser = mService.loginInfo(kakaoLoginDTO);
-
-		System.out.println(register);
+		HashMap<String, Object> hashMap = new HashMap<>();
 
 		if (loginUser == null) {
 			/* 회원가입처리 */
@@ -82,50 +90,47 @@ class MemLoginController {
 			kakaoLoginDTO.setNickName(nickName);
 			kakaoLoginDTO.setSnsUid(kakaoUid);
 
-			System.out.println("회원가입 쪽 : " + kakaoLoginDTO);
 			mService.snsRegister(kakaoLoginDTO);
+			loginUser = mService.loginInfo(kakaoLoginDTO);
 
 		} else if (!loginUser.getCkSocPlt().equals("KAKAO")) {
 
-			return loginUser.getCkSocPlt();
+			hashMap.put("ckSocPlt", loginUser.getCkSocPlt());
+
+			return ResponseEntity.ok(hashMap);
+		} else {
+
+			hashMap.put("memSq", loginUser.getMemSq());
+			hashMap.put("memEmailId", loginUser.getMemEmailId());
+			hashMap.put("memNick", loginUser.getMemNick());
+
+			session = request.getSession();
+			session.setAttribute("loginUser", loginUser);
 		}
 
-		session = request.getSession();
-		session.setAttribute("loginUser", loginUser);
-		return Integer.toString(loginUser.getMemSq());
-
+		return ResponseEntity.ok(hashMap);
 	}
 
 	@PostMapping("/naver")
-	public String naverLogin(@RequestBody String naverInfo, HttpServletRequest request, HttpSession session) {
+	public ResponseEntity<HashMap<String, Object>> naverLogin(@RequestBody String naverInfo, HttpServletRequest request,
+			HttpSession session) {
 
 		JsonObject naverObj = JsonParser.parseString(naverInfo).getAsJsonObject();
-
-		System.out.println(naverObj);
 
 		JsonObject naverodata = naverObj.getAsJsonObject("data");
 		JsonObject naverResponse = naverodata.getAsJsonObject("response");
 
-		System.out.println(naverResponse);
 		String naverUid = naverResponse.get("id").getAsString();
 		String email = naverResponse.get("email").getAsString();
 		String nickName = naverResponse.get("nickname").getAsString();
-
-		System.out.println("naverUid " + naverUid);
-		System.out.println("email " + email);
-		System.out.println("nickName " + nickName);
 
 		LoginDTO naverLoginDTO = new LoginDTO();
 		naverLoginDTO.setEmail(email);
 		naverLoginDTO.setPlatformName("NAVER");
 
-		System.out.println(naverLoginDTO);
-
 		int register = mService.snsRegisterSelect(naverLoginDTO);
 		MemberVO loginUser = mService.loginInfo(naverLoginDTO);
-
-		System.out.println(register);
-		System.out.println(loginUser);
+		HashMap<String, Object> hashMap = new HashMap<>();
 
 		if (loginUser == null) {
 			/* 회원가입처리 */
@@ -136,35 +141,38 @@ class MemLoginController {
 			naverLoginDTO.setNickName(nickName);
 			naverLoginDTO.setSnsUid(naverUid);
 
-			System.out.println("회원가입 쪽 : " + naverLoginDTO);
 			mService.snsRegister(naverLoginDTO);
+			loginUser = mService.loginInfo(naverLoginDTO);
 
 		} else if (!loginUser.getCkSocPlt().equals("NAVER")) {
 
-			return loginUser.getCkSocPlt();
+			hashMap.put("ckSocPlt", loginUser.getCkSocPlt());
+
+			return ResponseEntity.ok(hashMap);
+		} else {
+
+			hashMap.put("memSq", loginUser.getMemSq());
+			hashMap.put("memEmailId", loginUser.getMemEmailId());
+			hashMap.put("memNick", loginUser.getMemNick());
+
+			session = request.getSession();
+			session.setAttribute("loginUser", loginUser);
 		}
 
-		session = request.getSession();
-		session.setAttribute("loginUser", loginUser);
-		return Integer.toString(loginUser.getMemSq());
-
+		return ResponseEntity.ok(hashMap);
 	}
 
 	@PostMapping("/google")
-	public String googleLogin(@RequestBody String googleInfo, HttpServletRequest request, HttpSession session) {
+	public ResponseEntity<HashMap<String, Object>> googleLogin(@RequestBody String googleInfo,
+			HttpServletRequest request, HttpSession session) {
 
 		JsonObject googleObj = JsonParser.parseString(googleInfo).getAsJsonObject();
 
 		JsonObject naverodata = googleObj.getAsJsonObject("data");
 
-		System.out.println(naverodata);
 		String naverUid = naverodata.get("sub").getAsString();
 		String email = naverodata.get("email").getAsString();
 		String name = naverodata.get("given_name").getAsString();
-
-		System.out.println("googleUid " + naverUid);
-		System.out.println("email " + email);
-		System.out.println("nickName " + name);
 
 		LoginDTO googleLoginDTO = new LoginDTO();
 		googleLoginDTO.setEmail(email);
@@ -172,9 +180,7 @@ class MemLoginController {
 
 		int register = mService.snsRegisterSelect(googleLoginDTO);
 		MemberVO loginUser = mService.loginInfo(googleLoginDTO);
-
-		System.out.println(register);
-		System.out.println(loginUser);
+		HashMap<String, Object> hashMap = new HashMap<>();
 
 		if (loginUser == null) {
 			/* 회원가입처리 */
@@ -185,17 +191,24 @@ class MemLoginController {
 			googleLoginDTO.setNickName(name);
 			googleLoginDTO.setSnsUid(naverUid);
 
-			System.out.println("회원가입 쪽 : " + googleLoginDTO);
 			mService.snsRegister(googleLoginDTO);
 
 		} else if (!loginUser.getCkSocPlt().equals("GOOGLE")) {
 
-			return loginUser.getCkSocPlt();
+			hashMap.put("ckSocPlt", loginUser.getCkSocPlt());
+
+			return ResponseEntity.ok(hashMap);
+		} else {
+
+			hashMap.put("memSq", loginUser.getMemSq());
+			hashMap.put("memEmailId", loginUser.getMemEmailId());
+			hashMap.put("memNick", loginUser.getMemNick());
+
+			session = request.getSession();
+			session.setAttribute("loginUser", loginUser);
 		}
 
-		session = request.getSession();
-		session.setAttribute("loginUser", loginUser);
-		return Integer.toString(loginUser.getMemSq());
+		return ResponseEntity.ok(hashMap);
 
 	}
 

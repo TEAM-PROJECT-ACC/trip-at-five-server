@@ -64,13 +64,11 @@ public class MemberRegisterController {
 		System.out.println(registerdto);
 
 		String encPwd = bCryptPasswordEncoder.encode(registerdto.getPwd());
-		System.out.println("encPwd : " + encPwd);
 
 		registerdto.setPwd(encPwd);
 
 		int result = mService.registerSend(registerdto);
 
-		System.out.println(result);
 		if (result > 0) {
 			return result;
 		} else {

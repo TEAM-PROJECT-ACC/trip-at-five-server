@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberServiceImpl implements MemberService {
 
 	@Autowired
-	private  final MemberDAO memberDAO;
+	private final MemberDAO memberDAO;
 
 	@Override
 	public int snsRegisterSelect(LoginDTO loginDTO) {
@@ -40,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
 
 		return result;
 	}
-	
+
 	@Override
 	public int emailDuplicationCheck(String email) {
 
