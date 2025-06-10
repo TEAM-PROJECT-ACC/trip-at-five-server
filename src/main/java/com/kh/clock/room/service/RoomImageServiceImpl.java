@@ -13,7 +13,7 @@ import com.kh.clock.room.repository.dto.RoomImageDTO;
 @Service
 public class RoomImageServiceImpl implements RoomImageService {
   private RoomImageDAO roomImageDAO;
-  OclockFileUtils oFileUtils;
+  private OclockFileUtils oFileUtils;
   
   public RoomImageServiceImpl(RoomImageDAO roomImageDAO, OclockFileUtils oFileUtils) {
     this.roomImageDAO = roomImageDAO;

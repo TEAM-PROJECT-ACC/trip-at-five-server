@@ -198,7 +198,7 @@ public class OclockFileUtils {
    * @param typePath : 숙박/객실/이용후기 UploadFileType 의 path
    * @return
    */
-  public List<String> saveRoomImage(List<MultipartFile> newImageList, String typePath) {
+  public List<String> saveImage(List<MultipartFile> newImageList, String typePath) {
     String dateFolderPath = createDateFolderPath();
     createFolders(dateFolderPath, typePath);
     

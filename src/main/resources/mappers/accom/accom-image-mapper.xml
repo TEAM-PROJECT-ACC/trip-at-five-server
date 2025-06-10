@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accomImageMapper">
+
+	<!-- 특정 객실 이미지 목록 조회 -->
+	<select id="findAccomImageByAccomSq" resultType="com.kh.clock.accommodation.repository.dto.AccomAdminImageDTO">
+		SELECT ACCOM_IMG_HASH_CD, ACCOM_IMG_ORG_NAME, ACCOM_IMG_PATH_NAME, ACCOM_NO FROM ACCOMMODATION_IMAGE_TB WHERE ACCOM_NO = #{accomSq} 
+	</select>
+	
+	<insert id="insertAccomImage">
+		INSERT INTO ACCOMMODATION_IMAGE_TB 
+    	(ACCOM_IMG_SQ, ACCOM_IMG_HASH_CD, ACCOM_IMG_ORG_NAME, ACCOM_IMG_PATH_NAME, ACCOM_IMG_REG_DT, ACCOM_NO) 
+    	VALUES (
+			ACCOM_IMG_SEQ.NEXTVAL, 
+			#{accomImgHashCd},
+			#{accomImgOrgName},
+			#{accomImgPathName},
+			DEFAULT,
+			#{accomNo}
+		)
+	</insert>
+	
+	<!-- 객실 이미지 수정 UPDATE문 -->
+  	<update id="updateAccomImage">
+  		UPDATE ACCOMMODATION_IMAGE_TB SET 
+			ACCOM_IMG_ORG_NAME = #{accomImgOrgName},
+			ACCOM_IMG_PATH_NAME = #{accomImgPathName}
+		WHERE ACCOM_NO = #{accomNo}
+  	</update>
+  	
+	<delete id="deleteAccomImageByAccomSq">
+		DELETE FROM ACCOMMODATION_IMAGE_TB WHERE ACCOM_NO = #{no} AND ACCOM_IMG_HASH_CD = #{hashCode} 
+	</delete>
+</mapper>

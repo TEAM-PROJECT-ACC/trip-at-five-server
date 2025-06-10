@@ -23,7 +23,7 @@ public interface AccomService {
   AccomAdminDetailDTO selectAdminAccomDetailByAccomSq(int accomSq);
 
   // 관리자 페이지 숙박 상세 수정
-  int updateAdminAccomDetail(AccomAdminDetailDTO updatedAccomInfo);
+  int updateAdminAccomDetail(AccomAdminDetailDTO updatedAccomInfo, MultipartFile[] images);
 
   // 관리자 페이지 숙박 정보 삭제
   int deleteAdminAccom(int accomSq);

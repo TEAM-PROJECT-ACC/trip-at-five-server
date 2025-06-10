@@ -10,7 +10,7 @@ public interface RoomImageService {
   /**
    * 객실 이미지 저장
    * 
-   * @param roomimageVO : 객실이미지 정보
+   * @param roomimageDTO : 객실이미지 정보
    * @return
    */
   int insertRoomImage(RoomImageDTO roomimageDTO);

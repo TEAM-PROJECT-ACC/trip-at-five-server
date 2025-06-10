@@ -1,6 +1,5 @@
 package com.kh.clock.room.service;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,10 +18,6 @@ import com.kh.clock.room.repository.dto.RoomSearchDTO;
 
 @Service
 public class RoomServiceImpl implements RoomService {
-  
-  @Value("${file.dir}")
-  private String staticFilePath;
-  
   
   private RoomDAO roomDAO;
   private RoomImageServiceImpl roomImageService;
@@ -97,7 +92,7 @@ public class RoomServiceImpl implements RoomService {
         }
         
         // 객실 이미지 처리
-        List<String> fileUrls = oFileUtils.saveRoomImage(newImageList, typePath);    
+        List<String> fileUrls = oFileUtils.saveImage(newImageList, typePath);    
         for(int i = 0; i < fileUrls.size(); i++) {
           roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(hashCodeList.get(i), newImageList.get(i).getOriginalFilename(), fileUrls.get(i), typeNumKey));
         }
@@ -152,7 +147,7 @@ public class RoomServiceImpl implements RoomService {
         
         // 객실 이미지 처리
         if(newImageList.size() > 0) {
-          List<String> fileUrls = oFileUtils.saveRoomImage(newImageList, UploadFileType.ROOM.getPath());    
+          List<String> fileUrls = oFileUtils.saveImage(newImageList, UploadFileType.ROOM.getPath());    
           for(int i = 0; i < fileUrls.size(); i++) {
             roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(hashCodeList.get(i), newImageList.get(i).getOriginalFilename(), fileUrls.get(i), typeNumKey));
           }

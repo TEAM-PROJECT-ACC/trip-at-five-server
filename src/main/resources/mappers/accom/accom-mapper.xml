@@ -84,11 +84,11 @@
 	<!-- 관리 -->
 	<select id="selectAdminAccomList" parameterType="com.kh.clock.accommodation.repository.dto.AccomAdminSearchDTO" resultType="com.kh.clock.accommodation.repository.dto.AccomAdminListDTO">
 		SELECT 
-			A.ACCOM_SQ,
+			A.ACCOM_SQ AS NO,
+			T.ACCOM_TYPE_NAME,
 			A.ACCOM_NAME,
 			A.ACCOM_ADDR,
 			A.ACCOM_PHONE,
-			T.ACCOM_TYPE_NAME,
 			R.ROOM_PRICE
 		FROM ACCOMMODATION_TB A
 		LEFT JOIN LOCATION_TB L ON A.LOC_ID = L.LOC_ID
@@ -179,5 +179,14 @@
 	      #{etcFacInfo},
 	      #{accomTypeNo}
 	    )
+	    
+	    
+		<!--
+			방금 INSERT 한 데이터의 키값 조회
+			order를 AFTER로 설정하여 SQL쿼리문 실행 후 실행으로 설정
+		-->
+	 	<selectKey keyProperty="accomSq" order="AFTER" resultType="int">
+	        SELECT ACCOM_SEQ.CURRVAL FROM DUAL
+	    </selectKey>
 	</insert>
 </mapper>
