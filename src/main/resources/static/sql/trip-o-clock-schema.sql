@@ -8,6 +8,7 @@
 -- 25/06/03 회원테이블 비밀번호 암호화로 인해 데이터 크기 100으로 변경
 -- 25/06/04 객실 이미지 테이블에 hashcode 컬럼 추가
 -- 25/06/07 채팅방 테이블 사용자 이메일 컬럼 추가, 숙박업소 및 이용후기 이미지 테이블에 hashcode 컬럼 추가
+-- 25/06/11 장바구니 객실번호 값 unique 추가
 
 -----------------------------------------------------------------------------
 
@@ -526,6 +527,7 @@ CREATE TABLE CART_TB (
     CONSTRAINT CART_CSQ_PK PRIMARY KEY (CART_SQ),
     CONSTRAINT CART_MNO_FK FOREIGN KEY (MEM_NO)
         REFERENCES MEMBER_TB (MEM_SQ) ON DELETE CASCADE,
+    CONSTRAINT CART_RNO_UQ UNIQUE (ROOM_NO),
     CONSTRAINT CART_RNO_FK FOREIGN KEY (ROOM_NO)
         REFERENCES ROOM_TB (ROOM_SQ) ON DELETE SET NULL
 );
