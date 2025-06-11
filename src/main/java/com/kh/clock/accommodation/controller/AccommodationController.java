@@ -27,15 +27,8 @@ public class AccommodationController {
   }
   // 숙박 목록 조회
   @GetMapping
-  public List<AccomDTO> selectAccomList(@RequestParam(defaultValue = "0") int page,
-          @RequestParam(defaultValue = "10") int size, @RequestParam(required = false) String keyword){
-    AccomListInfoDTO accomDto = new AccomListInfoDTO();
-
-    accomDto.setPage(page);
-    accomDto.setSize(size);
-    accomDto.setKeyword(keyword);
-    
-    return accomService.selectAccomList(accomDto);
+  public List<AccomDTO> selectAccomList(@ModelAttribute AccomListInfoDTO accomListInfoDTO){
+    return accomService.selectAccomList(accomListInfoDTO);
   }
   
   // 숙박 상세 페이지 조회

@@ -23,18 +23,21 @@
         R.ROOM_PRICE,
         R.ROOM_CHK_IN,
         R.ROOM_CHK_OUT
-	  FROM ACCOMMODATION_TB A
-	  JOIN LOCATION_TB L ON A.LOC_ID = L.LOC_ID
-	  JOIN (
-    	SELECT R1.ACCOM_NO, R1.ROOM_PRICE, R1.ROOM_CHK_IN, R1.ROOM_CHK_OUT
-    	FROM (
-        	SELECT R.*,
-            	ROW_NUMBER() OVER (PARTITION BY R.ACCOM_NO ORDER BY R.ROOM_PRICE ASC) AS RN
-        	FROM ROOM_TB R
-    	) R1
-    	WHERE R1.RN = 1
-	  ) R ON A.ACCOM_SQ = R.ACCOM_NO
-	    WHERE (ACCOM_ADDR LIKE '%' || #{keyword} || '%' OR ACCOM_NAME LIKE '%' || #{keyword} || '%')
+		FROM ACCOMMODATION_TB A
+		JOIN (
+	    	SELECT R1.ACCOM_NO, R1.ROOM_PRICE, R1.ROOM_CHK_IN, R1.ROOM_CHK_OUT
+	    	FROM (
+	      		SELECT R.*,
+	            	ROW_NUMBER() OVER (PARTITION BY R.ACCOM_NO ORDER BY R.ROOM_PRICE ASC) AS RN
+	      		FROM ROOM_TB R
+	    		) R1
+	    	WHERE R1.RN = 1
+	  	) R ON A.ACCOM_SQ = R.ACCOM_NO
+	    WHERE
+		    (
+		      (A.LOC_ID = #{locId}) OR
+		      (ACCOM_NAME LIKE '%' || #{keyword} || '%')
+		    )
 	    ORDER BY ACCOM_SQ DESC
     </select>
 	
