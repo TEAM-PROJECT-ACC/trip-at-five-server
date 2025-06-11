@@ -7,4 +7,8 @@ public interface CartService {
 
   int insertCart(List<CartInfoDTO> cartInfo);
 
+  List<CartInfoDTO> findCartByMemNoAndRoomNo(int memNo, List<Integer> cartInfo);
+
+  int deleteCart(List<CartInfoDTO> existingList);
+
 }

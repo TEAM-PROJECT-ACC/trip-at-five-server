@@ -19,4 +19,14 @@ public class CartServiceImpl implements CartService {
     return cartDAO.insertCart(cartInfo);
   }
 
+  @Override
+  public List<CartInfoDTO> findCartByMemNoAndRoomNo(int memNo, List<Integer> cartInfo) {
+    return cartDAO.findCartByMemNoAndRoomNo(memNo, cartInfo);
+  }
+
+  @Override
+  public int deleteCart(List<CartInfoDTO> existingList) {
+    return cartDAO.deleteCart(existingList);
+  }
+
 }

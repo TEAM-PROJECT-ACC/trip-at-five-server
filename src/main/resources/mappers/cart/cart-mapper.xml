@@ -5,7 +5,24 @@
 <mapper namespace="cartMapper">
 
 	<insert id="insertCart">
-        INSERT INTO CART_TB (CART_SQ, CART_REG_DT, MEM_NO, ROOM_NO) VALUES (CART_SEQ.NEXTVAL, SYSDATE, #{memNo}, #{roomNo})
+        INSERT INTO CART_TB (CART_SQ, CART_REG_DT, MEM_NO, ROOM_NO)
+        	VALUES (CART_SEQ.NEXTVAL, SYSDATE, #{memNo}, #{roomNo})
     </insert>
+    
+    <delete id="deleteCart">
+    	DELETE FROM CART_TB
+    	WHERE MEM_NO = #{memNo} AND ROOM_NO = #{roomNo}
+    </delete>
+    
+    <select id="findCartByMemNoAndRoomNo" resultType="com.kh.clock.cart.repository.dto.CartInfoDTO">
+	  SELECT MEM_NO, ROOM_NO
+	  FROM CART_TB
+	  WHERE MEM_NO = #{memNo}
+	    AND ROOM_NO IN
+	    <foreach collection="roomNoList" item="roomNo" open="(" separator="," close=")">
+	      #{roomNo}
+	    </foreach>
+	</select>
+
 
 </mapper>
