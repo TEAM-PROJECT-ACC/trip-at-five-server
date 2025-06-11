@@ -13,8 +13,8 @@ import com.kh.clock.room.repository.dto.RoomSearchDTO;
 public class RoomDAO {
   private final SqlSession sqlSession;
   
-  public RoomDAO(SqlSession sqlsSession) {
-    this.sqlSession = sqlsSession;
+  public RoomDAO(SqlSession sqlSession) {
+    this.sqlSession = sqlSession;
   }
   
   // 객실 등록
