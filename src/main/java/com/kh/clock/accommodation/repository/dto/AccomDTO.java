@@ -1,4 +1,4 @@
-package com.kh.clock.accommodation.repository;
+package com.kh.clock.accommodation.repository.dto;
 
 import java.util.List;
 import com.kh.clock.room.domain.RoomVO;
@@ -23,4 +23,7 @@ public class AccomDTO {
   private String roomChkIn;
   private String roomChkOut;
   private List<RoomVO> roomList;
+  
+  private String accomTypeName;
+  
 }
