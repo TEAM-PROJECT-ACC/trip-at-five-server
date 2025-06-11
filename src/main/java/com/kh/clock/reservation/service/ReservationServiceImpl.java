@@ -25,8 +25,6 @@ public class ReservationServiceImpl implements ReservationService {
     String salt = createSalt();
 
     String resCodeDeCoding = new StringBuilder()
-        .append(resCodeDTO.getAccomSq())
-        .append(resCodeDTO.getRoomSq())
         .append(resCodeDTO.getAccomName())
         .append(resCodeDTO.getRoomName())
         .append(resCodeDTO.getResEmail())
