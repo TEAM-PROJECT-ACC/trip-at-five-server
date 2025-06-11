@@ -1,7 +1,9 @@
 package com.kh.clock.cart.controller;
 
 import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +26,8 @@ public class CartController {
     cartInfo.forEach(cart -> System.out.println(cart));
     
     int insertResult = cartService.insertCart(cartInfo);
-    
-    return null;
+
+    if(insertResult > 0) return ResponseEntity.status(HttpStatus.OK).body(cartInfo);
+    else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("장바구니 등록에 실패했습니다.");
   }
 }
