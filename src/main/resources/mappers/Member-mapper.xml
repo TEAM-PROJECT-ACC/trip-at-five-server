@@ -19,6 +19,20 @@
 		where mem_nick = #{nickName}
 	</select>
 
+	<select id="loginInfo" resultType="MemberVO">
+
+		select * from member_tb where
+		mem_email_id = #{email}
+
+	</select>
+
+	<select id="adminInfo" resultType="AdminVO">
+
+		select * from admin_tb where
+		admin_email_id = #{email}
+
+	</select>
+
 	<insert id="registerSend">
 
 		insert into member_tb
@@ -42,13 +56,16 @@
 		)
 	</insert>
 
+	<update id="updatePwd">
 
-	<select id="loginInfo" resultType="MemberVO">
-
-		select * from member_tb where
+		update member_tb set mem_pwd = #{pwd}
+		where
 		mem_email_id = #{email}
 
-	</select>
+	</update>
+
+
+
 
 
 </mapper>

@@ -23,7 +23,7 @@ public class MailAuthContorller {
 	public String sendEmailCode(@RequestBody Map<String, Object> requestBody) {
 
 		String email = (String) requestBody.get("email");
-
+		System.out.println(email);
 		try {
 			mailService.sendMail(email);
 		} catch (MessagingException e) {
