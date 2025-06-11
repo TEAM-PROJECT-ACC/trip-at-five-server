@@ -89,20 +89,11 @@ public class OclockFileUtils {
      * 
      * join 과 resolve 메서드의 차이는 상대경로인지 절대경로인지의 차이다.
      */
-//    Path targetLocation = this.uploadPath.resolve(type).resolve(subFolder).resolve(fileName);
-//    System.out.println("파일 저장 메서드의 파일 저장 경로 : " + targetLocation);
-//    
-//    try {
-//      Files.createDirectories(targetLocation.getParent()); // getParent 메서드 : 현재 경로의 부모 메서드 반환
-////      System.out.println(targetLocation.toFile());
-//      file.transferTo(targetLocation.toFile()); // transferTo 메서드 : 업로드된 파일을 지정된 파일 객체에 저장하는 기능을 제공
-//    } catch (IOException e) {
-//      System.out.println("파일 저장 실패");
-//      e.printStackTrace();
-//    }
     Path targetLocation = this.uploadPath.resolve(type).resolve(subFolder).resolve(fileName);
     try {
-        Files.createDirectories(targetLocation.getParent());
+        Files.createDirectories(targetLocation.getParent()); // getParent 메서드 : 현재 경로의 부모 메서드 반환
+        
+        // transferTo 메서드 : 업로드된 파일을 지정된 파일 객체에 저장하는 기능을 제공
 
         // 기존 transferTo 대신 안전하게 byte 복사
         /**
@@ -198,14 +189,14 @@ public class OclockFileUtils {
    * @param typePath : 숙박/객실/이용후기 UploadFileType 의 path
    * @return
    */
-  public List<String> saveRoomImage(List<MultipartFile> newImageList, String typePath) {
+  public List<String> saveImage(List<MultipartFile> newImageList, String typePath) {
     String dateFolderPath = createDateFolderPath();
     createFolders(dateFolderPath, typePath);
     
     List<String> fileUrls = new ArrayList<>();
  
     for (int i = 0; i < newImageList.size(); i++) {
-      System.out.println("file : " + newImageList.get(i).getOriginalFilename());
+//      System.out.println("file : " + newImageList.get(i).getOriginalFilename());
       String fileName = OclockFileUtils.changeFileName(newImageList.get(i));
       
 //      System.out.println("newImageList.get(i) : " + newImageList.get(i));
@@ -234,7 +225,7 @@ public class OclockFileUtils {
   public List<String> getHashCodeList(MultipartFile[] imageList, String typePath) {
     String dateFolderPath = createDateFolderPath();
     Path tempFolderPath = createTempFolder(dateFolderPath, typePath); // 임시 폴더 생성
-    System.out.println("tempFolderPath : " + tempFolderPath);
+//    System.out.println("tempFolderPath : " + tempFolderPath);
 
     List<String> hashCodeList = new ArrayList<>();
     for(MultipartFile image : imageList) {
@@ -244,7 +235,7 @@ public class OclockFileUtils {
       saveFile(image, dateFolderPath, image.getOriginalFilename(), ("temp/" + typePath));
       
       String hashCode = getHashValue(fileUrl);
-      System.out.println("hashCode : " + hashCode);
+//      System.out.println("hashCode : " + hashCode);
       
       hashCodeList.add(hashCode);
     }
@@ -258,42 +249,42 @@ public class OclockFileUtils {
    * @param fileUrl : 파일 경로
    * @return
    */
-  private String getHashValue(String fileUrl) {
-    System.out.println("fileUrl : " + fileUrl);
-    String hashValue = "";
-    try {
-        MessageDigest digest = MessageDigest.getInstance(algorithm);
-
-        try (FileInputStream fis = new FileInputStream(fileUrl)) {
-            byte[] buffer = new byte[16384];
-            int bytesRead;
-
-            while ((bytesRead = fis.read(buffer)) != -1) {
-                digest.update(buffer, 0, bytesRead);
-            }
-        }
-        
-        byte[] hash = digest.digest();
-
-        // 해시 값을 16진수 문자열로 변환
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : hash) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-
-        System.out.println(algorithm + " 해시 값: " + hexString.toString());
-        hashValue = hexString.toString();
-    } catch (NoSuchAlgorithmException e) {
-        System.err.println("알고리즘을 찾을 수 없음: " + e.getMessage());
-    } catch (IOException e) {
-        System.err.println("파일 입출력 오류: " + e.getMessage());
+    private String getHashValue(String fileUrl) {
+      System.out.println("fileUrl : " + fileUrl);
+      String hashValue = "";
+      try {
+          MessageDigest digest = MessageDigest.getInstance(algorithm);
+  
+          try (FileInputStream fis = new FileInputStream(fileUrl)) {
+              byte[] buffer = new byte[16384];
+              int bytesRead;
+  
+              while ((bytesRead = fis.read(buffer)) != -1) {
+                  digest.update(buffer, 0, bytesRead);
+              }
+          }
+          
+          byte[] hash = digest.digest();
+  
+          // 해시 값을 16진수 문자열로 변환
+          StringBuilder hexString = new StringBuilder();
+          for (byte b : hash) {
+              String hex = Integer.toHexString(0xff & b);
+              if (hex.length() == 1) {
+                  hexString.append('0');
+              }
+              hexString.append(hex);
+          }
+  
+          System.out.println(algorithm + " 해시 값: " + hexString.toString());
+          hashValue = hexString.toString();
+      } catch (NoSuchAlgorithmException e) {
+          System.err.println("알고리즘을 찾을 수 없음: " + e.getMessage());
+      } catch (IOException e) {
+          System.err.println("파일 입출력 오류: " + e.getMessage());
+      }
+      return hashValue;
     }
-    return hashValue;
-  }
 
   /**
    * 임시 폴더 내 임시 파일 삭제
@@ -306,7 +297,7 @@ public class OclockFileUtils {
    * @param hashCodeList : 해시코드 리스트
    * @param typePath : 숙박/객실/이용후기 UploadFileType 의 path
    */
-  public void deleteTempFolder(List<MultipartFile> newImageList, List<String> hashCodeList, String typePath) {
+  public void deleteTempFolder(List<MultipartFile> newImageList, List<String> deleteList, List<String> hashCodeList, String typePath) {
     String dateFolderPath = createDateFolderPath();
     Path folderPath = uploadPath.resolve("temp").resolve(typePath).resolve(dateFolderPath);
 //    System.out.println("folderPath : " + folderPath);
@@ -323,14 +314,35 @@ public class OclockFileUtils {
       e.printStackTrace();
     }
     
-    for(int i = 0; i < fileHashList.size(); i++) {
+    newImageList.forEach(value -> System.out.println("newImageList : " + value.getOriginalFilename()));
+    hashCodeList.forEach(value -> System.out.println("hashCodeList : " + value));
+    
+    for(int i = 0; i < deleteList.size(); i++) {
 //      System.out.println("folderPath.resolve(newImageList.get(i).getOriginalFilename()).toString() : " + folderPath.resolve(newImageList.get(i).getOriginalFilename()).toString());
-//      System.out.println("fileHashList.get(i) : " + fileHashList.get(i));
-//      System.out.println("hashCodeList.get(i) : " + hashCodeList.get(i));
+//      System.out.println("deleteList.get(i) : " + deleteList.get(i));
       for(int j = 0; j < hashCodeList.size(); j++) {
-        if(fileHashList.get(i).equals(hashCodeList.get(j))) {
-          new File(folderPath.resolve(newImageList.get(j).getOriginalFilename()).toString()).delete();
+//        System.out.println("hashCodeList.get(j) : " + hashCodeList.get(j));
+        if(deleteList.get(i).equals(hashCodeList.get(j))) {
+//          System.out.println("중복된 파일 제거 temp : " + folderPath.resolve(newImageList.get(i).getOriginalFilename()).toString());
+          new File(folderPath.resolve(newImageList.get(i).getOriginalFilename()).toString()).delete();
+          break;
         }
+      }
+    }
+    
+    if(Files.exists(folderPath)) {
+      try (Stream<Path> paths = Files.walk(folderPath)) {
+         paths.sorted((p1, p2) -> p2.compareTo(p1)) // 하위 파일부터 삭제하기 위해 정렬
+           .forEach(path -> {
+             try {
+               Files.delete(path);
+//               System.out.println("삭제됨: " + path);
+             } catch (IOException e) {
+//               System.err.println("삭제 실패: " + path + " - " + e.getMessage());
+             }
+           });
+      } catch (IOException e) {
+         System.err.println("파일 탐색 실패: " + e.getMessage());
       }
     }
   }
@@ -341,7 +353,7 @@ public class OclockFileUtils {
      String fullPath = basePath + File.separator + path;
    
      File file = new File(fullPath);
-     System.out.println("삭제 경로: " + file.getPath());
+//     System.out.println("삭제 경로: " + file.getPath());
    
      if (file.exists()) {
          if (file.delete()) {

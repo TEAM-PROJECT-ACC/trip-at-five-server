@@ -1,6 +1,5 @@
 package com.kh.clock.room.service;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,10 +18,6 @@ import com.kh.clock.room.repository.dto.RoomSearchDTO;
 
 @Service
 public class RoomServiceImpl implements RoomService {
-  
-  @Value("${file.dir}")
-  private String staticFilePath;
-  
   
   private RoomDAO roomDAO;
   private RoomImageServiceImpl roomImageService;
@@ -81,6 +76,7 @@ public class RoomServiceImpl implements RoomService {
   private void insertImageFun(int judge, int typeNumKey, MultipartFile[] images) {
     int roomImageResult = 0;
     List<MultipartFile> newImageList = new ArrayList<>();
+    List<String> deleteList = new ArrayList<>();
     if(judge > 0) {
       
       // 파일이 있을 경우만 실행
@@ -91,22 +87,23 @@ public class RoomServiceImpl implements RoomService {
         List<String> hashCodeList = oFileUtils.getHashCodeList(images, typePath);
 
         for(int i = 0; i < images.length; i++) {
-          System.out.println("구한 hash값 : " + hashCodeList.get(i));
-          System.out.println("images[i] : " + images[i]);
+//          System.out.println("구한 hash값 : " + hashCodeList.get(i));
+//          System.out.println("images[i] : " + images[i]);
           newImageList.add(images[i]);
+          deleteList.add(hashCodeList.get(i));
         }
         
         // 객실 이미지 처리
-        List<String> fileUrls = oFileUtils.saveRoomImage(newImageList, typePath);    
+        List<String> fileUrls = oFileUtils.saveImage(newImageList, typePath);    
         for(int i = 0; i < fileUrls.size(); i++) {
           roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(hashCodeList.get(i), newImageList.get(i).getOriginalFilename(), fileUrls.get(i), typeNumKey));
         }
         // 전달 받은 파일의 갯수와 DB에서 INSERT 한 행의 갯수가 동일하면 저장 성공!
         if(roomImageResult == fileUrls.size()) {
-          System.out.println("파일 데이터 저장 성공!");
+//          System.out.println("파일 데이터 저장 성공!");
           
           // 임시 폴더 내 파일 삭제
-          oFileUtils.deleteTempFolder(newImageList, hashCodeList, typePath);
+          oFileUtils.deleteTempFolder(newImageList, deleteList, hashCodeList, typePath);
         }
       }
     }
@@ -134,6 +131,7 @@ public class RoomServiceImpl implements RoomService {
 
         // 새로 요청받은 이미지 배열의 해시값 리스트
         List<String> hashCodeList = oFileUtils.getHashCodeList(images, typePath);
+        List<String> newHashCodeList = new ArrayList<>();
         
         // 해시값 비교
         for(int i = 0; i < hashCodeList.size(); i++) {
@@ -146,15 +144,19 @@ public class RoomServiceImpl implements RoomService {
               count++;
             } 
           }
+
           
-          if(count == 0) newImageList.add(images[i]); 
+          if(count == 0) {
+            newHashCodeList.add(hashCodeList.get(i));
+            newImageList.add(images[i]); 
+          }
         }
         
         // 객실 이미지 처리
         if(newImageList.size() > 0) {
-          List<String> fileUrls = oFileUtils.saveRoomImage(newImageList, UploadFileType.ROOM.getPath());    
+          List<String> fileUrls = oFileUtils.saveImage(newImageList, UploadFileType.ROOM.getPath());    
           for(int i = 0; i < fileUrls.size(); i++) {
-            roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(hashCodeList.get(i), newImageList.get(i).getOriginalFilename(), fileUrls.get(i), typeNumKey));
+            roomImageResult += roomImageService.insertRoomImage(new RoomImageDTO(newHashCodeList.get(i), newImageList.get(i).getOriginalFilename(), fileUrls.get(i), typeNumKey));
           }
           
           if(roomImageResult == fileUrls.size()) {
@@ -167,7 +169,7 @@ public class RoomServiceImpl implements RoomService {
           }
         }
 
-        oFileUtils.deleteTempFolder(newImageList, hashCodeList, typePath);
+        oFileUtils.deleteTempFolder(newImageList, newHashCodeList, hashCodeList, typePath);
       }
     }
   }
@@ -186,7 +188,7 @@ public class RoomServiceImpl implements RoomService {
      */
     List<RoomImageDTO> roomImagePathList = roomImageService.findRoomImageByRoomSq(roomIdenDTO.getRoomSq());
     
-    for(RoomImageDTO r : roomImagePathList) System.out.println("삭제를 위해 조회한 이미지 : " + r.getRoomImgPathName());
+//    for(RoomImageDTO r : roomImagePathList) System.out.println("삭제를 위해 조회한 이미지 : " + r.getRoomImgPathName());
     
     boolean flag = false;
     for(int i = 0; i < roomImagePathList.size(); i++) {

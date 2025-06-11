@@ -50,11 +50,11 @@ public class RoomController {
     @RequestParam(value="currentPage", required = false, defaultValue="1") int currentPage,
     @RequestParam(value="keyword", required = false, defaultValue = "") String keyword
   ) {
-    System.out.println("GetMapping : " + accomNo);
+//    System.out.println("GetMapping : " + accomNo);
 //    System.out.println((currentPage != 0 ? currentPage : "null입니다."));
     List<RoomListDTO> roomList = roomService.selectAllList(new RoomSearchDTO(accomNo, keyword));
     
-    for(RoomListDTO rlDTO : roomList) System.out.println(rlDTO.toString());
+//    for(RoomListDTO rlDTO : roomList) System.out.println(rlDTO.toString());
 
     if(roomList != null) return ResponseEntity.status(HttpStatus.OK).body(roomList);
     else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 전체 조회에 실패했습니다.");
