@@ -1,4 +1,4 @@
-package com.kh.clock.accommodation.repository;
+package com.kh.clock.accommodation.repository.dao;
 
 import java.util.List;
 import org.apache.ibatis.session.RowBounds;

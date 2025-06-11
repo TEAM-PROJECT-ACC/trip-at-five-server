@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccomAdminImageDTO {
-  private String accomImageHashCd;
-  private String accomImageOrgName;
-  private String accomImagePathName;
-  private int accomSq;
+  private String accomImgHashCd;
+  private String accomImgOrgName;
+  private String accomImgPathName;
+  private int accomNo;
 }
