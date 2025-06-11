@@ -19,7 +19,7 @@
         IN_ROOM_FAC_INFO,
         ETC_FAC_INFO,
         ACCOM_TYPE_NO,
-        A.LOC_ID,
+        LOC_ID,
         R.ROOM_PRICE,
         R.ROOM_CHK_IN,
         R.ROOM_CHK_OUT
@@ -33,11 +33,14 @@
 	    		) R1
 	    	WHERE R1.RN = 1
 	  	) R ON A.ACCOM_SQ = R.ACCOM_NO
-	    WHERE
-		    (
-		      (A.LOC_ID = #{locId}) OR
-		      (ACCOM_NAME LIKE '%' || #{keyword} || '%')
+	  	JOIN LOCATION_TB USING (LOC_ID)
+	    WHERE 1=1
+		  <if test="keyword != null and keyword != ''">
+		    AND (
+		      LOC_NAME LIKE '%' || #{keyword} || '%'
+		      OR A.ACCOM_NAME LIKE '%' || #{keyword} || '%'
 		    )
+		  </if>
 	    ORDER BY ACCOM_SQ DESC
     </select>
 	

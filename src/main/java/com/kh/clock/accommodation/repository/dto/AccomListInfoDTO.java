@@ -11,4 +11,5 @@ public class AccomListInfoDTO {
   private int page;
   private int size;
   private int locId;
+  private int accomTypeNo;
 }
