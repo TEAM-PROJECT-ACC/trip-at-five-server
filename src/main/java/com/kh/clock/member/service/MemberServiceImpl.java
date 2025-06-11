@@ -1,9 +1,12 @@
 package com.kh.clock.member.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.clock.member.domain.AdminVO;
+import com.kh.clock.member.domain.ChallengeVO;
 import com.kh.clock.member.domain.MemberVO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.repository.MemberDAO;
@@ -93,5 +96,31 @@ public class MemberServiceImpl implements MemberService {
 
 		return result;
 	}
+
+	/* 회원 비활성화(탈퇴) */
+	@Override
+	public int userInactive(MemberVO loginUser) {
+
+		int result = memberDAO.userInactive(loginUser);
+
+		return result;
+	}
+
+	/* 챌린지 리스트 조회 */
+	@Override
+	public List<ChallengeVO> getChallengeList() {
+		
+		return memberDAO.getChallengeList();
+
+	}
+
+	/* 회원 가입시 챌린지 추가  */
+	@Override
+	public int insetUserChallengeList(List<ChallengeVO> items) {
+		int result = memberDAO.insetUserChallengeList(items);
+		return result;
+	}
+	
+	
 
 }

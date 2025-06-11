@@ -1,6 +1,9 @@
 package com.kh.clock.member.service;
 
+import java.util.List;
+
 import com.kh.clock.member.domain.AdminVO;
+import com.kh.clock.member.domain.ChallengeVO;
 import com.kh.clock.member.domain.MemberVO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.repository.RegisterDTO;
@@ -35,5 +38,14 @@ public interface MemberService {
 
 	/* 회원 정보 수정 */
 	public int infoUpdate(LoginDTO userInfo);
+
+	/* 회원 비활성화(탈퇴) */
+	public int userInactive(MemberVO loginUser);
+
+	/* 챌린지 리스트 조회 */
+	public List<ChallengeVO> getChallengeList();
+
+	/* 회원 가입시 챌린지 추가  */
+	public int insetUserChallengeList(List<ChallengeVO> items);
 
 }

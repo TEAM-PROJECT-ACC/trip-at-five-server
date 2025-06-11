@@ -38,13 +38,23 @@ class MemLoginController {
 		MemberVO loginUser = mService.userInfo(userInfo);
 		HashMap<String, Object> hashMap = new HashMap<>();
 
+		System.out.println(loginUser.getCkMemSt());
+
 		if (loginUser == null) {
 
 			hashMap.put("IdFail", "IdFail");
 
 			return ResponseEntity.ok(hashMap);
 
-		} else if (!bCryptPasswordEncoder.matches(userInfo.getPwd(), loginUser.getMemPwd())) {
+		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
+			hashMap.put("INACTIVE", "INACTIVE");
+
+			System.out.println("test");
+
+			return ResponseEntity.ok(hashMap);
+		}
+
+		else if (!bCryptPasswordEncoder.matches(userInfo.getPwd(), loginUser.getMemPwd())) {
 
 			hashMap.put("pwdFail", "pwdFail");
 			return ResponseEntity.ok(hashMap);
@@ -127,7 +137,13 @@ class MemLoginController {
 			mService.snsRegister(kakaoLoginDTO);
 			loginUser = mService.userInfo(kakaoLoginDTO);
 
-		} else if (!loginUser.getCkSocPlt().equals("KAKAO")) {
+		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
+			hashMap.put("INACTIVE", "INACTIVE");
+
+			return ResponseEntity.ok(hashMap);
+		}
+
+		else if (!loginUser.getCkSocPlt().equals("KAKAO")) {
 
 			hashMap.put("ckSocPlt", loginUser.getCkSocPlt());
 
@@ -178,6 +194,10 @@ class MemLoginController {
 			mService.snsRegister(naverLoginDTO);
 			loginUser = mService.userInfo(naverLoginDTO);
 
+		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
+			hashMap.put("INACTIVE", "INACTIVE");
+
+			return ResponseEntity.ok(hashMap);
 		} else if (!loginUser.getCkSocPlt().equals("NAVER")) {
 
 			hashMap.put("ckSocPlt", loginUser.getCkSocPlt());
@@ -227,6 +247,10 @@ class MemLoginController {
 
 			mService.snsRegister(googleLoginDTO);
 
+		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
+			hashMap.put("INACTIVE", "INACTIVE");
+
+			return ResponseEntity.ok(hashMap);
 		} else if (!loginUser.getCkSocPlt().equals("GOOGLE")) {
 
 			hashMap.put("ckSocPlt", loginUser.getCkSocPlt());

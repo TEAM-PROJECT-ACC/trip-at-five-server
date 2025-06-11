@@ -1,12 +1,17 @@
 package com.kh.clock.member.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.clock.member.domain.ChallengeVO;
 import com.kh.clock.member.domain.MemberVO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.service.MemberService;
@@ -62,17 +67,42 @@ public class MypageController {
 		}
 
 	}
-	
-	
+
 	@PutMapping("/userInactive")
 	public int userInactive(@RequestBody LoginDTO userInfo) {
 
-	
 		MemberVO loginUser = mService.userInfo(userInfo);
+		System.out.println(userInfo);
 		System.out.println(loginUser);
 
-		 return 0;
+		if (loginUser == null) {
+			return 0;
+		}
+
+		if (!bCryptPasswordEncoder.matches(loginUser.getMemPwd(), userInfo.getPwd())) {
+
+			int result = mService.userInactive(loginUser);
+
+			System.out.println(result);
+
+			if (result > 0) {
+				System.out.println("pwd 일치");
+				return result;
+			}
+			return 0;
+		} else {
+			
+			System.out.println("pwd 미일치");
+			return 0;
+		}
 
 	}
 	
+    @GetMapping("/challenge")
+    public ResponseEntity<List<ChallengeVO>> getChallengeList() {
+        List<ChallengeVO> items = mService.getChallengeList();
+        System.out.println(items);
+        return ResponseEntity.ok(items); // 
+    }
+
 }
