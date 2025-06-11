@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import com.kh.clock.cart.repository.dto.CartInfoDTO;
+import com.kh.clock.cart.repository.dto.CartListDTO;
 
 @Repository
 public class CartDAO {
@@ -43,6 +44,10 @@ public class CartDAO {
     }
     
     return result;
+  }
+
+  public List<CartListDTO> findCartByMemNo(int memNo) {
+    return sqlSession.selectList("cartMapper.findCartByMemNo", memNo);
   }
 
 }

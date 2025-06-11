@@ -24,5 +24,12 @@
 	    </foreach>
 	</select>
 
+	<select id="findCartByMemNo" resultType="com.kh.clock.cart.repository.dto.CartListDTO">
+		SELECT A.ACCOM_NAME, R.ROOM_NAME, R.ROOM_PRICE, C.ROOM_NO, R.ACCOM_NO
+		FROM CART_TB C
+		    LEFT JOIN ROOM_TB R ON (C.ROOM_NO = R.ROOM_SQ)
+		    LEFT JOIN ACCOMMODATION_TB A ON (R.ACCOM_NO = A.ACCOM_SQ)
+		WHERE MEM_NO = #{memNo}
+	</select>
 
 </mapper>

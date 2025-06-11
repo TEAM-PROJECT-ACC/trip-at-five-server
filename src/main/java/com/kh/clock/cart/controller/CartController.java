@@ -1,5 +1,6 @@
 package com.kh.clock.cart.controller;
 
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,11 +9,15 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.kh.clock.cart.repository.dto.CartInfoDTO;
+import com.kh.clock.cart.repository.dto.CartListDTO;
 import com.kh.clock.cart.service.CartServiceImpl;
 
 @RestController
@@ -23,6 +28,18 @@ public class CartController {
   
   public CartController(CartServiceImpl cartService) {
     this.cartService = cartService;
+  }
+  
+  @GetMapping("/{memNo}")
+  public ResponseEntity<Object> selectCarts(
+      @PathVariable(value="memNo", required=true) int memNo) {
+    System.out.println(memNo);
+    List<CartListDTO> cartList = cartService.findCartByMemNo(memNo);
+    
+    cartList.forEach(cart -> System.out.println(cart));
+    
+    if(cartList != null) return ResponseEntity.status(HttpStatus.OK).body(cartList);
+    else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("조회된 장바구니가 없습니다.");
   }
 
   @PostMapping("")
