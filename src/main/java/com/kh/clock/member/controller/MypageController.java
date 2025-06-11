@@ -40,6 +40,39 @@ public class MypageController {
 		}
 
 	}
-	
 
+	@PutMapping("/infoUpdate")
+	public int infoUpdate(@RequestBody LoginDTO userInfo) {
+
+		MemberVO loginUser = mService.userInfo(userInfo);
+
+		if (loginUser == null) {
+
+			return 0;
+		} else if (userInfo.getPwd().length() == 0) {
+			int result = mService.infoUpdate(userInfo);
+
+			return result;
+		} else {
+			String encPwd = bCryptPasswordEncoder.encode(userInfo.getPwd());
+			userInfo.setPwd(encPwd);
+			int result = mService.infoUpdate(userInfo);
+			return result;
+
+		}
+
+	}
+	
+	
+	@PutMapping("/userInactive")
+	public int userInactive(@RequestBody LoginDTO userInfo) {
+
+	
+		MemberVO loginUser = mService.userInfo(userInfo);
+		System.out.println(loginUser);
+
+		 return 0;
+
+	}
+	
 }

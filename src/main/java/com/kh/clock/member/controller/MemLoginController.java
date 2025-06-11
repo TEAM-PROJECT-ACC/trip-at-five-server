@@ -137,7 +137,7 @@ class MemLoginController {
 			hashMap.put("memSq", loginUser.getMemSq());
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
-			hashMap.put("memType", "user");
+			hashMap.put("memType", "kakaoUser");
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
@@ -188,7 +188,7 @@ class MemLoginController {
 			hashMap.put("memSq", loginUser.getMemSq());
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
-			hashMap.put("memType", "user");
+			hashMap.put("memType", "naverUser");
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
@@ -237,7 +237,7 @@ class MemLoginController {
 			hashMap.put("memSq", loginUser.getMemSq());
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
-			hashMap.put("memType", "user");
+			hashMap.put("memType", "googleUser");
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);

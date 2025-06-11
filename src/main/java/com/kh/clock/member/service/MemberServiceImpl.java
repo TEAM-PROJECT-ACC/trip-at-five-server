@@ -78,9 +78,18 @@ public class MemberServiceImpl implements MemberService {
 		return result;
 	}
 
+	/* 비밀번호 재설정 */
 	@Override
 	public int updatePwd(LoginDTO userInfo) {
 		int result = memberDAO.updatePwd(userInfo);
+
+		return result;
+	}
+
+	/* 회원 정보 수정 */
+	@Override
+	public int infoUpdate(LoginDTO userInfo) {
+		int result = memberDAO.infoUpdate(userInfo);
 
 		return result;
 	}

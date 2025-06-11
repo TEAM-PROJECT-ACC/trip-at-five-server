@@ -70,4 +70,10 @@ public class MemberDAO {
 		return result;
 	}
 
+	public int infoUpdate(LoginDTO userInfo) {
+		int result = sqlsession.update("mamberMapper.infoUpdate", userInfo);
+
+		return result;
+	}
+
 }

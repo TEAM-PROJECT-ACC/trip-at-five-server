@@ -64,6 +64,17 @@
 
 	</update>
 
+	<update id="infoUpdate">
+
+		UPDATE member_tb
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="pwd != null and pwd.length() > 0">mem_pwd = #{pwd},</if>
+			<if test="nickName != null and nickName.length() > 0">mem_nick = #{nickName},</if>
+		</trim>
+
+		WHERE mem_email_id = #{email}
+
+	</update>
 
 
 

@@ -33,4 +33,7 @@ public interface MemberService {
 	/* 유저 비밀번호 변경 */
 	public int updatePwd(LoginDTO userInfo);
 
+	/* 회원 정보 수정 */
+	public int infoUpdate(LoginDTO userInfo);
+
 }

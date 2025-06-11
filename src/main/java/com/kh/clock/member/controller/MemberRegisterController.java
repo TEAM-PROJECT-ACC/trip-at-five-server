@@ -43,11 +43,14 @@ public class MemberRegisterController {
 	@PostMapping("/nickNameDuplicationCheck")
 	public int nickNameDuplicationCheck(@RequestBody Map<String, Object> requestBody) {
 
-		String nick = (String) requestBody.get("nick");
+		String nick = (String) requestBody.get("nickName");
+		System.out.println(nick);
 
 		RegisterDTO register = new RegisterDTO();
 
 		int result = mService.nickNameDuplicationCheck(nick);
+		
+		System.out.println(result);
 
 		if (result > 0) {
 			register.setNickCount(result);
@@ -68,6 +71,8 @@ public class MemberRegisterController {
 		registerdto.setPwd(encPwd);
 
 		int result = mService.registerSend(registerdto);
+		System.out.println("회원가입쪽");
+		System.out.println(result);
 
 		if (result > 0) {
 			return result;
