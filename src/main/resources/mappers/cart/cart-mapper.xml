@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cartMapper">
+
+	<insert id="insertCart">
+        INSERT INTO CART_TB (CART_SQ, CART_REG_DT, MEM_NO, ROOM_NO) VALUES (CART_SEQ.NEXTVAL, SYSDATE, #{memNo}, #{roomNo})
+    </insert>
+
+</mapper>
