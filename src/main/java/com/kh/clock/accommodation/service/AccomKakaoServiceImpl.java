@@ -15,18 +15,12 @@ import lombok.RequiredArgsConstructor;
 public class AccomKakaoServiceImpl implements AccomKakaoService{
 
   private final AccomDAO accomDAO;
-  
+
   @Override
   public AccomKakaoResponseDTO getAccomKakao() {
-    List<AccomKakaoDTO> accomKakao = accomDAO.selectAccomKakao();
-    // LOC_ID로 그룹화함
-    Map<Integer, List<AccomKakaoDTO>> groupByLocation = new HashMap<>();
-    
-    for(AccomKakaoDTO accom: accomKakao) {
-      groupByLocation.computeIfAbsent(accom.getLocId(), k -> new ArrayList<>()).add(accom);
-    }
-    List<Double[]> regionCenters = 
+    // TODO Auto-generated method stub
     return null;
   }
+
 
 }
