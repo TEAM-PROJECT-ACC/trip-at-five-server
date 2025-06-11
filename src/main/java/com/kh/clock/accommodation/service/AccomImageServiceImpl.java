@@ -32,16 +32,7 @@ public class AccomImageServiceImpl implements AccomImageService{
   public List<AccomAdminImageDTO> findAccomImageByAccomSq(int accomSq) {
     return accomImageDAO.findAccomImageByAccomSq(accomSq);
   }
-
-  /**
-   * 객실 이미지 수정
-   */
-  @Override
-  @Transactional(propagation = Propagation.REQUIRED)
-  public int updateAccomImage(AccomAdminImageDTO accomImageDTO) {
-    return accomImageDAO.updateAccomImage(accomImageDTO);
-  }
-
+  
   /**
    * 객실 이미지 삭제
    * @param imageList 

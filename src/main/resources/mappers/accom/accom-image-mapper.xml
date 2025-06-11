@@ -23,14 +23,9 @@
 	</insert>
 	
 	<!-- 객실 이미지 수정 UPDATE문 -->
-  	<update id="updateAccomImage">
-  		UPDATE ACCOMMODATION_IMAGE_TB SET 
-			ACCOM_IMG_ORG_NAME = #{accomImgOrgName},
-			ACCOM_IMG_PATH_NAME = #{accomImgPathName}
-		WHERE ACCOM_NO = #{accomNo}
-  	</update>
   	
 	<delete id="deleteAccomImageByAccomSq">
-		DELETE FROM ACCOMMODATION_IMAGE_TB WHERE ACCOM_NO = #{no} AND ACCOM_IMG_HASH_CD = #{hashCode} 
+		DELETE FROM ACCOMMODATION_IMAGE_TB
+		WHERE ACCOM_NO = #{no} AND ACCOM_IMG_HASH_CD = #{hashCode} 
 	</delete>
 </mapper>

@@ -19,11 +19,6 @@ public interface AccomImageService {
   List<AccomAdminImageDTO> findAccomImageByAccomSq(int accomSq);
 
   /**
-   * 객실 이미지 수정
-   */
-  int updateAccomImage(AccomAdminImageDTO accomImageDTO);
-
-  /**
    * 객실 이미지 삭제
    * @param imageList 
    */

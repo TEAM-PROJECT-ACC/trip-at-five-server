@@ -24,10 +24,6 @@ public class AccomImageDAO {
     return sqlSession.selectList("accomImageMapper.findAccomImageByAccomSq", accomNo);
   }
 
-  public int updateAccomImage(AccomAdminImageDTO accomAdminImageDTO) {
-    return sqlSession.update("accomImageMapper.updateAccomImage", accomAdminImageDTO);
-  }
-
   public int deleteAccomImageByAccomSq(ImageFileDTO imageFileDTO) {
     return sqlSession.delete("accomImageMapper.deleteAccomImageByAccomSq", imageFileDTO);
   }

@@ -84,9 +84,9 @@ public class AccomServiceImpl implements AccomService {
   @Override
   @Transactional
   public int insertAdminAccom(AccomAdminDetailDTO accomDto, MultipartFile[] images) {
-    System.out.println("accomDto : " + accomDto);
+//    System.out.println("accomDto : " + accomDto);
     int insertResult = accomDAO.insertAdminAccom(accomDto);
-    System.out.println("accomDto.getAccomSq() : " + accomDto.getAccomSq());
+//    System.out.println("accomDto.getAccomSq() : " + accomDto.getAccomSq());
     insertImageFun(insertResult, accomDto.getAccomSq(), images);
     
     return insertResult;
@@ -101,6 +101,7 @@ public class AccomServiceImpl implements AccomService {
   private void insertImageFun(int judge, int typeNumKey, MultipartFile[] images) {
     int accomImageResult = 0;
     List<MultipartFile> newImageList = new ArrayList<>();
+    List<String> newHashCodeList = new ArrayList<>();
     if(judge > 0) {
       
       if(images != null) {
@@ -109,9 +110,10 @@ public class AccomServiceImpl implements AccomService {
         List<String> hashCodeList = oFileUtils.getHashCodeList(images, typePath);
 
         for(int i = 0; i < images.length; i++) {
-          System.out.println("구한 hash값 : " + hashCodeList.get(i));
-          System.out.println("images[i] : " + images[i]);
+//          System.out.println("구한 hash값 : " + hashCodeList.get(i));
+//          System.out.println("images[i] : " + images[i]);
           newImageList.add(images[i]);
+          newHashCodeList.add(hashCodeList.get(i));
         }
         
         List<String> fileUrls = oFileUtils.saveImage(newImageList, typePath);    
@@ -122,7 +124,7 @@ public class AccomServiceImpl implements AccomService {
         if(accomImageResult == fileUrls.size()) {
           System.out.println("파일 데이터 저장 성공!");
           
-          oFileUtils.deleteTempFolder(newImageList, hashCodeList, typePath);
+          oFileUtils.deleteTempFolder(newImageList, newHashCodeList, hashCodeList, typePath);
         }
       }
     }
@@ -146,24 +148,28 @@ public class AccomServiceImpl implements AccomService {
         String typePath = UploadFileType.ACC.getPath();
 
         List<String> hashCodeList = oFileUtils.getHashCodeList(images, typePath);
+        List<String> newHashCodeList = new ArrayList<>();
         
         // 해시값 비교
         for(int i = 0; i < hashCodeList.size(); i++) {
           int count = 0;
           for(int j = 0; j < accomImageList.size(); j++) {
             if(hashCodeList.get(i).equals(accomImageList.get(j).getAccomImgHashCd())) {
-              System.out.println("값이 일치");
+//              System.out.println("값이 일치");
               count++;
             } 
           }
           
-          if(count == 0) newImageList.add(images[i]); 
+          if(count == 0) {
+            newHashCodeList.add(hashCodeList.get(i));
+            newImageList.add(images[i]); 
+          }
         }
         
         if(newImageList.size() > 0) {
           List<String> fileUrls = oFileUtils.saveImage(newImageList, UploadFileType.ACC.getPath());    
           for(int i = 0; i < fileUrls.size(); i++) {
-            roomImageResult += accomImageService.insertAccomImage(new AccomAdminImageDTO(hashCodeList.get(i), newImageList.get(i).getOriginalFilename(), fileUrls.get(i), typeNumKey));
+            roomImageResult += accomImageService.insertAccomImage(new AccomAdminImageDTO(newHashCodeList.get(i), newImageList.get(i).getOriginalFilename(), fileUrls.get(i), typeNumKey));
           }
           
           if(roomImageResult == fileUrls.size()) {
@@ -175,7 +181,7 @@ public class AccomServiceImpl implements AccomService {
           }
         }
 
-        oFileUtils.deleteTempFolder(newImageList, hashCodeList, typePath);
+        oFileUtils.deleteTempFolder(newImageList, newHashCodeList, hashCodeList, typePath);
       }
     }
   }
