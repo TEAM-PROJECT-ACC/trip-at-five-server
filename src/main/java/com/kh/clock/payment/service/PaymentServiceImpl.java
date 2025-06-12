@@ -60,8 +60,6 @@ public class PaymentServiceImpl implements PaymentService {
       e.printStackTrace();
     }
     
-    System.out.println("success");
-    
     return payResult;
   }
 
