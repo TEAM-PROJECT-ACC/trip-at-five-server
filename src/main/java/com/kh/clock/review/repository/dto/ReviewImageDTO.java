@@ -1,6 +1,5 @@
 package com.kh.clock.review.repository.dto;
 
-import com.kh.clock.room.repository.dto.RoomImageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

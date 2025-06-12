@@ -14,7 +14,7 @@ private final SqlSession sqlSession;
   
   // 리뷰 이미지 저장
   public int insertReviewImage(ReviewImageDTO reviewImageDTO) {
-    System.out.println("ReviewImageDTO : " + reviewImageDTO);
+    System.out.println("이미지 : " + reviewImageDTO);
     
     return sqlSession.insert("reviewImageMapper.insertReviewImage", reviewImageDTO);
   }

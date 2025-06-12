@@ -13,7 +13,7 @@ import com.kh.clock.review.service.ReviewImageServiceImpl;
 import com.kh.clock.review.service.ReviewServiceImpl;
 
 @RestController
-@RequestMapping("/accommodations/{accomSq}")
+@RequestMapping("/api/review")
 public class ReviewController {
   
   private ReviewServiceImpl reviewSerivce;
@@ -26,6 +26,10 @@ public class ReviewController {
   
   @PostMapping("")
   public ResponseEntity<Object> insertReview(@ModelAttribute ReviewVO reviewVo, @RequestPart(value = "images", required = false) MultipartFile[] images){
+    if(images.length > 5) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미지는 최대 5장까지 가능합니다");
+    }
+    
     int result = reviewSerivce.insertReview(reviewVo, images);
     
     if(result > 0) return ResponseEntity.status(HttpStatus.OK).body(reviewVo);

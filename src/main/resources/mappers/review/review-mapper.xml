@@ -4,7 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="reviewMapper">
 	<!-- 리뷰 저장 -->
-	<insert id="insertReview">
+	<insert id="insertReview" parameterType="com.kh.clock.review.domain.reviewVO" >
 		INSERT INTO REVIEW_TB (
 			REV_SQ, REV_SCO, CK_REV_ST, REV_CONT, REV_REG_DT, RES_CD
 		) VALUES (
@@ -12,7 +12,7 @@
 			#{revSco},
 			#{ckRevSt},
 			#{revCont},
-			DEFAULT
+			DEFAULT,
 			#{resCd}
 		)
 		<selectKey keyProperty="revSq" order="AFTER" resultType="int">

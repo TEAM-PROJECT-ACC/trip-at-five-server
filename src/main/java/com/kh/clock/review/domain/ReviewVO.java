@@ -16,6 +16,7 @@ public class ReviewVO {
   private int revSq;
   private double revSco;
   private String ckRevSt;
+  private String revCont;
   private Date revRegDt;
-  private String resCD;
+  private String resCd;
 }
