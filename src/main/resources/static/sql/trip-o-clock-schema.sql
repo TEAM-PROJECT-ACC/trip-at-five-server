@@ -9,7 +9,7 @@
 -- 25/06/04 객실 이미지 테이블에 hashcode 컬럼 추가
 -- 25/06/07 채팅방 테이블 사용자 이메일 컬럼 추가, 숙박업소 및 이용후기 이미지 테이블에 hashcode 컬럼 추가
 -- 25/06/11 장바구니 객실번호 값 unique 추가 <- 제거
--- 25/06/12 결제 테이블 생성 및 예약 테이블 데이터 타입 설정
+-- 25/06/12 결제 테이블 생성 및 예약 테이블 데이터 타입 설정, 예약테이블 인원수 컬럼 추가
 
 -----------------------------------------------------------------------------
 
@@ -549,6 +549,7 @@ CREATE TABLE RESERVATION_TB (
     RES_EMAIL_ID VARCHAR2(100) NOT NULL,
     RES_NAME VARCHAR2(20) NOT NULL,
     RES_PHONE VARCHAR2(11) NOT NULL,
+    RES_NUM_OF_PEO NUMBER NOT NULL,
     CHECK_IN_DT VARCHAR2(15) NOT NULL,
     CHECK_OUT_DT VARCHAR2(15) NOT NULL,
     CK_RES_ST VARCHAR2(10) DEFAULT 'Unpaid',
@@ -568,6 +569,7 @@ COMMENT ON COLUMN RESERVATION_TB.RES_CD IS '예약코드';
 COMMENT ON COLUMN RESERVATION_TB.RES_EMAIL_ID IS '사용자이메일';
 COMMENT ON COLUMN RESERVATION_TB.RES_NAME IS '예약자명';
 COMMENT ON COLUMN RESERVATION_TB.RES_PHONE IS '예약자 전화번호';
+COMMENT ON COLUMN RESERVATION_TB.RES_NUM_OF_PEO IS '인원수';
 COMMENT ON COLUMN RESERVATION_TB.CHECK_IN_DT IS '체크인 날짜';
 COMMENT ON COLUMN RESERVATION_TB.CHECK_OUT_DT IS '체크아웃 날짜';
 COMMENT ON COLUMN RESERVATION_TB.CK_RES_ST IS '예약상태';
