@@ -27,4 +27,7 @@ public class AccomDTO {
   
   private String accomTypeName;
   
+  private int maxPrice;
+  private int minPrice;
+  
 }

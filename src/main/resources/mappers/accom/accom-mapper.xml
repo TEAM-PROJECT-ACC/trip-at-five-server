@@ -41,6 +41,9 @@
 		      OR A.ACCOM_NAME LIKE '%' || #{keyword} || '%'
 		    )
 		  </if>
+		  <if test="minPrice != null and maxPrice != null">
+		     AND R.ROOM_PRICE BETWEEN #{minPrice} AND #{maxPrice}
+		  </if>
 	    ORDER BY ACCOM_NAME
     </select>
 	
