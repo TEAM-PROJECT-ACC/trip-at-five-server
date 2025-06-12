@@ -20,7 +20,7 @@ public class CartDAO {
   public int insertCart(List<CartInfoDTO> cartInfo) {
     int result = 0;
     for (CartInfoDTO cart : cartInfo) {
-//      System.out.println(cart);
+      System.out.println(cart);
       result += sqlSession.insert("cartMapper.insertCart", cart);
   }
     return result;

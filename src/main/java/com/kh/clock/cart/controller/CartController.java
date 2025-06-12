@@ -36,7 +36,7 @@ public class CartController {
     System.out.println(memNo);
     List<CartListDTO> cartList = cartService.findCartByMemNo(memNo);
     
-    cartList.forEach(cart -> System.out.println(cart));
+    cartList.forEach(cart -> System.out.println("장바구니에 상품 추가할 항목 : " + cart));
     
     if(cartList != null) return ResponseEntity.status(HttpStatus.OK).body(cartList);
     else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("조회된 장바구니가 없습니다.");

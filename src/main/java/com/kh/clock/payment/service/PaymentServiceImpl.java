@@ -3,8 +3,8 @@ package com.kh.clock.payment.service;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import com.kh.clock.payment.repository.dao.PaymentDAO;
 import com.kh.clock.payment.repository.dto.ConfirmDTO;
-import com.kh.clock.payment.repository.dto.PayInfoDTO;
 import kr.co.bootpay.pg.Bootpay;
 
 @Service
@@ -17,9 +17,16 @@ public class PaymentServiceImpl implements PaymentService {
 
   @Value("${bootpay.private-key}")
   private String priKey;
+  
+  private final PaymentDAO payDAO;
+  
+  public PaymentServiceImpl(PaymentDAO payDAO) {
+    this.payDAO = payDAO;
+  }
 
   @Override
-  public PayInfoDTO payConfirm(ConfirmDTO confirmDTO) {
+  public int payConfirm(ConfirmDTO confirmDTO) {
+    int payResult = 0;
     try {
       System.out.println("restKey : " + restKey);
       System.out.println("priKey : " + priKey);
@@ -35,6 +42,7 @@ public class PaymentServiceImpl implements PaymentService {
       HashMap<String, Object> res = bootpay.confirm(receiptId);
       if(res.get("error_code") == null) { // success
           System.out.println("confirm success: " + res);
+          payResult = payDAO.insertPayment(confirmDTO);
       } else {
           System.out.println("confirm false: " + res);
       }
@@ -44,7 +52,7 @@ public class PaymentServiceImpl implements PaymentService {
     
     System.out.println("success");
     
-    return null;
+    return payResult;
   }
 
 }
