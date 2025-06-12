@@ -14,4 +14,5 @@ public class ChallengHistoryDTO {
 	private int chalCond; // 챌린지 조건
 	private int currentStep; // 챌린지 진행도
 	private int chalHistoryNo; // 유저 챌린지 내역 번호
+
 }

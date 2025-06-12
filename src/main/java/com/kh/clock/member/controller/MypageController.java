@@ -105,17 +105,21 @@ public class MypageController {
 
 		return ResponseEntity.ok(list);
 	}
-	
+
 	@PutMapping("/challengeSucces")
 	public int challengeSucces(@RequestBody HashMap chalSuccessInfo) {
 
-	    System.out.println(chalSuccessInfo);
+		System.out.println(chalSuccessInfo);
 
 		int result = mService.challengeSucces(chalSuccessInfo);
-	    
 
-		return 0;
+		if (result > 0) {
+			/* 챌린지 성공 */
+			return result;
+		} else {
+			/* 챌린지 실패 */
+			return result;
+		}
 	}
-	
 
 }
