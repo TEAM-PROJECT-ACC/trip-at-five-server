@@ -9,7 +9,7 @@
 -- 25/06/04 객실 이미지 테이블에 hashcode 컬럼 추가
 -- 25/06/07 채팅방 테이블 사용자 이메일 컬럼 추가, 숙박업소 및 이용후기 이미지 테이블에 hashcode 컬럼 추가
 -- 25/06/11 장바구니 객실번호 값 unique 추가 <- 제거
--- 25/06/12 결제 테이블 생성 및 예약 테이블 데이터 타입 설정, 예약테이블 인원수 컬럼 추가
+-- 25/06/12 결제 테이블 생성 및 예약 테이블 데이터 타입 크기 변경, 예약테이블 인원수 컬럼 추가
 
 -----------------------------------------------------------------------------
 
@@ -545,7 +545,7 @@ CREATE SEQUENCE CART_SEQ;
 -- RESERVATION_TB 예약 테이블
 DROP TABLE RESERVATION_TB;
 CREATE TABLE RESERVATION_TB (
-    RES_CD VARCHAR2(50),
+    RES_CD VARCHAR2(100),
     RES_EMAIL_ID VARCHAR2(100) NOT NULL,
     RES_NAME VARCHAR2(20) NOT NULL,
     RES_PHONE VARCHAR2(11) NOT NULL,
@@ -587,7 +587,7 @@ CREATE TABLE PAYMENT_TB (
     PAY_METHOD VARCHAR2(100) NOT NULL,
     PAY_ST_CK NUMBER NOT NULL,
     PAY_REQ_DT DATE DEFAULT SYSDATE NOT NULL,
-    RES_CD VARCHAR2(50),
+    RES_CD VARCHAR2(100),
     
 	CONSTRAINT PAY_ID_PK PRIMARY KEY (RECEIPT_ID),
     CONSTRAINT PAY_STATE_CK CHECK(PAY_ST_CK IN (1, 0)),
@@ -672,7 +672,7 @@ CREATE TABLE REVIEW_TB (
     CK_REV_ST VARCHAR2(10) DEFAULT 'PUBLIC' NOT NULL,
     REV_CONT VARCHAR2(255),
     REV_REG_DT DATE DEFAULT SYSDATE NOT NULL,
-    RES_CD VARCHAR2(10) NOT NULL,
+    RES_CD VARCHAR2(100) NOT NULL,
     
     CONSTRAINT REV_RNO_PK PRIMARY KEY (REV_SQ), 
     CONSTRAINT REV_STATE_CK CHECK(CK_REV_ST IN ('PUBLIC', 'PRIVATE')),
