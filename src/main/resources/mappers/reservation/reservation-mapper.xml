@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reservationMapper">
+
+	<insert id="insertReservation">
+        INSERT INTO RESERVATION_TB (
+			RES_CD, 
+			RES_EMAIL_ID, 
+			RES_NAME, 
+			RES_PHONE,
+			RES_NUM_OF_PEO,
+			CHECK_IN_DT,
+			CHECK_OUT_DT,
+			CK_RES_ST,
+			RES_REG_DT,
+			ROOM_NO,
+			MEM_NO
+		) VALUES (
+			#{resCode},
+			#{resEmail},
+			#{resName},
+			#{resPhone},
+			#{resNumOfPeo},
+			#{checkInDt},
+			#{checkOutDt},
+			'PROCESSING',
+			SYSDATE,
+			#{roomNo},
+			#{memNo},
+		)
+    </insert>
+
+</mapper>

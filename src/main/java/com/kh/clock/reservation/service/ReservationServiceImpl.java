@@ -3,11 +3,14 @@ package com.kh.clock.reservation.service;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import com.kh.clock.reservation.domain.ReservationVO;
+import com.kh.clock.reservation.repository.dao.ReservationDAO;
 import com.kh.clock.reservation.repository.dto.ReservationCodeDTO;
+import com.kh.clock.reservation.repository.dto.ReservationDTO;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -17,6 +20,12 @@ public class ReservationServiceImpl implements ReservationService {
   
   @Value("${reservation.random.algorithm}")
   private String ranAlgorithm;
+  
+  private final ReservationDAO resDAO;
+  
+  public ReservationServiceImpl(ReservationDAO resDAO) {
+    this.resDAO = resDAO;
+  }
   
   @Override
   public String createReservationCode(ReservationCodeDTO resCodeDTO) {
@@ -78,6 +87,29 @@ public class ReservationServiceImpl implements ReservationService {
     }
     
     return resCode;
+  }
+
+  @Override
+  public int insertReservation(ReservationDTO reservationDTO, List<Integer> roomInfo) {
+    int result = 0;
+    
+    for(int i = 0; i < roomInfo.size(); i++) {
+      result += resDAO.insertReservation(
+          new ReservationVO(
+              reservationDTO.getResCode(),
+              reservationDTO.getResEmail(),
+              reservationDTO.getResName(),
+              reservationDTO.getResPhone(),
+              reservationDTO.getResNumOfPeo(),
+              reservationDTO.getCheckInDt(),
+              reservationDTO.getCheckOutDt(),
+              roomInfo.get(i),
+              reservationDTO.getMemNo()
+         )
+      );
+    }
+    
+    return result;
   }
 
 }
