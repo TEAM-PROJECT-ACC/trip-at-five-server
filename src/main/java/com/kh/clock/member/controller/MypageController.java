@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.clock.member.domain.MemberVO;
 import com.kh.clock.member.repository.ChallengHistoryDTO;
+import com.kh.clock.member.repository.CouponDTO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.service.MemberService;
 
@@ -120,6 +121,15 @@ public class MypageController {
 			/* 챌린지 실패 */
 			return result;
 		}
+	}
+	
+	@GetMapping("/couponSelect")
+	public ResponseEntity<List<CouponDTO>> couponSelect(@RequestParam String userMemSq) {
+
+		System.out.println(userMemSq);
+		List<CouponDTO> list = mService.couponSelect(userMemSq);
+		System.out.println(list);
+		return ResponseEntity.ok(list);
 	}
 
 }

@@ -8,6 +8,7 @@ import com.kh.clock.member.domain.ChallengeVO;
 import com.kh.clock.member.domain.MemberVO;
 import com.kh.clock.member.repository.ChallengHistoryDTO;
 import com.kh.clock.member.repository.ChallengeHistoryCreateDTO;
+import com.kh.clock.member.repository.CouponDTO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.repository.RegisterDTO;
 
@@ -62,5 +63,8 @@ public interface MemberService {
 
 	/* 챌린지 완료 처리 */
 	public int challengeSucces(HashMap chalSuccessInfo);
+
+	/* 쿠폰 정보 조회 */
+	public List<CouponDTO> couponSelect(String userMemSq);
 
 }

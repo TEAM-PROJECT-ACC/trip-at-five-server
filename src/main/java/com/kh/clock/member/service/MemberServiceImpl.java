@@ -11,6 +11,7 @@ import com.kh.clock.member.domain.ChallengeVO;
 import com.kh.clock.member.domain.MemberVO;
 import com.kh.clock.member.repository.ChallengHistoryDTO;
 import com.kh.clock.member.repository.ChallengeHistoryCreateDTO;
+import com.kh.clock.member.repository.CouponDTO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.repository.MemberDAO;
 import com.kh.clock.member.repository.RegisterDTO;
@@ -142,6 +143,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int challengeSucces(HashMap chalSuccessInfo) {
 		return memberDAO.challengeSucces(chalSuccessInfo);
+	}
+
+	@Override
+	public List<CouponDTO> couponSelect(String userMemSq) {
+		return memberDAO.couponSelect(userMemSq);
 	}
 
 }

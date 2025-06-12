@@ -145,5 +145,17 @@
 		)
 	</insert>
 
+	<select id="couponSelect"
+		resultType="com.kh.clock.member.repository.CouponDTO">
+		select
+		coupon_name, 
+		coupon_price,
+		chal_completed_dt as couponRegDt
+		from challenge_completed_tb
+		join challenge_tb on chal_no = chal_sq
+		join coupon_tb on coupon_no = coupon_sq
+		where mem_no = #{userMemSq} 
+	</select>
+
 
 </mapper>
