@@ -6,8 +6,6 @@ import com.kh.clock.reservation.repository.dto.ReservationDTO;
 
 public interface ReservationService {
 
-  String createReservationCode(ReservationCodeDTO resCodeDTO);
-
-  int insertReservation(ReservationDTO reservationDTO, List<Integer> roomInfo);
+  List<String> insertReservation(ReservationDTO reservationDTO, List<Integer> roomInfo);
 
 }

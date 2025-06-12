@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ConfirmDTO {
   private String recepit; // 영수증아이디
-  private String orderId; // 예약코드
+  private String orderId; // 주문아이디
 }

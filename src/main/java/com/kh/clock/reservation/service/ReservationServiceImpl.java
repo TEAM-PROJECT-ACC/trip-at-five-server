@@ -3,12 +3,15 @@ package com.kh.clock.reservation.service;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.kh.clock.reservation.domain.ReservationVO;
 import com.kh.clock.reservation.repository.dao.ReservationDAO;
+import com.kh.clock.reservation.repository.dto.ResCodeListDTO;
 import com.kh.clock.reservation.repository.dto.ReservationCodeDTO;
 import com.kh.clock.reservation.repository.dto.ReservationDTO;
 
@@ -26,17 +29,35 @@ public class ReservationServiceImpl implements ReservationService {
   public ReservationServiceImpl(ReservationDAO resDAO) {
     this.resDAO = resDAO;
   }
+
+  public String createOrderId(ResCodeListDTO resCodeListDTO) {
+    StringBuilder sb = new StringBuilder();
+    String salt = createSalt();
+    
+    resCodeListDTO.getResCodeList().forEach(value -> {
+      sb.append(value);
+    });
+    
+    String orderIdDeCoding = sb.toString();
+    
+    String orderId = createResCode(orderIdDeCoding, salt);
+    
+    return orderId;
+  }
   
-  @Override
-  public String createReservationCode(ReservationCodeDTO resCodeDTO) {
+  private String createReservationCode(ReservationCodeDTO resCodeDTO) {
     System.out.println(resCodeDTO);
 //    System.out.println(ranAlgorithm);
     String salt = createSalt();
+    
+    int randomNumber = (int)(Math.random() * 10000 + 1);
 
     String resCodeDeCoding = new StringBuilder()
         .append(resCodeDTO.getResEmail())
         .append(resCodeDTO.getResName())
         .append(resCodeDTO.getResPhone())
+        .append(resCodeDTO.getRoomNo())
+        .append(randomNumber)
         .toString();
 
     System.out.println("salt : " + salt);
@@ -90,13 +111,16 @@ public class ReservationServiceImpl implements ReservationService {
   }
 
   @Override
-  public int insertReservation(ReservationDTO reservationDTO, List<Integer> roomInfo) {
+  @Transactional
+  public List<String> insertReservation(ReservationDTO reservationDTO, List<Integer> roomInfo) {
     int result = 0;
+    List<String> resCodeList = new ArrayList<>();
     
-    for(int i = 0; i < roomInfo.size(); i++) {
+    for(int i = 1; i <= roomInfo.size(); i++) {
+      String resCode = createReservationCode(new ReservationCodeDTO(reservationDTO.getResEmail(), reservationDTO.getResName(), reservationDTO.getResPhone(), roomInfo.get(i)));
       result += resDAO.insertReservation(
           new ReservationVO(
-              reservationDTO.getResCode(),
+              resCode,
               reservationDTO.getResEmail(),
               reservationDTO.getResName(),
               reservationDTO.getResPhone(),
@@ -107,9 +131,11 @@ public class ReservationServiceImpl implements ReservationService {
               reservationDTO.getMemNo()
          )
       );
+      
+      if(i == result) resCodeList.add(resCode);
     }
     
-    return result;
+    return resCodeList;
   }
 
 }

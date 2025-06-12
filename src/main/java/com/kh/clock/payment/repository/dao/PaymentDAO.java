@@ -2,7 +2,7 @@ package com.kh.clock.payment.repository.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-import com.kh.clock.payment.repository.dto.ConfirmDTO;
+import com.kh.clock.payment.domain.PaymentVO;
 
 @Repository
 public class PaymentDAO {
@@ -13,8 +13,8 @@ public class PaymentDAO {
     this.sqlSession = sqlSession;
   }
   
-  public int insertPayment(ConfirmDTO confirmDTO) {
-    return sqlSession.insert("paymentMapper.insertPayment", confirmDTO);
+  public int insertPayment(PaymentVO paymentVO) {
+    return sqlSession.insert("paymentMapper.insertPayment", paymentVO);
   }
 
 }

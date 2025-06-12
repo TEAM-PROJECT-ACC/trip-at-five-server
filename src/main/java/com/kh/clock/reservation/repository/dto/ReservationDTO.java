@@ -12,7 +12,6 @@ public class ReservationDTO {
   private String resEmail;
   private String resName;
   private String resPhone;
-  private String resCode;
   private String checkInDt;
   private String checkOutDt;
   private int resNumOfPeo;

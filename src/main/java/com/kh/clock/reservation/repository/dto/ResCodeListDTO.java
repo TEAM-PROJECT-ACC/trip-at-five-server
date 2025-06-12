@@ -1,5 +1,6 @@
 package com.kh.clock.reservation.repository.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,9 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReservationCodeDTO {
-  private String resEmail;
-  private String resName;
-  private String resPhone;
-  private int roomNo;
+public class ResCodeListDTO {
+  private List<String> resCodeList; 
 }
