@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kh.clock.member.domain.ChallengeVO;
 import com.kh.clock.member.domain.MemberVO;
+import com.kh.clock.member.repository.ChallengHistoryDTO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.service.MemberService;
 
@@ -86,23 +86,25 @@ public class MypageController {
 			System.out.println(result);
 
 			if (result > 0) {
-				System.out.println("pwd 일치");
 				return result;
 			}
 			return 0;
 		} else {
-			
-			System.out.println("pwd 미일치");
+
 			return 0;
 		}
 
 	}
-	
-    @GetMapping("/challenge")
-    public ResponseEntity<List<ChallengeVO>> getChallengeList() {
-        List<ChallengeVO> items = mService.getChallengeList();
-        System.out.println(items);
-        return ResponseEntity.ok(items); // 
-    }
+
+	@GetMapping("/challenge")
+	public ResponseEntity<List<ChallengHistoryDTO>> getChallengeList(String userMemSq) {
+
+//		String memNo = "297";
+
+		List<ChallengHistoryDTO> list = mService.getChallengeUserList(userMemSq);
+
+		System.out.println(list);
+		return ResponseEntity.ok(list); //
+	}
 
 }

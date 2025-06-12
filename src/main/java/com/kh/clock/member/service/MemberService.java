@@ -5,6 +5,8 @@ import java.util.List;
 import com.kh.clock.member.domain.AdminVO;
 import com.kh.clock.member.domain.ChallengeVO;
 import com.kh.clock.member.domain.MemberVO;
+import com.kh.clock.member.repository.ChallengHistoryDTO;
+import com.kh.clock.member.repository.ChallengeHistoryCreateDTO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.repository.RegisterDTO;
 
@@ -46,6 +48,12 @@ public interface MemberService {
 	public List<ChallengeVO> getChallengeList();
 
 	/* 회원 가입시 챌린지 추가  */
-	public int insetUserChallengeList(List<ChallengeVO> items);
+	public int insertUserChallengeList(List<ChallengeHistoryCreateDTO> list);
+
+	/* 챌린지 테이블 리스트 총 숫자 조회 */
+	public List<Object> getChallengeCountNo();
+
+	/* 유저 챌린지 진형 내역 조회 */
+	public List<ChallengHistoryDTO> getChallengeUserList(String memNo);
 
 }

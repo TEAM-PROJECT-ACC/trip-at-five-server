@@ -1,6 +1,8 @@
 package com.kh.clock.member.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kh.clock.member.domain.AdminVO;
+import com.kh.clock.member.domain.ChallengeVO;
 import com.kh.clock.member.domain.MemberVO;
+import com.kh.clock.member.repository.ChallengeHistoryCreateDTO;
 import com.kh.clock.member.repository.LoginDTO;
+import com.kh.clock.member.repository.RegisterDTO;
 import com.kh.clock.member.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -136,6 +141,8 @@ class MemLoginController {
 
 			mService.snsRegister(kakaoLoginDTO);
 			loginUser = mService.userInfo(kakaoLoginDTO);
+			
+			challCreate(kakaoLoginDTO.getEmail());
 
 		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
 			hashMap.put("INACTIVE", "INACTIVE");
@@ -193,6 +200,7 @@ class MemLoginController {
 
 			mService.snsRegister(naverLoginDTO);
 			loginUser = mService.userInfo(naverLoginDTO);
+			challCreate(naverLoginDTO.getEmail());
 
 		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
 			hashMap.put("INACTIVE", "INACTIVE");
@@ -246,6 +254,7 @@ class MemLoginController {
 			googleLoginDTO.setSnsUid(naverUid);
 
 			mService.snsRegister(googleLoginDTO);
+			challCreate(googleLoginDTO.getEmail());
 
 		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
 			hashMap.put("INACTIVE", "INACTIVE");
@@ -277,6 +286,33 @@ class MemLoginController {
 		session.invalidate();
 
 		return "ok";
+	}
+
+	public int challCreate(String email) {
+		LoginDTO loginDTO = new LoginDTO();
+		loginDTO.setEmail(email);
+
+		MemberVO loginUser = mService.userInfo(loginDTO); // 회원 번호 확인
+		List<Object> numlist = mService.getChallengeCountNo(); // 챌린지 각 번호 확인
+
+		ChallengeVO chVo = new ChallengeVO();
+
+		List<ChallengeHistoryCreateDTO> list = new ArrayList<>();
+
+		for (int i = 0; i < numlist.size(); i++) {
+
+			list.add(new ChallengeHistoryCreateDTO((int) numlist.get(i), loginUser.getMemSq()));
+		}
+
+		int chcN = mService.insertUserChallengeList(list);
+		System.out.println(chcN);
+
+		if (chcN > 1) {
+			return 1;
+		}
+
+		return 0;
+
 	}
 
 }

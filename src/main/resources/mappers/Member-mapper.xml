@@ -57,7 +57,7 @@
 		)
 	</insert>
 
-    <!-- 비밀번호 재설정-->
+	<!-- 비밀번호 재설정 -->
 
 	<update id="updatePwd">
 
@@ -66,15 +66,18 @@
 		mem_email_id = #{email}
 
 	</update>
-	
-	<!-- 마이페이지 부분-->
 
-	<update id="infoUpdate"> UPDATE member_tb <trim prefix="SET"
-			suffixOverrides=",">
+	<!-- 마이페이지 부분 -->
+
+	<update id="infoUpdate">
+		UPDATE member_tb
+		<trim prefix="SET" suffixOverrides=",">
 			<if test="pwd != null and pwd.length() > 0">mem_pwd = #{pwd},</if>
 			<if test="nickName != null and nickName.length() > 0">mem_nick =
-		#{nickName},</if>
-		</trim> WHERE mem_email_id = #{email} </update>
+				#{nickName},</if>
+		</trim>
+		WHERE mem_email_id = #{email}
+	</update>
 
 	<update id="userInactive">
 		update member_tb
@@ -85,29 +88,54 @@
 	</update>
 
 	<select id="getChallengeList" resultType="ChallengeVO">
-		select * from challenge_tb
+		select * from
+		challenge_tb
 	</select>
-	
-	
-	<insert id="insetUserChallengeList" parameterType="java.util.List">
-	  
-	  INSERT ALL
-	  <foreach collection="list" item="item">
-	    INTO ITEMS_TABLE (
-	      CHAL_HX_SQ,
-	      CHAL_HX_VAL,
-	      CHAL_NO,
-	      MEM_NO
-	    ) VALUES (
-	      CHAL_HISTORY_SEQ.NEXTVAL, 
-	      0,
-	      #{item.couponNo},
-	      #{item.adminNol}
-	    )
-	  </foreach>
 
-</insert>
-	
+	<select id="getChallengeCountNo" resultType="int">
+		select CHAL_SQ from
+		challenge_tb
+	</select>
+
+
+	<select id="getChallengeUserList"
+		resultType="com.kh.clock.member.repository.ChallengHistoryDTO">
+		select coupon_name as rewardCouponName , chal_name,
+		chal_cond,chal_hx_val as currentStep from
+		challenge_member_history_tb
+		cmht
+		join challenge_tb ct on cmht.chal_no =
+		ct.chal_sq
+		join coupon_tb cp
+		on cp.coupon_sq = ct.coupon_no
+		where mem_no
+		= 297
+	</select>
+
+
+	<insert id="insertUserChallengeList"
+		parameterType="java.util.List">
+		INSERT INTO challenge_member_history_tb (
+		CHAL_HX_SQ,
+		CHAL_HX_VAL,
+		CHAL_NO,
+		MEM_NO
+		)
+		SELECT chal_history_seq.nextval, A.* FROM (
+		<foreach collection="list" item="chal" separator=" UNION ALL ">
+			SELECT
+			0 AS
+			CHAL_HX_VAL,
+			#{chal.chalTotalCountNo} AS CHAL_NO,
+			#{chal.memNo} AS
+			MEM_NO
+			FROM DUAL
+		</foreach>
+		) A
+	</insert>
+
+
+
 
 
 </mapper>

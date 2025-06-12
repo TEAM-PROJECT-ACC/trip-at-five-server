@@ -80,9 +80,18 @@ public class MemberDAO {
 		return sqlsession.selectList("mamberMapper.getChallengeList");
 	}
 
-	public int insetUserChallengeList(List<ChallengeVO> items) {
+	public int insertUserChallengeList(List<ChallengeHistoryCreateDTO> list) {
 
-		return sqlsession.insert("mamberMapper.insetUserChallengeList",items);
+		return sqlsession.insert("mamberMapper.insertUserChallengeList", list);
+	}
+
+	public List<Object> getChallengeCountNo() {
+		return sqlsession.selectList("mamberMapper.getChallengeCountNo");
+	}
+
+	public List<ChallengHistoryDTO> getChallengeUserList(String memNo) {
+		return sqlsession.selectList("mamberMapper.getChallengeUserList",memNo);
+
 	}
 
 }
