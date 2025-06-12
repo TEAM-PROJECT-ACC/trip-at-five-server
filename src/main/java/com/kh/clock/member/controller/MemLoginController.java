@@ -142,7 +142,7 @@ class MemLoginController {
 			mService.snsRegister(kakaoLoginDTO);
 			loginUser = mService.userInfo(kakaoLoginDTO);
 			
-			challCreate(kakaoLoginDTO.getEmail());
+			challAndMemLevelCreate(kakaoLoginDTO.getEmail());
 
 		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
 			hashMap.put("INACTIVE", "INACTIVE");
@@ -200,7 +200,7 @@ class MemLoginController {
 
 			mService.snsRegister(naverLoginDTO);
 			loginUser = mService.userInfo(naverLoginDTO);
-			challCreate(naverLoginDTO.getEmail());
+			challAndMemLevelCreate(naverLoginDTO.getEmail());
 
 		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
 			hashMap.put("INACTIVE", "INACTIVE");
@@ -254,7 +254,7 @@ class MemLoginController {
 			googleLoginDTO.setSnsUid(naverUid);
 
 			mService.snsRegister(googleLoginDTO);
-			challCreate(googleLoginDTO.getEmail());
+			challAndMemLevelCreate(googleLoginDTO.getEmail());
 
 		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
 			hashMap.put("INACTIVE", "INACTIVE");
@@ -288,7 +288,7 @@ class MemLoginController {
 		return "ok";
 	}
 
-	public int challCreate(String email) {
+	public int challAndMemLevelCreate(String email) {
 		LoginDTO loginDTO = new LoginDTO();
 		loginDTO.setEmail(email);
 

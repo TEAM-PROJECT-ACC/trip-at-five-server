@@ -82,7 +82,7 @@ public class MemberRegisterController {
 
 			/* 가입 완료 */
 
-			return challCreate(registerdto);
+			return challAndMemLevelCreate(registerdto);
 
 		} else {
 			/* 가입 실패 */
@@ -91,14 +91,14 @@ public class MemberRegisterController {
 
 	}
 
-	public int challCreate(RegisterDTO registerdto) {
+	public int challAndMemLevelCreate(RegisterDTO registerdto) {
 		LoginDTO loginDTO = new LoginDTO();
 		loginDTO.setEmail(registerdto.getEmail());
 
 		MemberVO loginUser = mService.userInfo(loginDTO); // 회원 번호 확인
 		List<Object> numlist = mService.getChallengeCountNo(); // 챌린지 각 번호 확인
-
 		List<ChallengeHistoryCreateDTO> list = new ArrayList<>();
+		int memLevelResult = mService.memberLevelSetting(loginUser.getMemSq());
 
 		for (int i = 0; i < numlist.size(); i++) {
 

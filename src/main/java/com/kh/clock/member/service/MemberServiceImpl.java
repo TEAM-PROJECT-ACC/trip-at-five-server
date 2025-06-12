@@ -1,5 +1,6 @@
 package com.kh.clock.member.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,6 +131,17 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<ChallengHistoryDTO> getChallengeUserList(String memNo) {
 		return memberDAO.getChallengeUserList(memNo);
+	}
+
+	@Override
+	public int memberLevelSetting(int memSq) {
+		return memberDAO.memberLevelSetting(memSq);
+
+	}
+
+	@Override
+	public int challengeSucces(HashMap chalSuccessInfo) {
+		return memberDAO.challengeSucces(chalSuccessInfo);
 	}
 
 }

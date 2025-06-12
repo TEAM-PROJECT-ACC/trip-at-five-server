@@ -1,5 +1,6 @@
 package com.kh.clock.member.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.clock.member.domain.MemberVO;
@@ -97,14 +99,23 @@ public class MypageController {
 	}
 
 	@GetMapping("/challenge")
-	public ResponseEntity<List<ChallengHistoryDTO>> getChallengeList(String userMemSq) {
-
-//		String memNo = "297";
+	public ResponseEntity<List<ChallengHistoryDTO>> getChallengeList(@RequestParam String userMemSq) {
 
 		List<ChallengHistoryDTO> list = mService.getChallengeUserList(userMemSq);
 
-		System.out.println(list);
-		return ResponseEntity.ok(list); //
+		return ResponseEntity.ok(list);
 	}
+	
+	@PutMapping("/challengeSucces")
+	public int challengeSucces(@RequestBody HashMap chalSuccessInfo) {
+
+	    System.out.println(chalSuccessInfo);
+
+		int result = mService.challengeSucces(chalSuccessInfo);
+	    
+
+		return 0;
+	}
+	
 
 }

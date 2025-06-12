@@ -1,5 +1,6 @@
 package com.kh.clock.member.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.kh.clock.member.domain.AdminVO;
@@ -55,5 +56,11 @@ public interface MemberService {
 
 	/* 유저 챌린지 진형 내역 조회 */
 	public List<ChallengHistoryDTO> getChallengeUserList(String memNo);
+
+	/* 유저 레벨 및 경험치 추가  */
+	public int memberLevelSetting(int memSq);
+
+	/* 챌린지 완료 처리 */
+	public int challengeSucces(HashMap chalSuccessInfo);
 
 }
