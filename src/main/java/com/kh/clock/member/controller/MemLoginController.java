@@ -38,13 +38,23 @@ class MemLoginController {
 		MemberVO loginUser = mService.userInfo(userInfo);
 		HashMap<String, Object> hashMap = new HashMap<>();
 
+		System.out.println(loginUser.getCkMemSt());
+
 		if (loginUser == null) {
 
 			hashMap.put("IdFail", "IdFail");
 
 			return ResponseEntity.ok(hashMap);
 
-		} else if (!bCryptPasswordEncoder.matches(userInfo.getPwd(), loginUser.getMemPwd())) {
+		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
+			hashMap.put("INACTIVE", "INACTIVE");
+
+			System.out.println("test");
+
+			return ResponseEntity.ok(hashMap);
+		}
+
+		else if (!bCryptPasswordEncoder.matches(userInfo.getPwd(), loginUser.getMemPwd())) {
 
 			hashMap.put("pwdFail", "pwdFail");
 			return ResponseEntity.ok(hashMap);
@@ -127,7 +137,13 @@ class MemLoginController {
 			mService.snsRegister(kakaoLoginDTO);
 			loginUser = mService.userInfo(kakaoLoginDTO);
 
-		} else if (!loginUser.getCkSocPlt().equals("KAKAO")) {
+		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
+			hashMap.put("INACTIVE", "INACTIVE");
+
+			return ResponseEntity.ok(hashMap);
+		}
+
+		else if (!loginUser.getCkSocPlt().equals("KAKAO")) {
 
 			hashMap.put("ckSocPlt", loginUser.getCkSocPlt());
 
@@ -137,7 +153,7 @@ class MemLoginController {
 			hashMap.put("memSq", loginUser.getMemSq());
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
-			hashMap.put("memType", "user");
+			hashMap.put("memType", "kakaoUser");
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
@@ -178,6 +194,10 @@ class MemLoginController {
 			mService.snsRegister(naverLoginDTO);
 			loginUser = mService.userInfo(naverLoginDTO);
 
+		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
+			hashMap.put("INACTIVE", "INACTIVE");
+
+			return ResponseEntity.ok(hashMap);
 		} else if (!loginUser.getCkSocPlt().equals("NAVER")) {
 
 			hashMap.put("ckSocPlt", loginUser.getCkSocPlt());
@@ -188,7 +208,7 @@ class MemLoginController {
 			hashMap.put("memSq", loginUser.getMemSq());
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
-			hashMap.put("memType", "user");
+			hashMap.put("memType", "naverUser");
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
@@ -227,6 +247,10 @@ class MemLoginController {
 
 			mService.snsRegister(googleLoginDTO);
 
+		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
+			hashMap.put("INACTIVE", "INACTIVE");
+
+			return ResponseEntity.ok(hashMap);
 		} else if (!loginUser.getCkSocPlt().equals("GOOGLE")) {
 
 			hashMap.put("ckSocPlt", loginUser.getCkSocPlt());
@@ -237,7 +261,7 @@ class MemLoginController {
 			hashMap.put("memSq", loginUser.getMemSq());
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
-			hashMap.put("memType", "user");
+			hashMap.put("memType", "googleUser");
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);

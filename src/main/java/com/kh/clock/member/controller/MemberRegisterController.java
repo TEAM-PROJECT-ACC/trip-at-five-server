@@ -1,5 +1,6 @@
 package com.kh.clock.member.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.clock.member.domain.ChallengeVO;
+import com.kh.clock.member.domain.MemberVO;
+import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.repository.RegisterDTO;
 import com.kh.clock.member.service.MemberService;
 
@@ -43,11 +47,14 @@ public class MemberRegisterController {
 	@PostMapping("/nickNameDuplicationCheck")
 	public int nickNameDuplicationCheck(@RequestBody Map<String, Object> requestBody) {
 
-		String nick = (String) requestBody.get("nick");
+		String nick = (String) requestBody.get("nickName");
+		System.out.println(nick);
 
 		RegisterDTO register = new RegisterDTO();
 
 		int result = mService.nickNameDuplicationCheck(nick);
+		
+		System.out.println(result);
 
 		if (result > 0) {
 			register.setNickCount(result);
@@ -69,10 +76,20 @@ public class MemberRegisterController {
 
 		int result = mService.registerSend(registerdto);
 
+
 		if (result > 0) {
+			/* 가입 완료 */
+			LoginDTO loginDTO = new LoginDTO();
+			loginDTO.setEmail(registerdto.getEmail());
+			
+			MemberVO loginUser = mService.userInfo(loginDTO);
+			List<ChallengeVO> items = mService.getChallengeList();
+			int test = mService.insetUserChallengeList(items);
+			
+			
 			return result;
 		} else {
-
+			/* 가입 실패 */
 			return result;
 		}
 

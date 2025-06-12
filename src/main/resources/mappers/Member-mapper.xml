@@ -24,6 +24,7 @@
 		select * from member_tb where
 		mem_email_id = #{email}
 
+
 	</select>
 
 	<select id="adminInfo" resultType="AdminVO">
@@ -56,6 +57,8 @@
 		)
 	</insert>
 
+    <!-- 비밀번호 재설정-->
+
 	<update id="updatePwd">
 
 		update member_tb set mem_pwd = #{pwd}
@@ -63,9 +66,48 @@
 		mem_email_id = #{email}
 
 	</update>
+	
+	<!-- 마이페이지 부분-->
 
+	<update id="infoUpdate"> UPDATE member_tb <trim prefix="SET"
+			suffixOverrides=",">
+			<if test="pwd != null and pwd.length() > 0">mem_pwd = #{pwd},</if>
+			<if test="nickName != null and nickName.length() > 0">mem_nick =
+		#{nickName},</if>
+		</trim> WHERE mem_email_id = #{email} </update>
 
+	<update id="userInactive">
+		update member_tb
+		set CK_MEM_ST = 'INACTIVE',
+		MEM_INACTIVE_DT = sysdate
+		where MEM_EMAIL_ID = #{memEmailId}
 
+	</update>
+
+	<select id="getChallengeList" resultType="ChallengeVO">
+		select * from challenge_tb
+	</select>
+	
+	
+	<insert id="insetUserChallengeList" parameterType="java.util.List">
+	  
+	  INSERT ALL
+	  <foreach collection="list" item="item">
+	    INTO ITEMS_TABLE (
+	      CHAL_HX_SQ,
+	      CHAL_HX_VAL,
+	      CHAL_NO,
+	      MEM_NO
+	    ) VALUES (
+	      CHAL_HISTORY_SEQ.NEXTVAL, 
+	      0,
+	      #{item.couponNo},
+	      #{item.adminNol}
+	    )
+	  </foreach>
+
+</insert>
+	
 
 
 </mapper>

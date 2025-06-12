@@ -1,10 +1,13 @@
 package com.kh.clock.member.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.clock.member.domain.AdminVO;
+import com.kh.clock.member.domain.ChallengeVO;
 import com.kh.clock.member.domain.MemberVO;
 
 import lombok.AllArgsConstructor;
@@ -21,22 +24,19 @@ public class MemberDAO {
 
 	public int emailDuplicationCheck(String email) {
 
-		int result = sqlsession.selectOne("mamberMapper.emailDuplication", email);
+		return sqlsession.selectOne("mamberMapper.emailDuplication", email);
 
-		return result;
 	}
 
 	public int nickNameDuplicationCheck(String nickName) {
-		int result = sqlsession.selectOne("mamberMapper.nickNameDuplicationCheck", nickName);
+		return sqlsession.selectOne("mamberMapper.nickNameDuplicationCheck", nickName);
 
-		return result;
 	}
 
 	public int registerSend(RegisterDTO register) {
 
-		int result = sqlsession.insert("mamberMapper.registerSend", register);
+		return sqlsession.insert("mamberMapper.registerSend", register);
 
-		return result;
 	}
 
 	public int snsRegisterSelect(LoginDTO loginDTO) {
@@ -48,26 +48,41 @@ public class MemberDAO {
 
 	public int snsRegister(LoginDTO kakaoLoginDTO) {
 
-		int result = sqlsession.insert("mamberMapper.snsRegister", kakaoLoginDTO);
-
-		return result;
+		return sqlsession.insert("mamberMapper.snsRegister", kakaoLoginDTO);
 	}
 
 	public MemberVO loginInfo(LoginDTO userInfo) {
 
-		MemberVO result = sqlsession.selectOne("mamberMapper.loginInfo", userInfo);
-		return result;
+		return sqlsession.selectOne("mamberMapper.loginInfo", userInfo);
 	}
 
 	public AdminVO adminInfo(LoginDTO userInfo) {
-		AdminVO result = sqlsession.selectOne("mamberMapper.adminInfo", userInfo);
-		return result;
+		return sqlsession.selectOne("mamberMapper.adminInfo", userInfo);
 	}
 
 	public int updatePwd(LoginDTO userInfo) {
-		int result = sqlsession.update("mamberMapper.updatePwd", userInfo);
+		return sqlsession.update("mamberMapper.updatePwd", userInfo);
 
-		return result;
+	}
+
+	public int infoUpdate(LoginDTO userInfo) {
+		return sqlsession.update("mamberMapper.infoUpdate", userInfo);
+
+	}
+
+	public int userInactive(MemberVO loginUser) {
+		return sqlsession.update("mamberMapper.userInactive", loginUser);
+
+	}
+
+	public List<ChallengeVO> getChallengeList() {
+
+		return sqlsession.selectList("mamberMapper.getChallengeList");
+	}
+
+	public int insetUserChallengeList(List<ChallengeVO> items) {
+
+		return sqlsession.insert("mamberMapper.insetUserChallengeList",items);
 	}
 
 }
