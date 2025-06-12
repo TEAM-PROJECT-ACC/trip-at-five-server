@@ -39,7 +39,7 @@ public class PaymentServiceImpl implements PaymentService {
       if(token.get("error_code") != null) { // failed
           System.out.println("failed");
       }
-      String receiptId = confirmDTO.getRecepit();
+      String receiptId = confirmDTO.getReceiptId();
       HashMap<String, Object> res = bootpay.confirm(receiptId);
       if(res.get("error_code") == null) { // success
           System.out.println("confirm success: " + res);

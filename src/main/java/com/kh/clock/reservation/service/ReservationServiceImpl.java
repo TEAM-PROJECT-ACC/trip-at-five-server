@@ -116,7 +116,7 @@ public class ReservationServiceImpl implements ReservationService {
     int result = 0;
     List<String> resCodeList = new ArrayList<>();
     
-    for(int i = 1; i <= roomInfo.size(); i++) {
+    for(int i = 0; i < roomInfo.size(); i++) {
       String resCode = createReservationCode(new ReservationCodeDTO(reservationDTO.getResEmail(), reservationDTO.getResName(), reservationDTO.getResPhone(), roomInfo.get(i)));
       result += resDAO.insertReservation(
           new ReservationVO(
@@ -132,7 +132,7 @@ public class ReservationServiceImpl implements ReservationService {
          )
       );
       
-      if(i == result) resCodeList.add(resCode);
+      if((i + 1) == result) resCodeList.add(resCode);
     }
     
     return resCodeList;

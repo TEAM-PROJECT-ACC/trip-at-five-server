@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConfirmDTO {
-  private String recepit; // 영수증아이디
+  private String receiptId; // 영수증아이디
   private String orderId; // 주문아이디
 }

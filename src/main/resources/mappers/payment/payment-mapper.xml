@@ -10,14 +10,15 @@
 			ORDER_ID,
 			PAY_PRICE,
 			PAY_METHOD,
+			PAY_ST_CK,
 			PAY_DT,
-			PAY_REQ_DT,
-			PAY_ST_DT
+			PAY_REQ_DT
 		) VALUES (
 			#{receiptId},
 			#{orderId},
 			#{payPrice},
 			#{payMethod},
+			#{payStCk},
 			SYSDATE,
 			#{payReqDt}
 		)
