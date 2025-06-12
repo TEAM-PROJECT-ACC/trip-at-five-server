@@ -8,6 +8,7 @@ import com.kh.clock.accommodation.repository.dto.AccomAdminDetailDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminListDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminSearchDTO;
 import com.kh.clock.accommodation.repository.dto.AccomDTO;
+import com.kh.clock.accommodation.repository.dto.AccomKakaoDTO;
 import com.kh.clock.accommodation.repository.dto.AccomListInfoDTO;
 import com.kh.clock.room.domain.RoomVO;
 import lombok.RequiredArgsConstructor;
@@ -85,4 +86,8 @@ public class AccomDAO {
     return sqlSession.insert("accommodationMapper.insertAdminAccom", accomDto);
   }
 
+  // 카카오 좌표 계산
+  public List<AccomKakaoDTO> selectAccomKakao() {
+    return sqlSession.selectList("accommodationMapper.selectAccomKakao");
+  }
 }

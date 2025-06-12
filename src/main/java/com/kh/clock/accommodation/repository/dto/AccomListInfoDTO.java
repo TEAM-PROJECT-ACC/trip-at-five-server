@@ -10,4 +10,8 @@ public class AccomListInfoDTO {
   private int guests;
   private int page;
   private int size;
+  private int locId;
+  private int accomTypeNo;
+  private int maxPrice;
+  private int minPrice;
 }
