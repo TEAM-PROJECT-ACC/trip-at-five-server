@@ -34,9 +34,9 @@ public class ReservationServiceImpl implements ReservationService {
     String salt = createSalt();
 
     String resCodeDeCoding = new StringBuilder()
-        .append(resCodeDTO.getAccomName())
-        .append(resCodeDTO.getRoomName())
         .append(resCodeDTO.getResEmail())
+        .append(resCodeDTO.getResName())
+        .append(resCodeDTO.getResPhone())
         .toString();
 
     System.out.println("salt : " + salt);

@@ -1,5 +1,6 @@
 package com.kh.clock.reservation.repository.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,6 @@ public class ReservationDTO {
   private String checkInDt;
   private String checkOutDt;
   private int resNumOfPeo;
-  private int roomInfo;
+  private List<Integer> roomInfo;
   private int memNo;
 }

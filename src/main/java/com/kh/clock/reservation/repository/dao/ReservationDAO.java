@@ -14,6 +14,7 @@ public class ReservationDAO {
   }
 
   public int insertReservation(ReservationVO reservationVO) {
+    System.out.println("reservationVO : " + reservationVO);
     return sqlSession.insert("reservationMapper.insertReservation", reservationVO);
   }
 

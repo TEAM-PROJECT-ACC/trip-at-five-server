@@ -28,7 +28,7 @@
 			DEFAULT,
 			SYSDATE,
 			#{roomNo},
-			#{memNo},
+			#{memNo}
 		)
     </insert>
 

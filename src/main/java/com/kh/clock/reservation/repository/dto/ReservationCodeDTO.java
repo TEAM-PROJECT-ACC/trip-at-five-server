@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReservationCodeDTO {
-  private String accomName;
-  private String roomName;
   private String resEmail;
+  private String resName;
+  private String resPhone;
 }

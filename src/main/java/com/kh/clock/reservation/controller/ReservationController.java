@@ -24,6 +24,8 @@ public class ReservationController {
   // 예약코드 생성
   @PostMapping("/code")
   public ResponseEntity<Object> createReservationCode(@RequestBody ReservationCodeDTO resCodeDTO) {
+    System.out.println(resCodeDTO);
+    
     String resCode = resService.createReservationCode(resCodeDTO);
     
     System.out.println("Controller resCode : " + resCode);
@@ -35,13 +37,13 @@ public class ReservationController {
   // 사용자 예약 저장
   @PostMapping("")
   public ResponseEntity<Object> insertReservation(
-      @RequestBody ReservationDTO reservationDTO,
-      @RequestBody List<Integer> roomInfo
+      @RequestBody ReservationDTO reservationDTO
      ) {
     System.out.println("reservationDTO : " + reservationDTO);
-    roomInfo.forEach(value -> System.out.println("roomInfo : " + value));
     
-    int insertResult = resService.insertReservation(reservationDTO, roomInfo);
+    reservationDTO.getRoomInfo().forEach(value -> System.out.println("roomInfo : " + value));
+    
+    int insertResult = resService.insertReservation(reservationDTO, reservationDTO.getRoomInfo());
 
     if(insertResult > 0) return ResponseEntity.status(HttpStatus.OK).body(reservationDTO.getResCode());
     else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("예약을 실패했습니다.");
