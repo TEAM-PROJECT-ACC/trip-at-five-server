@@ -5,22 +5,22 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
-import com.kh.clock.common.websocket.WebSocketHandler;
+import com.kh.clock.chat.webSocket.ChatWebSocketHandler;
 
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
   @Value("${client.origins}")
   private String origins;
-  private final WebSocketHandler socketHandler;
+  private final ChatWebSocketHandler chatWebSocketHandler;
   
-  public WebSocketConfig(WebSocketHandler socketHandler) {
-    this.socketHandler = socketHandler;
+  public WebSocketConfig(ChatWebSocketHandler chatWebSocketHandler) {
+    this.chatWebSocketHandler = chatWebSocketHandler;
   }
   
   @Override
   public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-    registry.addHandler(socketHandler, "/chat", "/alert")
+    registry.addHandler(chatWebSocketHandler, "/chat")
             .setAllowedOrigins(origins);
   }
 }
