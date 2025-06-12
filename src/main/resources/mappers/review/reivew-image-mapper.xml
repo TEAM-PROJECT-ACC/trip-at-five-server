@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="reviewImageMapper">
+  	<insert id="insertReviewImage">
+  		INSERT INTO REVIEW_IMAGE_TB 
+  		(REV_IMG_SQ, REV_IMG_HASH_CD, REV_IMG_ORG_NAME, REV_IMG_PATH_NAME, REV_IMG_REG_DT, REV_NO)
+  		VALUES(
+			REV_IMG_SQ.NEXTVAL, 
+			#{revImgHashCd},
+			#{revImgOrgName},
+			#{revImgPathName},
+			DEFAULT,
+			#{revNo}
+  		)
+  	</insert>
+  </mapper>
