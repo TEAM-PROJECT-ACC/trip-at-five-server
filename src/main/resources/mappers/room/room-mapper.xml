@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="roomMapper">
+
+	<!-- 객실 전체 조회 -->
+	<select id="selectAllList" resultType="com.kh.clock.room.repository.dto.RoomListDTO">
+		SELECT ROOM_SQ AS NO, ROOM_NAME, ROOM_CNT, ROOM_PRICE
+		FROM ROOM_TB
+		WHERE ACCOM_NO = #{accomNo} AND ROOM_NAME LIKE '%${keyword}%'
+	</select>
+	
+	<!-- 특정 객실 조회 -->
+	<select id="findRoomByAccomNoAndRoomSq" resultType="com.kh.clock.room.repository.dto.RoomDetailDTO">
+		SELECT * FROM ROOM_TB WHERE ACCOM_NO = #{accomNo} AND ROOM_SQ = #{roomSq}
+	</select>
+	
+	<!-- 객실 등록 INSERT문 -->
+ 	<insert id="insertRoom" parameterType="RoomVO">
+    	INSERT INTO ROOM_TB VALUES (
+			ROOM_SEQ.NEXTVAL, 
+			#{roomName},
+			#{roomPrice},
+			#{roomChkIn},
+			#{roomChkOut},
+			#{roomStdPpl},
+			#{roomMaxPpl},
+			#{roomCnt},
+			DEFAULT,
+			#{accomNo}
+		)
+		
+		<!--
+			방금 INSERT 한 데이터의 키값 조회
+			order를 AFTER로 설정하여 SQL쿼리문 실행 후 실행으로 설정
+		-->
+	 	<selectKey keyProperty="roomSq" order="AFTER" resultType="int">
+	        SELECT ROOM_SEQ.CURRVAL FROM DUAL
+	    </selectKey>
+  	</insert>
+  	
+  	<!-- 숙박업소번호로 객실찾기 -->
+  	<select id="findByAccomNo" resultType="_int">
+  		SELECT ROOM_SQ FROM ROOM_TB WHERE ACCOM_NO = #{accomNo} GROUP BY ROOM_SQ
+  	</select>
+  	
+  	<!-- 객실 정보 수정 -->
+  	<update id="updateRoom">
+  		UPDATE ROOM_TB SET
+  			ROOM_NAME = #{roomName},
+  			ROOM_PRICE = #{roomPrice},
+  			ROOM_CHK_IN = #{roomChkIn},
+  			ROOM_CHK_OUT = #{roomChkOut},
+  			ROOM_STD_PPL = #{roomStdPpl},
+  			ROOM_MAX_PPL = #{roomMaxPpl},
+  			ROOM_CNT = #{roomCnt}
+  		WHERE ACCOM_NO = #{accomNo} AND ROOM_SQ = #{roomSq}
+  	</update>
+  	
+  	<!-- 객실 정보 삭제 -->
+  	<delete id="deleteRoomAndRoomImageByAccomNoAndRoomSq" parameterType="com.kh.clock.room.repository.dto.RoomIdentifierDTO">
+  		DELETE FROM ROOM_TB
+  		WHERE ACCOM_NO = #{accomNo} AND ROOM_SQ = #{roomSq}
+  	</delete>
+</mapper>
