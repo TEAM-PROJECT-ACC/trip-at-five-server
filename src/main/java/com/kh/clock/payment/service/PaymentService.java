@@ -7,4 +7,6 @@ public interface PaymentService {
 
   int payConfirm(ConfirmDTO confirmDTO);
 
+  int updatePayState(ConfirmDTO confirmDTO);
+
 }
