@@ -1,5 +1,6 @@
 package com.kh.clock.member.repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -80,9 +81,31 @@ public class MemberDAO {
 		return sqlsession.selectList("mamberMapper.getChallengeList");
 	}
 
-	public int insetUserChallengeList(List<ChallengeVO> items) {
+	public int insertUserChallengeList(List<ChallengeHistoryCreateDTO> list) {
 
-		return sqlsession.insert("mamberMapper.insetUserChallengeList",items);
+		return sqlsession.insert("mamberMapper.insertUserChallengeList", list);
+	}
+
+	public List<Object> getChallengeCountNo() {
+		return sqlsession.selectList("mamberMapper.getChallengeCountNo");
+	}
+
+	public List<ChallengHistoryDTO> getChallengeUserList(String memNo) {
+		return sqlsession.selectList("mamberMapper.getChallengeUserList", memNo);
+
+	}
+
+	public int memberLevelSetting(int memSq) {
+		return sqlsession.insert("mamberMapper.memberLevelSetting", memSq);
+	}
+
+	public int challengeSucces(HashMap chalSuccessInfo) {
+
+		return sqlsession.insert("mamberMapper.challengeSucces", chalSuccessInfo);
+	}
+
+	public List<CouponDTO> couponSelect(String userMemSq) {
+		return sqlsession.selectList("mamberMapper.couponSelect", userMemSq);
 	}
 
 }
