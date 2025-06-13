@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.kh.clock.payment.repository.dto.ConfirmDTO;
 import com.kh.clock.reservation.domain.ReservationVO;
 import com.kh.clock.reservation.repository.dao.ReservationDAO;
 import com.kh.clock.reservation.repository.dto.ResCodeListDTO;
@@ -137,5 +138,12 @@ public class ReservationServiceImpl implements ReservationService {
     
     return resCodeList;
   }
+  
+
+  @Override
+  public int updatePayState(List<String> resCodeList) {
+    return resDAO.updatePayState(resCodeList);
+  }
+
 
 }

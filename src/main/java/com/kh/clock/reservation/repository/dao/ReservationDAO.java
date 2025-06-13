@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import com.kh.clock.order.repository.dto.OrderResInfoDTO;
+import com.kh.clock.payment.repository.dto.ConfirmDTO;
 import com.kh.clock.reservation.domain.ReservationVO;
 import com.kh.clock.reservation.repository.dto.ResUserInfoDTO;
 
@@ -34,6 +35,17 @@ public class ReservationDAO {
 
   public ResUserInfoDTO findResUserInfo(String resCode) {
     return sqlSession.selectOne("reservationMapper.findResUserInfo", resCode);
+  }
+
+
+  public int updatePayState(List<String> resCodeList) {
+    int result = 0;
+    
+    for(int i = 0; i < resCodeList.size(); i++) {
+      result += sqlSession.update("reservationMapper.updatePayState", resCodeList.get(i));
+    }
+    
+    return result;
   }
 
 
