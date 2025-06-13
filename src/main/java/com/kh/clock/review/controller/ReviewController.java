@@ -26,32 +26,33 @@ public class ReviewController {
   
   // 리뷰 등록
   @PostMapping
-  public ResponseEntity<Object> insertReview(@ModelAttribute ReviewVO reviewVo, @RequestPart(value = "images", required = false) MultipartFile[] images, HttpSession session){
-    
+  public ResponseEntity<Object> insertReview(@ModelAttribute ReviewVO review, @RequestPart(value = "images", required = false) MultipartFile[] images, HttpSession session){
+    /*
     MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
     if (loginUser == null) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 필요함");
     }
-    
+    */
+    int memNo = review.getMemNo();
     if(images != null && images.length > 5) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미지는 최대 5장까지 가능합니다");
     }
     
-    int memNo = loginUser.getMemSq();
-    int accomSq = reviewVo.getAccomSq(); 
+    //int memNo = loginUser.getMemSq();
+    int accomSq = review.getAccomSq(); 
     
-    String resCd = reviewSerivce.getResCode(memNo, reviewVo.getAccomSq());
+    String resCd = reviewSerivce.getResCode(memNo, review.getAccomSq());
     
     if (resCd == null) {
       return ResponseEntity.status(403).body("숙소의 예약 이력 없음");
     }
     
-    reviewVo.setResCd(resCd);
+    review.setResCd(resCd);
     
     // 등록
-    int result = reviewSerivce.insertReview(reviewVo, images);
+    int result = reviewSerivce.insertReview(review, images);
     if(result > 0) {
-      return ResponseEntity.status(HttpStatus.OK).body(reviewVo); 
+      return ResponseEntity.status(HttpStatus.OK).body(review); 
     } else {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("리뷰 등록에 실패했습니다.");
     }

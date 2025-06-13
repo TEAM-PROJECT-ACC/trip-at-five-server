@@ -19,6 +19,6 @@ public class ReviewVO {
   private String revCont;
   private Date revRegDt;
   private String resCd;
-  
+  private int memNo;
   private int accomSq;
 }
