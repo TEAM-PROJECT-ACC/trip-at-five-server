@@ -3,6 +3,7 @@ package com.kh.clock.payment.repository.dao;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import com.kh.clock.payment.domain.PaymentVO;
+import com.kh.clock.payment.repository.dto.ConfirmDTO;
 import com.kh.clock.payment.repository.dto.PayInfoDTO;
 
 @Repository
@@ -20,6 +21,10 @@ public class PaymentDAO {
 
   public PayInfoDTO findPaymentByReceiptId(String receiptId) {
     return sqlSession.selectOne("paymentMapper.findPaymentByReceiptId", receiptId);
+  }
+
+  public int updatePayState(ConfirmDTO confirmDTO) {
+    return sqlSession.insert("paymentMapper.updatePayment", confirmDTO);
   }
 
 }
