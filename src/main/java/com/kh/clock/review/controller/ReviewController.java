@@ -24,9 +24,9 @@ public class ReviewController {
     this.reviewImageService=reviewImageService;
   }
   
-  @PostMapping("")
+  @PostMapping
   public ResponseEntity<Object> insertReview(@ModelAttribute ReviewVO reviewVo, @RequestPart(value = "images", required = false) MultipartFile[] images){
-    if(images.length > 5) {
+    if(images != null && images.length > 5) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미지는 최대 5장까지 가능합니다");
     }
     

@@ -50,22 +50,22 @@
 	<!-- 사용자 페이지 숙박 상세 페이지 -->
     <select id="selectAccomDetail" parameterType="int" resultType="com.kh.clock.accommodation.repository.dto.AccomDTO">
         SELECT 
-        A.ACCOM_SQ,
-        A.ACCOM_SQ AS accomNo,
-        A.ACCOM_NAME,
-        A.ACCOM_DESC,
-        A.ACCOM_LON,
-        A.ACCOM_LAT,
-        A.ACCOM_ZIP_CODE,
-        A.ACCOM_ADDR,
-        A.ACCOM_PHONE,
-        A.ACCOM_REG_DT,
-        A.PUB_FAC_INFO,
-        A.IN_ROOM_FAC_INFO,
-        A.ETC_FAC_INFO,
-        A.ACCOM_TYPE_NO,
-        A.LOC_ID,
-        R.ROOM_PRICE
+	        A.ACCOM_SQ,
+	        A.ACCOM_SQ AS accomNo,
+	        A.ACCOM_NAME,
+	        A.ACCOM_DESC,
+	        A.ACCOM_LON,
+	        A.ACCOM_LAT,
+	        A.ACCOM_ZIP_CODE,
+	        A.ACCOM_ADDR,
+	        A.ACCOM_PHONE,
+	        A.ACCOM_REG_DT,
+	        A.PUB_FAC_INFO,
+	        A.IN_ROOM_FAC_INFO,
+	        A.ETC_FAC_INFO,
+	        A.ACCOM_TYPE_NO,
+	        A.LOC_ID,
+	        R.ROOM_PRICE
         FROM ACCOMMODATION_TB A
         JOIN (SELECT ACCOM_NO, MIN(ROOM_PRICE) ROOM_PRICE FROM ROOM_TB GROUP BY ACCOM_NO ) R ON A.ACCOM_SQ = R.ACCOM_NO
         WHERE A.ACCOM_SQ = #{accomSq}

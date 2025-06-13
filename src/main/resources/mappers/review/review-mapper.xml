@@ -4,19 +4,16 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="reviewMapper">
 	<!-- 리뷰 저장 -->
-	<insert id="insertReview" parameterType="com.kh.clock.review.domain.reviewVO" >
+	<insert id="insertReview" parameterType="com.kh.clock.review.domain.ReviewVO" >
 		INSERT INTO REVIEW_TB (
 			REV_SQ, REV_SCO, CK_REV_ST, REV_CONT, REV_REG_DT, RES_CD
 		) VALUES (
-			REV_SQ.NEXTVAL,
+			REV_SEQ.NEXTVAL,
 			#{revSco},
 			#{ckRevSt},
 			#{revCont},
 			DEFAULT,
 			#{resCd}
 		)
-		<selectKey keyProperty="revSq" order="AFTER" resultType="int">
-        	SELECT REV_SQ.CURRVAL FROM DUAL
-    	</selectKey>
 	</insert>
 </mapper>

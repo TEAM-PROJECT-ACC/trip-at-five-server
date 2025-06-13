@@ -15,7 +15,7 @@ import com.kh.clock.accommodation.service.AccomService;
 @RequestMapping("/accommodations")
 public class AccommodationController {
   
-  private AccomService accomService;
+  private final AccomService accomService;
   
   public AccommodationController(AccomService accomService) {
     this.accomService=accomService;
