@@ -63,4 +63,9 @@ public class PaymentServiceImpl implements PaymentService {
     return payResult;
   }
 
+  @Override
+  public int updatePayState(ConfirmDTO confirmDTO) {
+    return payDAO.updatePayState(confirmDTO);
+  }
+
 }
