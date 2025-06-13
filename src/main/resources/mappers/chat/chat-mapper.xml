@@ -16,11 +16,11 @@
 		WHERE
 			CK_CHAT_ST = 'ACTIVE'
 			<choose >
-				<when test="memType == 'user'" >
-					AND MEM_NO = #{memSq}
-				</when>
-				<when test="memType == 'admin'">
+				<when test="memType == 'admin'" >
 					AND ADMIN_NO = #{adminSq}
+				</when>
+				<when test="memType != 'admin'">
+					AND MEM_NO = #{memSq}
 				</when>
 			</choose>
 	</select>
@@ -59,7 +59,9 @@
 				SELECT 
 					COUNT(*) 
 				FROM CHAT_ROOM_TB 
-				WHERE CK_CHAT_ST = 'ACTIVE'
+				WHERE 
+					CK_CHAT_ST = 'ACTIVE'
+					AND ADMIN_NO = ADMIN_SQ
 			) AS ROOM_COUNT
 		FROM
 			ADMIN_TB
@@ -79,9 +81,9 @@
 			ADMIN_EMAIL_ID,
 			ADMIN_PWD,
 			ADMIN_REG_DT,
-			INQ_CTG_CD,
+			INQ_CTG_CD
 		FROM ADMIN_TB
-		WHERE ADMIN_NO = #{adminNo}
+		WHERE ADMIN_SQ = #{adminSq}
 	</select>
 	<insert id="insertChatRoom" >
 		INSERT INTO 
@@ -96,7 +98,7 @@
 			CHAT_ROOM_SEQ.NEXTVAL,
 			#{memNo},
 			#{userEmail},
-			1,
+			#{adminNo},
 			#{inqCtgCd}
 		)
 	</insert>

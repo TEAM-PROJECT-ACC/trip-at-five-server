@@ -50,30 +50,32 @@ public class ChatController {
   @GetMapping("{memType}/{memNo}")
   public String selectInitChat( @PathVariable String memType, @PathVariable int memNo, @RequestParam String loginInfo, @RequestParam String userEmail, @RequestParam String inqCtgCd) {
     JsonObject loginInfoJson = JsonParser.parseString(loginInfo).getAsJsonObject();
-    
     Object loginInfoObj = null;
-    
-    if(memType == "admin") {
-      int adminSq = CommonGson.getJsonInt(loginInfoJson, "adminEmailId");
+    System.out.println(memType);
+    if(memType.equals("admin")) {
+      int adminSq = CommonGson.getJsonInt(loginInfoJson, "adminSq");
       String adminEmailId = CommonGson.getJsonString(loginInfoJson, "adminEmailId");
       
       loginInfoObj = new AdminInfo(adminEmailId, adminSq, inqCtgCd, memType);
-    } else if(memType == "user") {
+    } else {
+      System.out.println("memType user : " + loginInfoJson);
       int memSq = CommonGson.getJsonInt(loginInfoJson, "memSq");
       String memEmailId = CommonGson.getJsonString(loginInfoJson, "memEmailId");
       String memNick = CommonGson.getJsonString(loginInfoJson, "memNick");
       
       loginInfoObj = new MemberInfo(memEmailId, memNick, memSq, memType);
-    } else {
-      // TODO: 비회원 vo 생성
     }
+    // TODO: 비회원 vo 생성
     
     // memNo로 채팅 방 조회
     ChatRoom chatRoom = chatService.selectChatRoom(loginInfoObj);
+    System.out.println("방 존재 여부 확인 사용자 정보 : " + loginInfoObj);
+    System.out.println("memNo로 조회 한 채팅 방 : " + chatRoom);
     
     if(chatRoom == null) {
       // inqCtgCd로 관리자 계정 조회 후 
       ArrayList<ChatAdminVO> adminList = chatService.selectChatAdminList(inqCtgCd);
+      System.out.println("chat admin list : " + adminList);
       int tempCount = 0;
       ChatAdminVO admin = null;
       // 관리자 계정의 방 목록 조회 
@@ -86,7 +88,7 @@ public class ChatController {
           admin = currAdmin;
           continue;
         }
-        if(count > tempCount) {
+        if(count < tempCount) {
           // 방 목록 개수 비교 후 
           // 상대적으로 적은 수의 관리자 배정
           tempCount = count;
@@ -99,13 +101,14 @@ public class ChatController {
           continue;
         }
       }
-      
+      System.out.println("new chatroom adminNo : " + admin);
       int adminNo = admin.getAdminSq();
       ChatRoom newChatRoom = new ChatRoom(memNo, adminNo, userEmail, inqCtgCd);
       
       int result = chatService.insertChatRoom(newChatRoom);
       if(result > 0) {
         ArrayList<ChatMessage> chatMessageList = new ArrayList<>();
+        newChatRoom = chatService.selectChatRoom(loginInfoObj);
         ChatDTO chatDTO = new ChatDTO(newChatRoom, chatMessageList);
         Gson gson = CommonGson.getDateFormattedGson("yyyy-MM-dd");
         String responseData = gson.toJson(chatDTO);

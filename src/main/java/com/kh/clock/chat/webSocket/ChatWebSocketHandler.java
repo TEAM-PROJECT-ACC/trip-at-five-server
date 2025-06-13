@@ -74,8 +74,9 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
       // NOTI: 임시 관리자 계정 이메일 사용 추후 변경해야 함
       // TODO: chatroom으로 전달 받은 관리자 번호로 관리자 DB 조회
       AdminVO admin = chatService.selectChatAdmin(adminNo);
+      System.out.println("chat init admin data : " + admin);
       // 조회한 관리자 데이터의 이메일 할당
-      tempChatMessage.setSenderEmail("kkh@clock.com");
+      tempChatMessage.setSenderEmail(admin.getAdminEmailId());
       tempChatMessage.setChatRoomNo(chatRoomSq);
       int result = chatService.insertChatMessage(tempChatMessage);
       

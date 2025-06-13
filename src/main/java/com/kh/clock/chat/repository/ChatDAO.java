@@ -76,7 +76,7 @@ public class ChatDAO {
    * @param adminNo
    * @return AdminVO
    */
-  public AdminVO selectChatAdmin(int adminNo) {
-    return sqlSession.selectOne("chatMapper.selectChatAdmin", adminNo);
+  public AdminVO selectChatAdmin(int adminSq) {
+    return sqlSession.selectOne("chatMapper.selectChatAdmin", adminSq);
   }
 }

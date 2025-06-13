@@ -68,8 +68,8 @@ public interface ChatService {
 
   /**
    * [GET] 채팅 관리자 조회
-   * @param adminNo
+   * @param adminSq
    * @return AdminVO
    */
-  public AdminVO selectChatAdmin(int adminNo);
+  public AdminVO selectChatAdmin(int adminSq);
 }
