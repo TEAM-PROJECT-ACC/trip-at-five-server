@@ -78,12 +78,10 @@
 		    <artifactId>gson</artifactId>
 		</dependency>
 		<!-- 비밀번호 암호화 Security -->
-		<!--
 			<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		-->
 		<!-- 이메일 인증 -->
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
@@ -95,6 +93,51 @@
 		    <artifactId>mybatis-spring-boot-starter</artifactId>
 		    <version>3.0.4</version>
 		</dependency>
+		
+		<!-- WebSocket -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+		
+		<!--
+			<dependency>
+			    <groupId>com.auth0</groupId>
+			    <artifactId>java-jwt</artifactId>
+			    <version>4.4.0</version>
+			</dependency>
+-->
+		
+		
+		<!--jwt 라이브러리 모음 -->
+
+
+		<dependency>
+		    <groupId>io.jsonwebtoken</groupId>
+		    <artifactId>jjwt-api</artifactId>
+		    <version>0.11.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.jsonwebtoken</groupId>
+		    <artifactId>jjwt-impl</artifactId>
+		    <version>0.11.2</version>
+		    <scope>runtime</scope>
+		</dependency>
+		<dependency>		
+		    <groupId>io.jsonwebtoken</groupId>
+		    <artifactId>jjwt-jackson</artifactId> 
+		    <version>0.11.2</version>
+		    <scope>runtime</scope>
+		</dependency>
+
+
+		<!-- jwt 
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+		-->
 	</dependencies>
 
 	<build>
