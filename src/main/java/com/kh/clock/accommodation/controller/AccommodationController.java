@@ -32,20 +32,14 @@ public class AccommodationController {
   
   // 숙박 상세 페이지 조회
   @GetMapping("/{accomSq}")
-  public ResponseEntity<AccomDTO> getAccommodationById(@PathVariable int accomSq,  @RequestParam(value = "memNo", required = false) Integer memNo) {
+  public ResponseEntity<AccomDTO> getAccommodationById(@PathVariable int accomSq) {
     System.out.println(accomSq);
     AccomDTO accomDetail = accomService.getAccommodationById(accomSq);
     
     if (accomDetail == null) {
       return ResponseEntity.notFound().build();
     }
-    
-    if (memNo != null && memNo > 0) {
-      String resCd = reviewService.getResCode(memNo, accomSq);
-      accomDetail.setResCd(resCd); 
-      accomDetail.setMemNo(memNo);
-    }
-    
+
     return ResponseEntity.ok(accomDetail);
   }
   

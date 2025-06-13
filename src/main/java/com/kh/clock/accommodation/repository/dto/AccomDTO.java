@@ -25,11 +25,5 @@ public class AccomDTO {
   private String roomChkOut;
   private List<RoomVO> roomList;
   
-  private String accomTypeName;
-  
-  private int maxPrice;
-  private int minPrice;
-  
-  private int memNo;
   private String resCd;
 }
