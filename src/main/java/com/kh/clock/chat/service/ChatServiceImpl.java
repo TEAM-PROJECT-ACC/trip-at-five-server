@@ -93,4 +93,15 @@ public class ChatServiceImpl implements ChatService {
     int result = chatDAO.selectAdminChatRoomCount(adminSq); 
     return result;
   }
+  
+  /**
+   * [GET] 채팅 관리자 조회
+   * @param adminNo
+   * @return AdminVO
+   */
+  @Override
+  public AdminVO selectChatAdmin(int adminNo) {
+    AdminVO admin = chatDAO.selectChatAdmin(adminNo);
+    return admin;
+  }
 }
