@@ -69,12 +69,15 @@
 
 	<!-- 마이페이지 부분 -->
 
-	<update id="infoUpdate"> UPDATE member_tb <trim prefix="SET"
-			suffixOverrides=",">
+	<update id="infoUpdate">
+		UPDATE member_tb
+		<trim prefix="SET" suffixOverrides=",">
 			<if test="pwd != null and pwd.length() > 0">mem_pwd = #{pwd},</if>
 			<if test="nickName != null and nickName.length() > 0">mem_nick =
-		#{nickName},</if>
-		</trim> WHERE mem_email_id = #{email} </update>
+				#{nickName},</if>
+		</trim>
+		WHERE mem_email_id = #{email}
+	</update>
 
 	<update id="userInactive">
 		update member_tb
@@ -104,8 +107,10 @@
 		chal_cond,
 		chal_hx_val as currentStep
 		from challenge_member_history_tb cmht
-		join challenge_tb ct on cmht.chal_no = ct.chal_sq
-		join coupon_tb cp on cp.coupon_sq = ct.coupon_no
+		join challenge_tb ct on
+		cmht.chal_no = ct.chal_sq
+		join coupon_tb cp on cp.coupon_sq =
+		ct.coupon_no
 		where
 		mem_no
 		=
@@ -114,10 +119,12 @@
 
 
 	<insert id="insertUserChallengeList"
-		parameterType="java.util.List"> INSERT INTO challenge_member_history_tb
-		( CHAL_HX_SQ, CHAL_HX_VAL, CHAL_NO, MEM_NO ) SELECT
-		chal_history_seq.nextval, A.* FROM ( <foreach collection="list"
-			item="chal" separator=" UNION ALL ">
+		parameterType="java.util.List">
+		INSERT INTO challenge_member_history_tb
+		( CHAL_HX_SQ, CHAL_HX_VAL,
+		CHAL_NO, MEM_NO ) SELECT
+		chal_history_seq.nextval, A.* FROM (
+		<foreach collection="list" item="chal" separator=" UNION ALL ">
 			SELECT
 			0 AS
 			CHAL_HX_VAL,
@@ -126,7 +133,8 @@
 			MEM_NO
 			FROM DUAL
 		</foreach>
-		) A </insert>
+		) A
+	</insert>
 
 
 	<insert id="memberLevelSetting">
@@ -148,13 +156,15 @@
 	<select id="couponSelect"
 		resultType="com.kh.clock.member.repository.CouponDTO">
 		select
-		coupon_name, 
+		coupon_name,
 		coupon_price,
 		chal_completed_dt as couponRegDt
 		from challenge_completed_tb
-		join challenge_tb on chal_no = chal_sq
-		join coupon_tb on coupon_no = coupon_sq
-		where mem_no = #{userMemSq} 
+		join
+		challenge_tb on chal_no = chal_sq
+		join coupon_tb on coupon_no =
+		coupon_sq
+		where mem_no = #{userMemSq}
 	</select>
 
 
