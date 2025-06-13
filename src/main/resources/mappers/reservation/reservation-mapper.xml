@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reservationMapper">
+
+	<insert id="insertReservation">
+        INSERT INTO RESERVATION_TB (
+			RES_CD, 
+			RES_EMAIL_ID, 
+			RES_NAME, 
+			RES_PHONE,
+			RES_NUM_OF_PEO,
+			CHECK_IN_DT,
+			CHECK_OUT_DT,
+			CK_RES_ST,
+			RES_REG_DT,
+			ROOM_NO,
+			MEM_NO
+		) VALUES (
+			#{resCode},
+			#{resEmail},
+			#{resName},
+			#{resPhone},
+			#{resNumOfPeo},
+			#{checkInDt},
+			#{checkOutDt},
+			DEFAULT,
+			SYSDATE,
+			#{roomNo},
+			#{memNo}
+		)
+    </insert>
+    
+    <select id="findReservationByResCd" resultType="com.kh.clock.order.repository.dto.OrderResInfoDTO">
+    	SELECT ACC.ACCOM_NAME, R.ROOM_NAME, RES.CHECK_IN_DT, RES.CHECK_OUT_DT, R.ROOM_PRICE, RES.RES_CD
+    	FROM RESERVATION_TB RES
+    		LEFT JOIN ROOM_TB R ON (RES.ROOM_NO = R.ROOM_SQ)
+    		LEFT JOIN ACCOMMODATION_TB ACC ON (R.ACCOM_NO = ACC.ACCOM_SQ)
+    	WHERE RES.RES_CD = #{resCode}
+    </select>
+
+	<select id="findResUserInfo" resultType="com.kh.clock.reservation.repository.dto.ResUserInfoDTO">
+		SELECT RES_NAME, RES_PHONE FROM RESERVATION_TB WHERE RES_CD = #{resCode}
+	</select>
+</mapper>

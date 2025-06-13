@@ -95,6 +95,12 @@
 		    <artifactId>mybatis-spring-boot-starter</artifactId>
 		    <version>3.0.4</version>
 		</dependency>
+		<!-- bootpay -->
+		<dependency>
+		    <groupId>io.github.bootpay</groupId>
+		    <artifactId>backend</artifactId>
+		    <version>3.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
