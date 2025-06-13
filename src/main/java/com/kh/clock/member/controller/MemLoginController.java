@@ -1,6 +1,8 @@
 package com.kh.clock.member.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kh.clock.member.domain.AdminVO;
+import com.kh.clock.member.domain.ChallengeVO;
 import com.kh.clock.member.domain.MemberVO;
+import com.kh.clock.member.repository.ChallengeHistoryCreateDTO;
 import com.kh.clock.member.repository.LoginDTO;
+import com.kh.clock.member.repository.RegisterDTO;
 import com.kh.clock.member.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,13 +43,23 @@ class MemLoginController {
 		MemberVO loginUser = mService.userInfo(userInfo);
 		HashMap<String, Object> hashMap = new HashMap<>();
 
+		System.out.println(loginUser.getCkMemSt());
+
 		if (loginUser == null) {
 
 			hashMap.put("IdFail", "IdFail");
 
 			return ResponseEntity.ok(hashMap);
 
-		} else if (!bCryptPasswordEncoder.matches(userInfo.getPwd(), loginUser.getMemPwd())) {
+		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
+			hashMap.put("INACTIVE", "INACTIVE");
+
+			System.out.println("test");
+
+			return ResponseEntity.ok(hashMap);
+		}
+
+		else if (!bCryptPasswordEncoder.matches(userInfo.getPwd(), loginUser.getMemPwd())) {
 
 			hashMap.put("pwdFail", "pwdFail");
 			return ResponseEntity.ok(hashMap);
@@ -126,8 +141,16 @@ class MemLoginController {
 
 			mService.snsRegister(kakaoLoginDTO);
 			loginUser = mService.userInfo(kakaoLoginDTO);
+			
+			challAndMemLevelCreate(kakaoLoginDTO.getEmail());
 
-		} else if (!loginUser.getCkSocPlt().equals("KAKAO")) {
+		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
+			hashMap.put("INACTIVE", "INACTIVE");
+
+			return ResponseEntity.ok(hashMap);
+		}
+
+		else if (!loginUser.getCkSocPlt().equals("KAKAO")) {
 
 			hashMap.put("ckSocPlt", loginUser.getCkSocPlt());
 
@@ -137,7 +160,7 @@ class MemLoginController {
 			hashMap.put("memSq", loginUser.getMemSq());
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
-			hashMap.put("memType", "user");
+			hashMap.put("memType", "kakaoUser");
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
@@ -177,7 +200,12 @@ class MemLoginController {
 
 			mService.snsRegister(naverLoginDTO);
 			loginUser = mService.userInfo(naverLoginDTO);
+			challAndMemLevelCreate(naverLoginDTO.getEmail());
 
+		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
+			hashMap.put("INACTIVE", "INACTIVE");
+
+			return ResponseEntity.ok(hashMap);
 		} else if (!loginUser.getCkSocPlt().equals("NAVER")) {
 
 			hashMap.put("ckSocPlt", loginUser.getCkSocPlt());
@@ -188,7 +216,7 @@ class MemLoginController {
 			hashMap.put("memSq", loginUser.getMemSq());
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
-			hashMap.put("memType", "user");
+			hashMap.put("memType", "naverUser");
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
@@ -226,7 +254,12 @@ class MemLoginController {
 			googleLoginDTO.setSnsUid(naverUid);
 
 			mService.snsRegister(googleLoginDTO);
+			challAndMemLevelCreate(googleLoginDTO.getEmail());
 
+		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
+			hashMap.put("INACTIVE", "INACTIVE");
+
+			return ResponseEntity.ok(hashMap);
 		} else if (!loginUser.getCkSocPlt().equals("GOOGLE")) {
 
 			hashMap.put("ckSocPlt", loginUser.getCkSocPlt());
@@ -237,7 +270,7 @@ class MemLoginController {
 			hashMap.put("memSq", loginUser.getMemSq());
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
-			hashMap.put("memType", "user");
+			hashMap.put("memType", "googleUser");
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
@@ -253,6 +286,33 @@ class MemLoginController {
 		session.invalidate();
 
 		return "ok";
+	}
+
+	public int challAndMemLevelCreate(String email) {
+		LoginDTO loginDTO = new LoginDTO();
+		loginDTO.setEmail(email);
+
+		MemberVO loginUser = mService.userInfo(loginDTO); // 회원 번호 확인
+		List<Object> numlist = mService.getChallengeCountNo(); // 챌린지 각 번호 확인
+
+		ChallengeVO chVo = new ChallengeVO();
+
+		List<ChallengeHistoryCreateDTO> list = new ArrayList<>();
+
+		for (int i = 0; i < numlist.size(); i++) {
+
+			list.add(new ChallengeHistoryCreateDTO((int) numlist.get(i), loginUser.getMemSq()));
+		}
+
+		int chcN = mService.insertUserChallengeList(list);
+		System.out.println(chcN);
+
+		if (chcN > 1) {
+			return 1;
+		}
+
+		return 0;
+
 	}
 
 }

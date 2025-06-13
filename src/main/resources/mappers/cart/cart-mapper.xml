@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cartMapper">
+
+	<insert id="insertCart">
+        INSERT INTO CART_TB (CART_SQ, CART_REG_DT, MEM_NO, ROOM_NO)
+        	VALUES (CART_SEQ.NEXTVAL, SYSDATE, #{memNo}, #{roomNo})
+    </insert>
+    
+    <delete id="deleteCart">
+    	DELETE FROM CART_TB
+    	WHERE MEM_NO = #{memNo} AND ROOM_NO = #{roomNo}
+    </delete>
+    
+    <select id="findCartByMemNoAndRoomNo" resultType="com.kh.clock.cart.repository.dto.CartInfoDTO">
+	  SELECT MEM_NO, ROOM_NO
+	  FROM CART_TB
+	  WHERE MEM_NO = #{memNo}
+	    AND ROOM_NO IN
+	    <foreach collection="roomNoList" item="roomNo" open="(" separator="," close=")">
+	      #{roomNo}
+	    </foreach>
+	</select>
+
+	<select id="findCartByMemNo" resultType="com.kh.clock.cart.repository.dto.CartListDTO">
+		SELECT A.ACCOM_NAME, R.ROOM_NAME, R.ROOM_PRICE, C.ROOM_NO, R.ACCOM_NO
+		FROM CART_TB C
+		    LEFT JOIN ROOM_TB R ON (C.ROOM_NO = R.ROOM_SQ)
+		    LEFT JOIN ACCOMMODATION_TB A ON (R.ACCOM_NO = A.ACCOM_SQ)
+		WHERE MEM_NO = #{memNo}
+	</select>
+
+</mapper>

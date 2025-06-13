@@ -1,10 +1,17 @@
 package com.kh.clock.member.service;
 
+import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.clock.member.domain.AdminVO;
+import com.kh.clock.member.domain.ChallengeVO;
 import com.kh.clock.member.domain.MemberVO;
+import com.kh.clock.member.repository.ChallengHistoryDTO;
+import com.kh.clock.member.repository.ChallengeHistoryCreateDTO;
+import com.kh.clock.member.repository.CouponDTO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.repository.MemberDAO;
 import com.kh.clock.member.repository.RegisterDTO;
@@ -78,11 +85,69 @@ public class MemberServiceImpl implements MemberService {
 		return result;
 	}
 
+	/* 비밀번호 재설정 */
 	@Override
 	public int updatePwd(LoginDTO userInfo) {
 		int result = memberDAO.updatePwd(userInfo);
 
 		return result;
+	}
+
+	/* 회원 정보 수정 */
+	@Override
+	public int infoUpdate(LoginDTO userInfo) {
+		int result = memberDAO.infoUpdate(userInfo);
+
+		return result;
+	}
+
+	/* 회원 비활성화(탈퇴) */
+	@Override
+	public int userInactive(MemberVO loginUser) {
+
+		int result = memberDAO.userInactive(loginUser);
+
+		return result;
+	}
+
+	/* 챌린지 리스트 조회 */
+	@Override
+	public List<ChallengeVO> getChallengeList() {
+
+		return memberDAO.getChallengeList();
+
+	}
+
+	/* 회원 가입시 챌린지 추가 */
+	@Override
+	public int insertUserChallengeList(List<ChallengeHistoryCreateDTO> list) {
+		return memberDAO.insertUserChallengeList(list);
+	}
+
+	@Override
+	public List<Object> getChallengeCountNo() {
+		return memberDAO.getChallengeCountNo();
+	}
+
+	@Override
+	public List<ChallengHistoryDTO> getChallengeUserList(String memNo) {
+		return memberDAO.getChallengeUserList(memNo);
+	}
+
+	@Override
+	public int memberLevelSetting(int memSq) {
+		return memberDAO.memberLevelSetting(memSq);
+
+	}
+
+	@Override
+	public int challengeSucces(HashMap chalSuccessInfo) {
+		return memberDAO.challengeSucces(chalSuccessInfo);
+	}
+
+	@Override
+	public List<CouponDTO> couponSelect(String userMemSq) {
+		return memberDAO.couponSelect(userMemSq);
 	}
 
 }

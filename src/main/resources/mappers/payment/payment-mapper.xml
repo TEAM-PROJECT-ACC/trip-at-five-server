@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="paymentMapper">
+
+	<insert id="insertPayment">
+        INSERT INTO PAYMENT_TB (
+			RECEIPT_ID,
+			ORDER_ID,
+			PAY_PRICE,
+			PAY_METHOD,
+			PAY_ST_CK,
+			PAY_DT,
+			PAY_REQ_DT
+		) VALUES (
+			#{receiptId},
+			#{orderId},
+			#{payPrice},
+			#{payMethod},
+			#{payStCk},
+			SYSDATE,
+			#{payReqDt}
+		)
+    </insert>
+    
+    <select id="findPaymentByReceiptId" resultType="com.kh.clock.payment.repository.dto.PayInfoDTO">
+    	SELECT RECEIPT_ID, PAY_METHOD, PAY_PRICE
+    	FROM PAYMENT_TB
+    	WHERE RECEIPT_ID = #{receiptId}
+    </select>
+
+</mapper>
