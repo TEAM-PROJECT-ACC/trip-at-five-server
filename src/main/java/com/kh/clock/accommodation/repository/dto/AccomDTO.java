@@ -30,4 +30,5 @@ public class AccomDTO {
   private int maxPrice;
   private int minPrice;
   
+  private int memNo;
 }

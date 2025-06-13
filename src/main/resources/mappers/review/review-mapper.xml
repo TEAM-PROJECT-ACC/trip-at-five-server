@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reviewMapper">
+	<!-- 리뷰 저장 -->
+	<insert id="insertReview" parameterType="com.kh.clock.review.domain.ReviewVO" >
+		INSERT INTO REVIEW_TB (
+			REV_SQ, REV_SCO, CK_REV_ST, REV_CONT, REV_REG_DT, RES_CD
+		) VALUES (
+			REV_SEQ.NEXTVAL,
+			#{revSco},
+			#{ckRevSt},
+			#{revCont},
+			DEFAULT,
+			#{resCd}
+		)
+	</insert>
+</mapper>
