@@ -7,7 +7,7 @@ import com.kh.clock.review.domain.ReviewVO;
 
 public interface ReviewService {
   
-  String getResCode(int memNo, int accomSq);
+  String findResCode(int memNo, int accomSq);
   
   int insertReview(ReviewVO review, MultipartFile[] images);
   

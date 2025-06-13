@@ -9,8 +9,8 @@
 		FROM RESERVATION_TB RES
         JOIN ROOM_TB ROOM ON RES.ROOM_NO = ROOM.ROOM_SQ
         WHERE RES.MEM_NO = #{memNo}
-          AND ROOM.ACCOM_NO = #{accomSq}
-          AND RES.CK_RES_ST = 'COMPLETE'
+          AND ROOM.ACCOM_NO = #{accomNo}
+          AND RES.CK_RES_ST = 'COMPLETED'
         ORDER BY RES.RES_CD DESC
         FETCH FIRST 1 ROWS ONLY
 	</select>

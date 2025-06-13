@@ -83,7 +83,7 @@ public class ReviewServiceImpl implements ReviewService{
 
   // 예약코드
   @Override
-  public String getResCode(int memNo, int accomSq) {
+  public String findResCode(int memNo, int accomSq) {
     return reviewDAO.findResCode(memNo, accomSq);
   }
 
