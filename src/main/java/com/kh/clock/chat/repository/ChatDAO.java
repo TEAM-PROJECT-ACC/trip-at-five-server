@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.clock.chat.domain.ChatAdminVO;
 import com.kh.clock.chat.domain.ChatMessage;
 import com.kh.clock.chat.domain.ChatRoom;
+import com.kh.clock.member.domain.AdminVO;
 
 @Repository
 public class ChatDAO {
@@ -69,5 +70,13 @@ public class ChatDAO {
    */
   public int selectAdminChatRoomCount(int adminSq) {
     return sqlSession.selectOne("chatMapper.selectAdminChatRoomCount", adminSq);
+  }
+
+  /**
+   * @param adminNo
+   * @return AdminVO
+   */
+  public AdminVO selectChatAdmin(int adminNo) {
+    return sqlSession.selectOne("chatMapper.selectChatAdmin", adminNo);
   }
 }

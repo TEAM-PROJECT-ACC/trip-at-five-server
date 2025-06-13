@@ -73,6 +73,16 @@
 			ADMIN_NO = #{adminNo} 
 			AND CK_CHAT_ST = 'ACTIVE'
 	</select>
+	<select id="selectChatAdmin" resultType="AdminVO" >
+		SELECT
+			ADMIN_SQ,
+			ADMIN_EMAIL_ID,
+			ADMIN_PWD,
+			ADMIN_REG_DT,
+			INQ_CTG_CD,
+		FROM ADMIN_TB
+		WHERE ADMIN_NO = #{adminNo}
+	</select>
 	<insert id="insertChatRoom" >
 		INSERT INTO 
 			CHAT_ROOM_TB (

@@ -16,6 +16,7 @@ import com.kh.clock.chat.domain.ChatRoom;
 import com.kh.clock.chat.repository.ChatDTO;
 import com.kh.clock.chat.service.ChatService;
 import com.kh.clock.common.gson.CommonGson;
+import com.kh.clock.member.domain.AdminVO;
 
 @Component
 public class ChatWebSocketHandler extends TextWebSocketHandler {
@@ -71,7 +72,9 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
       tempChatMessage.setCkSenderType("ADMIN");
       
       // NOTI: 임시 관리자 계정 이메일 사용 추후 변경해야 함
-      // TODO: admin 계정 할당 구현 (랜덤 또는 일정 로직)
+      // TODO: chatroom으로 전달 받은 관리자 번호로 관리자 DB 조회
+      AdminVO admin = chatService.selectChatAdmin(adminNo);
+      // 조회한 관리자 데이터의 이메일 할당
       tempChatMessage.setSenderEmail("kkh@clock.com");
       tempChatMessage.setChatRoomNo(chatRoomSq);
       int result = chatService.insertChatMessage(tempChatMessage);

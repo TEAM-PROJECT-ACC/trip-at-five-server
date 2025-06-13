@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.kh.clock.chat.domain.ChatAdminVO;
 import com.kh.clock.chat.domain.ChatMessage;
 import com.kh.clock.chat.domain.ChatRoom;
+import com.kh.clock.member.domain.AdminVO;
 
 @Service
 public interface ChatService {
@@ -50,7 +51,7 @@ public interface ChatService {
 
 
   /**
-   * [GET] 채팅 관리자 조회
+   * [GET] 채팅 관리자 목록 조회
    * @param inqCtgCd
    * @return ArrayList<ChatAdminVO>
    */
@@ -63,4 +64,12 @@ public interface ChatService {
    * @return int
    */
   public int selectAdminChatRoomCount(int adminSq);
+
+
+  /**
+   * [GET] 채팅 관리자 조회
+   * @param adminNo
+   * @return AdminVO
+   */
+  public AdminVO selectChatAdmin(int adminNo);
 }
