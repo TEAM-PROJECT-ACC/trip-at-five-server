@@ -12,4 +12,7 @@
 		)
     </insert>
 
+	<select id="findOrderByReceiptId" resultType="String">
+		SELECT RES_CD FROM ORDER_TB WHERE RECEIPT_ID = #{receiptId}
+	</select>
 </mapper>

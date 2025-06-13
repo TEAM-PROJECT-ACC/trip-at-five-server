@@ -31,5 +31,16 @@
 			#{memNo}
 		)
     </insert>
+    
+    <select id="findReservationByResCd" resultType="com.kh.clock.order.repository.dto.OrderResInfoDTO">
+    	SELECT ACC.ACCOM_NAME, R.ROOM_NAME, RES.CHECK_IN_DT, RES.CHECK_OUT_DT, R.ROOM_PRICE, RES.RES_CD
+    	FROM RESERVATION_TB RES
+    		LEFT JOIN ROOM_TB R ON (RES.ROOM_NO = R.ROOM_SQ)
+    		LEFT JOIN ACCOMMODATION_TB ACC ON (R.ACCOM_NO = ACC.ACCOM_SQ)
+    	WHERE RES.RES_CD = #{resCode}
+    </select>
 
+	<select id="findResUserInfo" resultType="com.kh.clock.reservation.repository.dto.ResUserInfoDTO">
+		SELECT RES_NAME, RES_PHONE FROM RESERVATION_TB WHERE RES_CD = #{resCode}
+	</select>
 </mapper>

@@ -23,5 +23,11 @@
 			#{payReqDt}
 		)
     </insert>
+    
+    <select id="findPaymentByReceiptId" resultType="com.kh.clock.payment.repository.dto.PayInfoDTO">
+    	SELECT RECEIPT_ID, PAY_METHOD, PAY_PRICE
+    	FROM PAYMENT_TB
+    	WHERE RECEIPT_ID = #{receiptId}
+    </select>
 
 </mapper>
