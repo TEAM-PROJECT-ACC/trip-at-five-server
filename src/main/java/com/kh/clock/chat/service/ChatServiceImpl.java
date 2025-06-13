@@ -96,12 +96,12 @@ public class ChatServiceImpl implements ChatService {
   
   /**
    * [GET] 채팅 관리자 조회
-   * @param adminNo
+   * @param adminSq
    * @return AdminVO
    */
   @Override
-  public AdminVO selectChatAdmin(int adminNo) {
-    AdminVO admin = chatDAO.selectChatAdmin(adminNo);
+  public AdminVO selectChatAdmin(int adminSq) {
+    AdminVO admin = chatDAO.selectChatAdmin(adminSq);
     return admin;
   }
 }
