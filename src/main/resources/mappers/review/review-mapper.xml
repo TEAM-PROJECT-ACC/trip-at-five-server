@@ -3,8 +3,23 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="reviewMapper">
+	<!-- 예약코드 -->
+	<select id="findResCode" parameterType="map" resultType="String">
+		SELECT RES.RES_CD
+		FROM RESERVATION_TB RES
+        JOIN ROOM_TB ROOM ON RES.ROOM_NO = ROOM.ROOM_SQ
+        WHERE RES.MEM_NO = #{memNo}
+          AND ROOM.ACCOM_NO = #{accomSq}
+          AND RES.CK_RES_ST = 'COMPLETE'
+        ORDER BY RES.RES_CD DESC
+        FETCH FIRST 1 ROWS ONLY
+	</select>
+	
 	<!-- 리뷰 저장 -->
 	<insert id="insertReview" parameterType="com.kh.clock.review.domain.ReviewVO" >
+		<selectKey keyProperty="revSq" resultType="int" order="AFTER">
+			SELECT REV_SEQ.CURRVAL FROM DUAL
+		</selectKey>
 		INSERT INTO REVIEW_TB (
 			REV_SQ, REV_SCO, CK_REV_ST, REV_CONT, REV_REG_DT, RES_CD
 		) VALUES (
@@ -16,4 +31,5 @@
 			#{resCd}
 		)
 	</insert>
+	
 </mapper>

@@ -2,6 +2,7 @@ package com.kh.clock.review.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,7 +34,9 @@ public class ReviewServiceImpl implements ReviewService{
   public int insertReview(ReviewVO review, MultipartFile[] images) {
     int insertResult = reviewDAO.insertReview(review);
     
-    insertImageFun(insertResult, review.getRevSq(), images);
+    if (insertResult > 0) {
+      insertImageFun(insertResult, review.getRevSq(), images);
+    }
     return insertResult;
   }
 
@@ -70,4 +73,18 @@ public class ReviewServiceImpl implements ReviewService{
       }
     }
   }
+
+  // 리뷰 목록 조회
+  @Override
+  public Map<String, Object> selectReviewList(int accomSq, int page, int size) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  // 예약코드
+  @Override
+  public String getResCode(int memNo, int accomSq) {
+    return reviewDAO.findResCode(memNo, accomSq);
+  }
+
 }

@@ -31,4 +31,5 @@ public class AccomDTO {
   private int minPrice;
   
   private int memNo;
+  private String resCd;
 }

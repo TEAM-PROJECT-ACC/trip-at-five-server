@@ -2,15 +2,13 @@ package com.kh.clock.review.repository.dto;
 
 import java.sql.Date;
 import java.util.List;
-import lombok.Data;
 
-@Data
-public class ReviewDTO {
+public class ReviewListDTO {
   private int revSq;
   private double revSco;
-  private String ckRevSt;
   private String revCont;
   private Date revRegDt;
-  private String resCd;
-  private int accomSq;
+  // 회원 닉네임
+  private String memNick;
+  private List<ReviewImageDTO> reviewImages;
 }
