@@ -21,7 +21,9 @@
 
 	<select id="loginInfo" resultType="MemberVO">
 
-		select * from member_tb where
+		select * from member_tb
+		left join member_level_tb on mem_no = mem_sq
+		where
 		mem_email_id = #{email}
 
 
@@ -158,13 +160,16 @@
 		select
 		coupon_name,
 		coupon_price,
-		chal_completed_dt as couponRegDt
+		chal_completed_dt as
+		couponRegDt
 		from challenge_completed_tb
 		join
-		challenge_tb on chal_no = chal_sq
+		challenge_tb on chal_no =
+		chal_sq
 		join coupon_tb on coupon_no =
 		coupon_sq
-		where mem_no = #{userMemSq}
+		where mem_no =
+		#{userMemSq}
 	</select>
 
 

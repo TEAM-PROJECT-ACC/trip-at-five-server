@@ -52,9 +52,8 @@ class MemLoginController {
 			return ResponseEntity.ok(hashMap);
 
 		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
-			hashMap.put("INACTIVE", "INACTIVE");
 
-			System.out.println("test");
+			hashMap.put("INACTIVE", "INACTIVE");
 
 			return ResponseEntity.ok(hashMap);
 		}
@@ -71,6 +70,7 @@ class MemLoginController {
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
 			hashMap.put("memType", "user");
+			hashMap.put("memLvl", loginUser.getMemLvl());
 			return ResponseEntity.ok(hashMap);
 		}
 
@@ -131,6 +131,13 @@ class MemLoginController {
 		HashMap<String, Object> hashMap = new HashMap<>();
 
 		if (loginUser == null) {
+
+		}
+
+		System.out.println(loginUser);
+		System.out.println(kakaoLoginDTO);
+
+		if (loginUser == null) {
 			/* 회원가입처리 */
 			String tempPassword = "kakao_" + System.currentTimeMillis();
 			String encPwd = bCryptPasswordEncoder.encode(tempPassword);
@@ -141,7 +148,7 @@ class MemLoginController {
 
 			mService.snsRegister(kakaoLoginDTO);
 			loginUser = mService.userInfo(kakaoLoginDTO);
-			
+
 			challAndMemLevelCreate(kakaoLoginDTO.getEmail());
 
 		} else if (loginUser.getCkMemSt().equals("INACTIVE")) {
@@ -161,6 +168,7 @@ class MemLoginController {
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
 			hashMap.put("memType", "kakaoUser");
+			hashMap.put("memLvl", loginUser.getMemLvl());
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
@@ -217,6 +225,7 @@ class MemLoginController {
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
 			hashMap.put("memType", "naverUser");
+			hashMap.put("memLvl", loginUser.getMemLvl());
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
@@ -271,6 +280,7 @@ class MemLoginController {
 			hashMap.put("memEmailId", loginUser.getMemEmailId());
 			hashMap.put("memNick", loginUser.getMemNick());
 			hashMap.put("memType", "googleUser");
+			hashMap.put("memLvl", loginUser.getMemLvl());
 
 			session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
@@ -298,12 +308,14 @@ class MemLoginController {
 		ChallengeVO chVo = new ChallengeVO();
 
 		List<ChallengeHistoryCreateDTO> list = new ArrayList<>();
+		
 
 		for (int i = 0; i < numlist.size(); i++) {
 
 			list.add(new ChallengeHistoryCreateDTO((int) numlist.get(i), loginUser.getMemSq()));
 		}
 
+		int memLevelResult = mService.memberLevelSetting(loginUser.getMemSq());
 		int chcN = mService.insertUserChallengeList(list);
 		System.out.println(chcN);
 
