@@ -36,7 +36,7 @@ class MemLoginController {
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final MemberService mService;
 
-	@PostMapping("/nomal")
+	@PostMapping("/normal")
 	public ResponseEntity<HashMap<String, Object>> nomalLogin(@RequestBody LoginDTO userInfo,
 			HttpServletRequest request, HttpSession session) throws Exception {
 
