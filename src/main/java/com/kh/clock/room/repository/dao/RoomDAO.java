@@ -1,6 +1,5 @@
 package com.kh.clock.room.repository.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -50,6 +49,7 @@ public class RoomDAO {
     return sqlSession.delete("roomMapper.deleteRoomAndRoomImageByAccomNoAndRoomSq", roomIdenDTO);
   }
 
+  // 객실 수 조회
   public List<RoomCntDTO> selectRoomCnt(AvailableRoomRequestDTO availableRoomRequestDTO) {
     return sqlSession.selectList("roomMapper.selectRoomCnt", availableRoomRequestDTO);
   }

@@ -63,4 +63,25 @@
   		DELETE FROM ROOM_TB
   		WHERE ACCOM_NO = #{accomNo} AND ROOM_SQ = #{roomSq}
   	</delete>
+  	
+  	<!-- 객실 수 조회 -->
+	<select id="selectRoomCnt" parameterType="com.kh.clock.room.repository.dto.AvailableRoomRequestDTO" resultType="com.kh.clock.room.repository.dto.RoomCntDTO">
+		SELECT 
+			R.ROOM_SQ,
+			R.ROOM_CNT - NVL(SUB.CNT, 0)
+		FROM ROOM_TB R
+			LEFT JOIN (
+				SELECT 
+					RES.ROOM_NO,
+					COUNT(*) AS CNT
+				FROM RESERVATION_TB RES
+				WHERE 
+					RES.CK_RES_ST IN ('UNPAID', 'COMPLETED', 'PROCESSING')
+					AND TO_DATE(#{checkInDt}, 'YYYY-MM-DD') &lt; TO_DATE(RES.CHECK_OUT_DT, 'YYYY-MM-DD')
+					AND TO_DATE(#{checkOutDt}, 'YYYY-MM-DD') &gt; TO_DATE(RES.CHECK_IN_DT, 'YYYY-MM-DD')
+				GROUP BY RES.ROOM_NO
+			) SUB ON R.ROOM_SQ = SUB.ROOM_NO
+		WHERE R.ACCOM_NO = #{accomNo}
+	</select>
+
 </mapper>
