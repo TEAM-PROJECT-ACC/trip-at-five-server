@@ -14,4 +14,5 @@ public class OrderResInfoDTO {
   private String checkOutDt;
   private int roomPrice;
   private String resCode;
+  private String memNo;
 }

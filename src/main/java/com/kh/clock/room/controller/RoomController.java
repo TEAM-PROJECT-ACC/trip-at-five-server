@@ -31,8 +31,8 @@ import com.kh.clock.room.service.RoomServiceImpl;
 @RequestMapping("/admin/accommodations/{accomNo}/rooms")
 public class RoomController {
   
-  private RoomServiceImpl roomService;
-  private RoomImageServiceImpl roomImageService;
+  private final RoomServiceImpl roomService;
+  private final RoomImageServiceImpl roomImageService;
   
   public RoomController(RoomServiceImpl roomService, RoomImageServiceImpl roomImageService) {
     this.roomService = roomService;

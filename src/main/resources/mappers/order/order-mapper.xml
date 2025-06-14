@@ -15,4 +15,14 @@
 	<select id="findOrderByReceiptId" resultType="String">
 		SELECT RES_CD FROM ORDER_TB WHERE RECEIPT_ID = #{receiptId}
 	</select>
+	
+	<!-- TODO : 회원쪽으로 이동 -->
+	<insert id="insertMemExp">
+		INSERT INTO MEMBER_EXPERIENCE_TB VALUES (
+			#{memNo},
+			#{resCode},
+			#{memExp}
+			SYSDATE
+		)
+	</insert>
 </mapper>

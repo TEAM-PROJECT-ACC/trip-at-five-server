@@ -10,6 +10,8 @@ import com.kh.clock.common.file.OclockFileUtils;
 import com.kh.clock.common.file.UploadFileType;
 import com.kh.clock.room.domain.RoomVO;
 import com.kh.clock.room.repository.dao.RoomDAO;
+import com.kh.clock.room.repository.dto.AvailableRoomRequestDTO;
+import com.kh.clock.room.repository.dto.RoomCntDTO;
 import com.kh.clock.room.repository.dto.RoomDetailDTO;
 import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
 import com.kh.clock.room.repository.dto.RoomImageDTO;
@@ -211,5 +213,15 @@ public class RoomServiceImpl implements RoomService {
   @Override
   public RoomDetailDTO findRoomByAccomNoAndRoomSq(RoomIdentifierDTO getRoomDTO) {
     return roomDAO.findRoomByAccomNoAndRoomSq(getRoomDTO);
+  }
+
+  /**
+   * 숙박번호로 객실과 객실 수 조회
+   * @param availableRoomRequestDTO
+   * @return
+   */
+  @Override
+  public List<RoomCntDTO> selectRoomCnt(AvailableRoomRequestDTO availableRoomRequestDTO) {
+    return roomDAO.selectRoomCnt(availableRoomRequestDTO);
   }
 }

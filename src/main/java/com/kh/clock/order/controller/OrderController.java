@@ -33,7 +33,7 @@ public class OrderController {
     int result = orderService.insertOrder(orderListDTO);
     
     if(result > 0) return ResponseEntity.status(HttpStatus.OK).body(orderListDTO.getReceiptId());
-    else return ResponseEntity.status(HttpStatus.OK).body("주문 저장에 실패했습니다.");
+    else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("주문 저장에 실패했습니다.");
   }
   
   /**
@@ -51,10 +51,16 @@ public class OrderController {
 
     if(orderInfo != null) {
       // 회원 경험치 증가
+      // 예약코드 리스트를 전달
+      int memberExpResult = 0;
       
+      if(orderInfo.getResInfo().get(0).getMemNo() != null) {
+        memberExpResult = orderService.insertMemExp(orderInfo.getResInfo(), orderInfo.getPayInfo().getPayPrice());
+      }
       
-      return ResponseEntity.status(HttpStatus.OK).body(orderInfo);
+      if(memberExpResult > 0) return ResponseEntity.status(HttpStatus.OK).body(orderInfo);
+      else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 경험치 증가에 실패했습니다.");
     }
-    else return ResponseEntity.status(HttpStatus.OK).body("영수증 조회에 실패했습니다.");
+    else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("영수증 조회에 실패했습니다.");
   }
 }

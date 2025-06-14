@@ -1,11 +1,14 @@
 package com.kh.clock.room.repository.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import com.kh.clock.room.domain.RoomVO;
-import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
+import com.kh.clock.room.repository.dto.AvailableRoomRequestDTO;
+import com.kh.clock.room.repository.dto.RoomCntDTO;
 import com.kh.clock.room.repository.dto.RoomDetailDTO;
+import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
 import com.kh.clock.room.repository.dto.RoomSearchDTO;
 
@@ -45,5 +48,9 @@ public class RoomDAO {
   public int deleteRoomAndRoomImageByAccomNoAndRoomSq(RoomIdentifierDTO roomIdenDTO) {
     System.out.println(roomIdenDTO);
     return sqlSession.delete("roomMapper.deleteRoomAndRoomImageByAccomNoAndRoomSq", roomIdenDTO);
+  }
+
+  public List<RoomCntDTO> selectRoomCnt(AvailableRoomRequestDTO availableRoomRequestDTO) {
+    return sqlSession.selectList("roomMapper.selectRoomCnt", availableRoomRequestDTO);
   }
 }
