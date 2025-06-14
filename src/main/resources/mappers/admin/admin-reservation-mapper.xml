@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="adminReservationMapper">
+
+    <select id="selectReservationCount" resultType="int">
+        SELECT COUNT(*) FROM RESERVATION_TB WHERE CK_RES_ST != 'CANCEL'
+    </select>
+
+    <select id="selectReservationList" resultType="com.kh.clock.admin.repository.dto.AdminReservationListDTO">
+        SELECT 
+            RES.RES_CD,
+            ACC.ACCOM_NAME,
+            RES.RES_NAME,
+            RES.RES_PHONE,
+            RES.RES_EMAIL_ID,
+            RES.CK_RES_ST
+        FROM RESERVATION_TB RES
+        	LEFT JOIN ROOM_TB R ON (RES.ROOM_NO = R.ROOM_SQ)
+        	LEFT JOIN ACCOMMODATION_TB ACC ON (ACC.ACCOM_SQ = R.ACCOM_NO) 
+        ORDER BY CHECK_IN_DT DESC
+    </select>
+
+</mapper>
