@@ -21,8 +21,8 @@ public class AdminReservationDAO {
   }
 
   // RowBounds를 활용한 페이징 조회
-  public List<AdminReservationListDTO> selectReservationList(RowBounds rowBounds) {
-      return sqlSession.selectList("adminReservationMapper.selectReservationList", null, rowBounds);
+  public List<AdminReservationListDTO> selectReservationList(String keyword, RowBounds rowBounds) {
+      return sqlSession.selectList("adminReservationMapper.selectReservationList", keyword, rowBounds);
   }
 
 }
