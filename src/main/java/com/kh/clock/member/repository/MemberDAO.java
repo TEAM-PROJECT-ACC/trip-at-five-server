@@ -108,4 +108,12 @@ public class MemberDAO {
 		return sqlsession.selectList("mamberMapper.couponSelect", userMemSq);
 	}
 
+	public List<ReservationDTO> reservationSelect(String userMemSq) {
+		return sqlsession.selectList("mamberMapper.reservationSelect", userMemSq);
+	}
+
+	public int reservationCancelUpdate(ReservationCancel cancelInfo) {
+		return sqlsession.update("mamberMapper.reservationCancelUpdate", cancelInfo);
+	}
+
 }

@@ -11,6 +11,8 @@ import com.kh.clock.member.repository.ChallengeHistoryCreateDTO;
 import com.kh.clock.member.repository.CouponDTO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.repository.RegisterDTO;
+import com.kh.clock.member.repository.ReservationCancel;
+import com.kh.clock.member.repository.ReservationDTO;
 
 public interface MemberService {
 
@@ -66,5 +68,11 @@ public interface MemberService {
 
 	/* 쿠폰 정보 조회 */
 	public List<CouponDTO> couponSelect(String userMemSq);
+
+	/* 예약 조회 */
+	public List<ReservationDTO> reservationSelect(String userMemSq);
+
+	/* 예약 취소 수정 */
+	public int reservationCancelUpdate(ReservationCancel cancelInfo);
 
 }

@@ -71,15 +71,12 @@
 
 	<!-- 마이페이지 부분 -->
 
-	<update id="infoUpdate">
-		UPDATE member_tb
-		<trim prefix="SET" suffixOverrides=",">
+	<update id="infoUpdate"> UPDATE member_tb <trim prefix="SET"
+			suffixOverrides=",">
 			<if test="pwd != null and pwd.length() > 0">mem_pwd = #{pwd},</if>
 			<if test="nickName != null and nickName.length() > 0">mem_nick =
-				#{nickName},</if>
-		</trim>
-		WHERE mem_email_id = #{email}
-	</update>
+		#{nickName},</if>
+		</trim> WHERE mem_email_id = #{email} </update>
 
 	<update id="userInactive">
 		update member_tb
@@ -121,12 +118,10 @@
 
 
 	<insert id="insertUserChallengeList"
-		parameterType="java.util.List">
-		INSERT INTO challenge_member_history_tb
-		( CHAL_HX_SQ, CHAL_HX_VAL,
-		CHAL_NO, MEM_NO ) SELECT
-		chal_history_seq.nextval, A.* FROM (
-		<foreach collection="list" item="chal" separator=" UNION ALL ">
+		parameterType="java.util.List"> INSERT INTO challenge_member_history_tb
+		( CHAL_HX_SQ, CHAL_HX_VAL, CHAL_NO, MEM_NO ) SELECT
+		chal_history_seq.nextval, A.* FROM ( <foreach collection="list"
+			item="chal" separator=" UNION ALL ">
 			SELECT
 			0 AS
 			CHAL_HX_VAL,
@@ -135,8 +130,7 @@
 			MEM_NO
 			FROM DUAL
 		</foreach>
-		) A
-	</insert>
+		) A </insert>
 
 
 	<insert id="memberLevelSetting">
@@ -172,5 +166,30 @@
 		#{userMemSq}
 	</select>
 
+	<select id="reservationSelect"
+		resultType="com.kh.clock.member.repository.ReservationDTO">
+		select
+		res_name,
+		res_phone ,
+		RES_REG_DT as checkInDt,
+		CK_RES_ST,
+		room_name,
+		accom_name ,
+		room_no
+		from member_tb
+		join reservation_tb on mem_sq = mem_no
+		join room_tb on room_sq = ROOM_NO
+		join accommodation_tb on accom_sq = accom_no
+		where mem_no = #{userMemSq}
+
+	</select>
+
+	<update id="reservationCancelUpdate">
+
+		update reservation_tb
+		set CK_RES_ST = 'PROCESSING'
+		where mem_no = #{userMemSq}
+		and room_no = #{roomNo}	
+	</update>
 
 </mapper>

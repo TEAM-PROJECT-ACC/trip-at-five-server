@@ -15,6 +15,8 @@ import com.kh.clock.member.repository.CouponDTO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.repository.MemberDAO;
 import com.kh.clock.member.repository.RegisterDTO;
+import com.kh.clock.member.repository.ReservationCancel;
+import com.kh.clock.member.repository.ReservationDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -149,5 +151,17 @@ public class MemberServiceImpl implements MemberService {
 	public List<CouponDTO> couponSelect(String userMemSq) {
 		return memberDAO.couponSelect(userMemSq);
 	}
+
+	@Override
+	public List<ReservationDTO> reservationSelect(String userMemSq) {
+		return memberDAO.reservationSelect(userMemSq);
+	}
+
+	@Override
+	public int reservationCancelUpdate(ReservationCancel cancelInfo) {
+		return memberDAO.reservationCancelUpdate(cancelInfo);
+	}
+	
+	
 
 }
