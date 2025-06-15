@@ -102,11 +102,22 @@ public class MypageController {
 	public ResponseEntity<List<ChallengHistoryDTO>> getChallengeList(@RequestParam String userMemSq) {
 
 		List<ChallengHistoryDTO> list = mService.getChallengeUserList(userMemSq);
-		List<ChallengHistoryDTO> ckCouponStlist = mService.getChallengeUserList(userMemSq);
-		
-		 for(int i=0; i<list.size();i++) {
-			 list.get(i).setCkCouponSt(ckCouponStlist.get(i).getCkCouponSt());
-		 }
+		List<ChallengHistoryDTO> ckCouponStlist = mService.getChallengeCompletion(userMemSq);
+
+
+
+		for (int i = 0; i < list.size(); i++) {
+			for (int j = 0; j < ckCouponStlist.size(); j++) {
+				if(i == j) {
+					list.get(i).setCkCouponSt(ckCouponStlist.get(i).getCkCouponSt());
+				}else {
+					break;
+				}
+				
+			} 
+		}
+		System.out.println(list);
+		System.out.println(ckCouponStlist);
 
 		return ResponseEntity.ok(list);
 	}
@@ -114,7 +125,7 @@ public class MypageController {
 	@PutMapping("/challengeSuccess")
 	public int challengeSucces(@RequestBody HashMap chalSuccessInfo) {
 
-		int result = mService.challengeSucces(chalSuccessInfo);
+		int result = mService.challengeSuccess(chalSuccessInfo);
 
 		if (result > 0) {
 			/* 챌린지 성공 */

@@ -146,8 +146,8 @@ public class MemberServiceImpl implements MemberService {
 
 	/* 챌린지 완료 처리 */
 	@Override
-	public int challengeSucces(HashMap chalSuccessInfo) {
-		return memberDAO.challengeSucces(chalSuccessInfo);
+	public int challengeSuccess(HashMap chalSuccessInfo) {
+		return memberDAO.challengeSuccess(chalSuccessInfo);
 	}
 
 	/* 쿠폰 정보 조회 */
@@ -168,4 +168,10 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.reservationCancelUpdate(cancelInfo);
 	}
 
+	@Override
+	public List<ChallengHistoryDTO> getChallengeCompletion(String userMemSq) {
+		return memberDAO.getChallengeCompletion(userMemSq);
+	}
+
+	
 }

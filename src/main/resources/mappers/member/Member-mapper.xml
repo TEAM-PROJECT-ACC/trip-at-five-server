@@ -128,13 +128,15 @@
 		) A </insert>
 
 
-	<insert id="memberLevelSetting">
+	<select id="getChallengeCompletion"
+	resultType="com.kh.clock.member.repository.ChallengHistoryDTO">
 
-		insert into member_level_tb(mem_no) values (
-		#{memSq})
-	</insert>
-
-	<insert id="challengeSucces">
+		select CK_COUPON_ST from challenge_member_history_tb
+		join challenge_completed_tb using(mem_no,chal_no)
+		where mem_no = #{userMemSq}
+	</select>
+	
+		<insert id="challengeSuccess">
 
 		insert into challenge_completed_tb
 		values(chal_history_seq.nextval,
@@ -143,6 +145,13 @@
 		#{chalHistoryNo}
 		)
 	</insert>
+
+	<insert id="memberLevelSetting">
+
+		insert into member_level_tb(mem_no) values (
+		#{memSq})
+	</insert>
+
 
 	<select id="couponSelect"
 		resultType="com.kh.clock.member.repository.CouponDTO">
