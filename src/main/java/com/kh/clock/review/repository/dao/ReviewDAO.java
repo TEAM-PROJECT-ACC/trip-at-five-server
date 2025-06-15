@@ -1,5 +1,6 @@
 package com.kh.clock.review.repository.dao;
 
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import com.kh.clock.review.domain.ReviewVO;
 import com.kh.clock.review.repository.dto.ReviewListDTO;
+import com.kh.clock.review.repository.dto.ReviewDTO;
 
 @Repository
 public class ReviewDAO {
@@ -28,10 +30,30 @@ public class ReviewDAO {
   public int insertReview(ReviewVO review) {
     return sqlSession.insert("reviewMapper.insertReview", review);
   }
-
-  // 리뷰 목록 조회
-  public List<ReviewListDTO> selectReveiwList(int accomSq){
+  
+  public List<ReviewDTO> selectReviewList(int accomSq) {
     return sqlSession.selectList("reviewMapper.selectReviewList", accomSq);
   }
-  
+
+  public ReviewDTO selectLatestReview(int accomNo) {
+    return sqlSession.selectOne("reviewMapper.selectLatestReview", accomNo);
+  }
+
+  public int countReviewByResCd(String resCd) {
+    return sqlSession.selectOne("reviewMapper.countReviewByResCd", resCd);
+  }
+
+  public int countValidReservation(Map<String, Object> param) {
+    return sqlSession.selectOne("reviewMapper.countValidReservation", param);
+  }
+
+  public int selectReviewCount(int accomNo) {
+    return sqlSession.selectOne("reviewMapper.selectReviewCount", accomNo);
+  }
+
+  public double selectReviewAverageScore(int accomNo) {
+    Double result = sqlSession.selectOne("reviewMapper.selectReviewAverageScore", accomNo);
+    return result != null ? result : 0.0;
+  }
+
 }

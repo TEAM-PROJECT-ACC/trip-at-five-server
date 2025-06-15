@@ -1,5 +1,6 @@
 package com.kh.clock.review.repository.dao;
 
+import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import com.kh.clock.review.repository.dto.ReviewImageDTO;
@@ -12,10 +13,13 @@ private final SqlSession sqlSession;
     this.sqlSession = sqlsSession;
   }
   
-  // 리뷰 이미지 저장
-  public int insertReviewImage(ReviewImageDTO reviewImageDTO) {
-    System.out.println("이미지 : " + reviewImageDTO);
-    
-    return sqlSession.insert("reviewImageMapper.insertReviewImage", reviewImageDTO);
+//후기 이미지 리스트 조회 (reviewMapper의 selectReviewImageListByRevNo 사용)
+  public List<ReviewImageDTO> selectReviewImageListByRevNo(int revSq) {
+      return sqlSession.selectList("reviewMapper.selectReviewImageListByRevNo", revSq);
+  }
+
+  // 후기 이미지 저장 (reviewImageMapper의 insertReviewImage 사용)
+  public int insertReviewImage(ReviewImageDTO dto) {
+      return sqlSession.insert("reviewImageMapper.insertReviewImage", dto);
   }
 }

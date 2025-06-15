@@ -1,6 +1,7 @@
 package com.kh.clock.review.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
@@ -10,22 +11,21 @@ import com.kh.clock.common.file.OclockFileUtils;
 import com.kh.clock.common.file.UploadFileType;
 import com.kh.clock.review.domain.ReviewVO;
 import com.kh.clock.review.repository.dao.ReviewDAO;
+import com.kh.clock.review.repository.dao.ReviewImageDAO;
+import com.kh.clock.review.repository.dto.ReviewDTO;
 import com.kh.clock.review.repository.dto.ReviewImageDTO;
 import com.kh.clock.room.repository.dto.RoomImageDTO;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService{
   
-  private ReviewDAO reviewDAO;
-  private ReviewImageServiceImpl reviewImageService;
-  private OclockFileUtils oFileUtils;
-  
-  public ReviewServiceImpl(ReviewDAO reviewDAO, OclockFileUtils oFileUtils, ReviewImageServiceImpl reviewImageService) {
-    this.reviewDAO = reviewDAO;
-    this.oFileUtils = oFileUtils;
-    this.reviewImageService = reviewImageService;
-  }
-  
+  private final ReviewDAO reviewDAO;
+  private final ReviewImageDAO reviewImageDAO;
+  private final ReviewImageServiceImpl reviewImageService;
+  private final OclockFileUtils oFileUtils;
+
   /**
    * 리뷰 정보 저장
    */
@@ -33,10 +33,10 @@ public class ReviewServiceImpl implements ReviewService{
   @Transactional
   public int insertReview(ReviewVO review, MultipartFile[] images) {
     int insertResult = reviewDAO.insertReview(review);
-    
-    if (insertResult > 0) {
-      insertImageFun(insertResult, review.getRevSq(), images);
-    }
+
+    int revNo = review.getRevSq();
+    insertImageFun(insertResult, review.getRevSq(), images);
+
     return insertResult;
   }
 
@@ -74,17 +74,52 @@ public class ReviewServiceImpl implements ReviewService{
     }
   }
 
-  // 리뷰 목록 조회
   @Override
-  public Map<String, Object> selectReviewList(int accomSq, int page, int size) {
+  public List<ReviewDTO> selectReviewList(int accomNo) {
+    List<ReviewDTO> reviewList = reviewDAO.selectReviewList(accomNo);
+    for (ReviewDTO review : reviewList) {
+        List<ReviewImageDTO> imageList = reviewImageDAO.selectReviewImageListByRevNo(review.getRevSq());
+        review.setImageList(imageList);
+    }
+    return reviewList;
+  }
+
+  @Override
+  public ReviewDTO selectLatestReview(int accomNo) {
+    return reviewDAO.selectLatestReview(accomNo);
+  }
+  
+  @Override
+  public boolean existsValidReservation(String resCd, int accomSq) {
+      Map<String, Object> param = new HashMap<>();
+      param.put("resCd", resCd);
+      param.put("accomSq", accomSq);
+      return reviewDAO.countValidReservation(param) > 0;
+  }
+  @Override
+  public boolean existsReviewByResCd(String resCd) {
+      return reviewDAO.countReviewByResCd(resCd) > 0;
+  }
+
+  @Override
+  public int selectReviewCount(int accomNo) {
+    return reviewDAO.selectReviewCount(accomNo);
+  }
+  
+  public double selectReviewAverageScore(int accomNo) {
+    return reviewDAO.selectReviewAverageScore(accomNo);
+  }
+
+  @Override
+  public String findResCode(int memNo, int accomSq) {
     // TODO Auto-generated method stub
     return null;
   }
 
-  // 예약코드
   @Override
-  public String findResCode(int memNo, int accomSq) {
-    return reviewDAO.findResCode(memNo, accomSq);
+  public Map<String, Object> selectReviewList(int accomSq, int page, int size) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

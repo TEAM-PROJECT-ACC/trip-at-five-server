@@ -5,36 +5,29 @@
 <mapper namespace="accommodationMapper">
 	<!-- 사용자 페이지 숙박 목록 조회(키워드/검색 데이터) -->
     <select id="selectAccomList" parameterType="com.kh.clock.accommodation.repository.dto.AccomListInfoDTO" resultType="com.kh.clock.accommodation.repository.dto.AccomDTO">
-      SELECT 
-      	ACCOM_SQ,
-        ACCOM_NAME,
-        ACCOM_DESC,
-        ACCOM_LON,
-        ACCOM_LAT,
-        ACCOM_ZIP_CODE,
-        ACCOM_ADDR,
-        ACCOM_PHONE,
-        ACCOM_REG_DT,
-        PUB_FAC_INFO,
-        IN_ROOM_FAC_INFO,
-        ETC_FAC_INFO,
-        ACCOM_TYPE_NO,
-        LOC_ID,
-        R.ROOM_PRICE,
-        R.ROOM_CHK_IN,
-        R.ROOM_CHK_OUT
+      SELECT         
+		  A.*,        
+		  (SELECT COUNT(*) 
+		    FROM REVIEW_TB V
+		      JOIN RESERVATION_TB R ON V.RES_CD = R.RES_CD
+		      JOIN ROOM_TB RM ON R.ROOM_NO = RM.ROOM_SQ
+		    WHERE RM.ACCOM_NO = A.ACCOM_SQ
+		  ) AS reviewCount,
+		  R.ROOM_PRICE,
+		  R.ROOM_CHK_IN,
+		  R.ROOM_CHK_OUT
 		FROM ACCOMMODATION_TB A
 		JOIN (
-	    	SELECT R1.ACCOM_NO, R1.ROOM_PRICE, R1.ROOM_CHK_IN, R1.ROOM_CHK_OUT
-	    	FROM (
-	      		SELECT R.*,
-	            	ROW_NUMBER() OVER (PARTITION BY R.ACCOM_NO ORDER BY R.ROOM_PRICE ASC) AS RN
-	      		FROM ROOM_TB R
-	    		) R1
-	    	WHERE R1.RN = 1
-	  	) R ON A.ACCOM_SQ = R.ACCOM_NO
-	  	JOIN LOCATION_TB USING (LOC_ID)
-	    WHERE 1=1
+		    SELECT R1.ACCOM_NO, R1.ROOM_PRICE, R1.ROOM_CHK_IN, R1.ROOM_CHK_OUT
+		    FROM (
+		      SELECT R.*,
+		        ROW_NUMBER() OVER (PARTITION BY R.ACCOM_NO ORDER BY R.ROOM_PRICE ASC) AS RN
+		      FROM ROOM_TB R
+		    ) R1
+		    WHERE R1.RN = 1
+		  ) R ON A.ACCOM_SQ = R.ACCOM_NO
+		JOIN LOCATION_TB L ON A.LOC_ID = L.LOC_ID
+		WHERE 1=1
 		  <if test="keyword != null and keyword != ''">
 		    AND (
 		      LOC_NAME LIKE '%' || #{keyword} || '%'
@@ -42,9 +35,9 @@
 		    )
 		  </if>
 		  <if test="minPrice != null and maxPrice != null">
-		     AND R.ROOM_PRICE BETWEEN #{minPrice} AND #{maxPrice}
+		    AND R.ROOM_PRICE BETWEEN #{minPrice} AND #{maxPrice}
 		  </if>
-	    ORDER BY ACCOM_NAME
+		ORDER BY ACCOM_NAME
     </select>
 	
 	<!-- 사용자 페이지 숙박 상세 페이지 -->
@@ -198,4 +191,17 @@
 	        SELECT ACCOM_SEQ.CURRVAL FROM DUAL
 	    </selectKey>
 	</insert>
+	
+	<select id="findUserResCd" parameterType="map" resultType="string">
+        SELECT R.RES_CD
+	    FROM RESERVATION_TB R
+	    JOIN ROOM_TB RM ON R.ROOM_NO = RM.ROOM_SQ
+	    WHERE RM.ACCOM_NO = #{accomSq}
+	      AND R.MEM_NO = #{memNo}
+	      AND R.CK_RES_ST IN ('COMPLETED')
+	    ORDER BY R.RES_REG_DT DESC
+	    FETCH FIRST 1 ROWS ONLY
+    </select>
+    
+    
 </mapper>

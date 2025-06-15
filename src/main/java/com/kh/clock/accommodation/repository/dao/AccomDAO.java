@@ -1,6 +1,8 @@
 package com.kh.clock.accommodation.repository.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -35,7 +37,6 @@ public class AccomDAO {
  
   // 숙박 상세 조회
   public AccomDTO selectAccomDetail(int accomSq) {
-    log.info("DAO: accomSq = {}", accomSq);
     AccomDTO accom = sqlSession.selectOne("accommodationMapper.selectAccomDetail", accomSq);
     log.info("DAO: accomDetail = {}", accom);
     return accom;
@@ -90,4 +91,12 @@ public class AccomDAO {
   public List<AccomKakaoDTO> selectAccomKakao() {
     return sqlSession.selectList("accommodationMapper.selectAccomKakao");
   }
+  
+  public String findUserResCd(int accomSq, int memNo) {
+    Map<String, Object> param = new HashMap<>();
+    param.put("accomSq", accomSq);
+    param.put("memNo", memNo);
+    System.out.println("findUserResCd() accomSq=" + accomSq + ", memNo=" + memNo);
+    return sqlSession.selectOne("accommodationMapper.findUserResCd", param);
+}
 }

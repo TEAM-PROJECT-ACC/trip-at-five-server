@@ -14,7 +14,7 @@ public interface AccomService {
   List<AccomDTO> selectAccomList(AccomListInfoDTO accomListInfoDTO);
   
   //숙박 상세 페이지 조회
-  AccomDTO getAccommodationById(int accomSq);
+  AccomDTO getAccommodationById(int accomSq, Integer memNo);
   
   // 관리자 숙박 목록 조회
   List<AccomAdminListDTO> selectAdminAccomList(AccomAdminSearchDTO accomsSearchDTO);
