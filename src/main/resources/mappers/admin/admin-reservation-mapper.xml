@@ -10,7 +10,7 @@
 
     <select id="selectReservationList" resultType="com.kh.clock.admin.repository.dto.AdminReservationListDTO">
         SELECT 
-            RES.RES_CD AS NO,
+            RES.RES_CD,
             ACC.ACCOM_NAME,
             RES.RES_NAME,
             RES.RES_PHONE,

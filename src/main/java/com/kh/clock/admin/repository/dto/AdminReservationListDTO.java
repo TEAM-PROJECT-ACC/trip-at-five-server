@@ -8,10 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdminReservationListDTO {
-  private String no;
+  private String resCd;
   private String accomName;
   private String resName;
   private String resPhone;
   private String resEmailId;
   private String ckResSt;
 }
+  
