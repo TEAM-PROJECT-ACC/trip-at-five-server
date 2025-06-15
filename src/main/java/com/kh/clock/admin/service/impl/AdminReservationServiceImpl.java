@@ -3,6 +3,7 @@ package com.kh.clock.admin.service.impl;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import com.kh.clock.admin.repository.dao.AdminReservationDAO;
+import com.kh.clock.admin.repository.dto.AdminReservationDetailDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationListDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationSearchDTO;
 import com.kh.clock.admin.service.AdminReservationService;
@@ -24,6 +25,11 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   @Override
   public List<AdminReservationListDTO> selectReservationList(AdminReservationSearchDTO adminResSeoDTO) {
     return reservationDAO.selectReservationList(adminResSeoDTO.getKeyword(), adminResSeoDTO.getPageInfo().getRowBounds());
+  }
+
+  @Override
+  public AdminReservationDetailDTO findReservationByResCd(String resCode) {
+    return reservationDAO.findReservationByResCd(resCode);
   }
 
 }

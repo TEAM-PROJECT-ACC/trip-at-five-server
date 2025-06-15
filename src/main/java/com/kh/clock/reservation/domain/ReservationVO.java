@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReservationVO {
-  private String resCode;
-  private String resEmail;
+  private String resCd;
+  private String resEmailId;
   private String resName;
   private String resPhone;
   private int resNumOfPeo;
@@ -21,10 +21,10 @@ public class ReservationVO {
   private int roomNo;
   private int memNo;
 
-  public ReservationVO(String resCode, String resEmail, String resName, String resPhone,
+  public ReservationVO(String resCd, String resEmailId, String resName, String resPhone,
       int resNumOfPeo, String checkInDt, String checkOutDt, int roomNo, int memNo) {
-    this.resCode = resCode;
-    this.resEmail = resEmail;
+    this.resCd = resCd;
+    this.resEmailId = resEmailId;
     this.resName = resName;
     this.resPhone = resPhone;
     this.resNumOfPeo = resNumOfPeo;
