@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CouponDTO {
 
-	private String couponName;
-	private int couponPrice;
-	private Date couponRegDt;
+	private String couponName;  // 쿠폰 이름
+	private int couponPrice;    // 쿠폰 가격
+	private Date couponRegDt;   // 쿠폰 등록 날짜
 }

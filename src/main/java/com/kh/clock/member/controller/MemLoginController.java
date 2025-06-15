@@ -43,8 +43,6 @@ class MemLoginController {
 		MemberVO loginUser = mService.userInfo(userInfo);
 		HashMap<String, Object> hashMap = new HashMap<>();
 
-		System.out.println(loginUser.getCkMemSt());
-
 		if (loginUser == null) {
 
 			hashMap.put("IdFail", "IdFail");
@@ -82,9 +80,6 @@ class MemLoginController {
 
 		AdminVO loginUser = mService.adminInfo(userInfo);
 		HashMap<String, Object> hashMap = new HashMap<>();
-
-		System.out.println("admin ");
-		System.out.println(loginUser);
 
 		if (loginUser == null) {
 
@@ -133,9 +128,6 @@ class MemLoginController {
 		if (loginUser == null) {
 
 		}
-
-		System.out.println(loginUser);
-		System.out.println(kakaoLoginDTO);
 
 		if (loginUser == null) {
 			/* 회원가입처리 */
@@ -308,7 +300,6 @@ class MemLoginController {
 		ChallengeVO chVo = new ChallengeVO();
 
 		List<ChallengeHistoryCreateDTO> list = new ArrayList<>();
-		
 
 		for (int i = 0; i < numlist.size(); i++) {
 

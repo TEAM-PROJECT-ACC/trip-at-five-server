@@ -15,8 +15,7 @@ import com.kh.clock.member.repository.CouponDTO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.repository.MemberDAO;
 import com.kh.clock.member.repository.RegisterDTO;
-import com.kh.clock.member.repository.ReservationCancel;
-import com.kh.clock.member.repository.ReservationDTO;
+import com.kh.clock.member.repository.ReservationSelectDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -126,42 +125,47 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.insertUserChallengeList(list);
 	}
 
+	/* 챌린지 테이블 리스트 총 숫자 조회 */
 	@Override
 	public List<Object> getChallengeCountNo() {
 		return memberDAO.getChallengeCountNo();
 	}
 
+	/* 회원 가입시 챌린지 추가 */
 	@Override
 	public List<ChallengHistoryDTO> getChallengeUserList(String memNo) {
 		return memberDAO.getChallengeUserList(memNo);
 	}
 
+	/* 유저 레벨 및 경험치 추가 */
 	@Override
 	public int memberLevelSetting(int memSq) {
 		return memberDAO.memberLevelSetting(memSq);
 
 	}
 
+	/* 챌린지 완료 처리 */
 	@Override
 	public int challengeSucces(HashMap chalSuccessInfo) {
 		return memberDAO.challengeSucces(chalSuccessInfo);
 	}
 
+	/* 쿠폰 정보 조회 */
 	@Override
 	public List<CouponDTO> couponSelect(String userMemSq) {
 		return memberDAO.couponSelect(userMemSq);
 	}
 
+	/* 예약 조회 */
 	@Override
-	public List<ReservationDTO> reservationSelect(String userMemSq) {
+	public List<ReservationSelectDTO> reservationSelect(String userMemSq) {
 		return memberDAO.reservationSelect(userMemSq);
 	}
 
+	/* 예약 취소 수정 */
 	@Override
-	public int reservationCancelUpdate(ReservationCancel cancelInfo) {
+	public int reservationCancelUpdate(ReservationSelectDTO cancelInfo) {
 		return memberDAO.reservationCancelUpdate(cancelInfo);
 	}
-	
-	
 
 }

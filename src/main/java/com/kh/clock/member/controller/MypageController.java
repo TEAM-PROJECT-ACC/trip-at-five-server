@@ -17,8 +17,7 @@ import com.kh.clock.member.domain.MemberVO;
 import com.kh.clock.member.repository.ChallengHistoryDTO;
 import com.kh.clock.member.repository.CouponDTO;
 import com.kh.clock.member.repository.LoginDTO;
-import com.kh.clock.member.repository.ReservationCancel;
-import com.kh.clock.member.repository.ReservationDTO;
+import com.kh.clock.member.repository.ReservationSelectDTO;
 import com.kh.clock.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -77,8 +76,6 @@ public class MypageController {
 	public int userInactive(@RequestBody LoginDTO userInfo) {
 
 		MemberVO loginUser = mService.userInfo(userInfo);
-		System.out.println(userInfo);
-		System.out.println(loginUser);
 
 		if (loginUser == null) {
 			return 0;
@@ -105,14 +102,17 @@ public class MypageController {
 	public ResponseEntity<List<ChallengHistoryDTO>> getChallengeList(@RequestParam String userMemSq) {
 
 		List<ChallengHistoryDTO> list = mService.getChallengeUserList(userMemSq);
+		List<ChallengHistoryDTO> ckCouponStlist = mService.getChallengeUserList(userMemSq);
+		
+		 for(int i=0; i<list.size();i++) {
+			 list.get(i).setCkCouponSt(ckCouponStlist.get(i).getCkCouponSt());
+		 }
 
 		return ResponseEntity.ok(list);
 	}
 
 	@PutMapping("/challengeSuccess")
 	public int challengeSucces(@RequestBody HashMap chalSuccessInfo) {
-
-		System.out.println(chalSuccessInfo);
 
 		int result = mService.challengeSucces(chalSuccessInfo);
 
@@ -133,18 +133,16 @@ public class MypageController {
 	}
 
 	@GetMapping("/reservationSelect")
-	public ResponseEntity<List<ReservationDTO>> reservationSelect(@RequestParam String userMemSq) {
+	public ResponseEntity<List<ReservationSelectDTO>> reservationSelect(@RequestParam String userMemSq) {
 
-		List<ReservationDTO> list = mService.reservationSelect(userMemSq);
+		List<ReservationSelectDTO> list = mService.reservationSelect(userMemSq);
 		return ResponseEntity.ok(list);
 	}
-	
-    @PutMapping("/reservationCancelUpdate")
-	public int reservationCancelUpdate(@RequestBody ReservationCancel cancelInfo) {
 
-    	System.out.println(cancelInfo);
+	@PutMapping("/reservationCancelUpdate")
+	public int reservationCancelUpdate(@RequestBody ReservationSelectDTO cancelInfo) {
+
 		int result = mService.reservationCancelUpdate(cancelInfo);
-		System.out.println(result);
 		return result;
 	}
 

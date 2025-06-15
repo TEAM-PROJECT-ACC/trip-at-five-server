@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChallengeHistoryCreateDTO {
 
+	private int memNo; 			  // 회원 번호 전달
 	private int chalTotalCountNo; // 챌린지 테이블에서 총 조회되는 개수
-	private int memNo; // 회원 번호 전달
 }

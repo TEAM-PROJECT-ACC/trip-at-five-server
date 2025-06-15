@@ -106,14 +106,9 @@
 		chal_cond,
 		chal_hx_val as currentStep
 		from challenge_member_history_tb cmht
-		join challenge_tb ct on
-		cmht.chal_no = ct.chal_sq
-		join coupon_tb cp on cp.coupon_sq =
-		ct.coupon_no
-		where
-		mem_no
-		=
-		#{memNo}
+		join challenge_tb ct on cmht.chal_no = ct.chal_sq
+		join coupon_tb cp on cp.coupon_sq = ct.coupon_no
+		where mem_no = #{memNo}
 	</select>
 
 
@@ -167,8 +162,9 @@
 	</select>
 
 	<select id="reservationSelect"
-		resultType="com.kh.clock.member.repository.ReservationDTO">
+		resultType="com.kh.clock.member.repository.ReservationSelectDTO">
 		select
+		res_cd,
 		res_name,
 		res_phone ,
 		RES_REG_DT as checkInDt,
@@ -188,8 +184,7 @@
 
 		update reservation_tb
 		set CK_RES_ST = 'PROCESSING'
-		where mem_no = #{userMemSq}
-		and room_no = #{roomNo}	
+		where RES_CD = #{resCd}
 	</update>
 
 </mapper>

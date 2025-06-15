@@ -50,13 +50,10 @@ public class MemberRegisterController {
 	public int nickNameDuplicationCheck(@RequestBody Map<String, Object> requestBody) {
 
 		String nick = (String) requestBody.get("nickName");
-		System.out.println(nick);
 
 		RegisterDTO register = new RegisterDTO();
 
 		int result = mService.nickNameDuplicationCheck(nick);
-
-		System.out.println(result);
 
 		if (result > 0) {
 			register.setNickCount(result);
@@ -69,8 +66,6 @@ public class MemberRegisterController {
 	/* 회원가입 */
 	@PostMapping("/send")
 	public int registerSend(@RequestBody RegisterDTO registerdto) throws Exception {
-
-		System.out.println(registerdto);
 
 		String encPwd = bCryptPasswordEncoder.encode(registerdto.getPwd());
 
