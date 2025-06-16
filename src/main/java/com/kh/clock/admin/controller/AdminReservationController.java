@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.kh.clock.admin.repository.dto.AdminReservationCancelListDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationDetailDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationListDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationSearchDTO;
 import com.kh.clock.admin.service.impl.AdminReservationServiceImpl;
 import com.kh.clock.common.pageInfo.PageInfo;
+import com.kh.clock.reservation.domain.ReservationVO;
 
 @RestController
 @RequestMapping("/admin/reservations")
@@ -32,7 +34,6 @@ public class AdminReservationController {
       @RequestParam(defaultValue = "1") int currentPage,
       @RequestParam(defaultValue = "10") int numOfRows
   ) {
-    
       System.out.println("keyword : " + keyword);
       PageInfo pageInfo = new PageInfo(adminReservationService.selectTotalCount(), currentPage, numOfRows);
       List<AdminReservationListDTO> reservations = adminReservationService.selectReservationList(new AdminReservationSearchDTO(pageInfo, keyword));
@@ -50,11 +51,41 @@ public class AdminReservationController {
 
   @GetMapping("/{resCode}")
   public ResponseEntity<Object> reservationDetail(@PathVariable String resCode) {
-    AdminReservationDetailDTO adminReservationDetailDTO = adminReservationService.findReservationByResCd(resCode);
+    ReservationVO resVO = adminReservationService.findReservationByResCd(resCode);
     
-    System.out.println(adminReservationDetailDTO);
+    System.out.println(resVO);
     
-    if(adminReservationDetailDTO != null) return ResponseEntity.status(HttpStatus.OK).body(adminReservationDetailDTO);
+    if(resVO != null) return ResponseEntity.status(HttpStatus.OK).body(resVO);
+    else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("예약 상세 조회에 실패했습니다.");
+  }
+  
+  @GetMapping("/cancel/list")
+  public ResponseEntity<Object> reservationCancelList(
+      @RequestParam(defaultValue = "") String keyword,
+      @RequestParam(defaultValue = "1") int currentPage,
+      @RequestParam(defaultValue = "10") int numOfRows
+  ) {
+    System.out.println("keyword : " + keyword);
+    PageInfo pageInfo = new PageInfo(adminReservationService.selectCancelTotalCount(), currentPage, numOfRows);
+    List<AdminReservationCancelListDTO> reservations = adminReservationService.selectReservationCancelList(new AdminReservationSearchDTO(pageInfo, keyword));
+    
+    reservations.forEach(value -> {
+      System.out.println("value : " + value);
+    });
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("dataList", reservations);
+    response.put("totalCount", pageInfo.getTotalCount());
+
+    return ResponseEntity.ok(response);
+  }
+  
+  @GetMapping("/cancel/detail/{resCode}")
+  public ResponseEntity<Object> findReservationByResCd(@PathVariable String resCd) {
+    
+    ReservationVO resVO = adminReservationService.findReservationByResCd(resCd);
+    
+    if(resVO != null) return ResponseEntity.status(HttpStatus.OK).body(resVO);
     else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("예약 상세 조회에 실패했습니다.");
   }
 }

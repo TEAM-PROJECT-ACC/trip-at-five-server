@@ -18,8 +18,8 @@
 			ROOM_NO,
 			MEM_NO
 		) VALUES (
-			#{resCode},
-			#{resEmail},
+			#{resCd},
+			#{resEmailId},
 			#{resName},
 			#{resPhone},
 			#{resNumOfPeo},

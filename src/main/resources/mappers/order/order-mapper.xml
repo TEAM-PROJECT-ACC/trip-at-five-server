@@ -21,7 +21,7 @@
 		INSERT INTO MEMBER_EXPERIENCE_TB VALUES (
 			#{memNo},
 			#{resCode},
-			#{memExp}
+			#{memExp},
 			SYSDATE
 		)
 	</insert>

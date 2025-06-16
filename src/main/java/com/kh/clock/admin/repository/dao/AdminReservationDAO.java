@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import com.kh.clock.admin.repository.dto.AdminReservationCancelListDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationDetailDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationListDTO;
 import com.kh.clock.reservation.domain.ReservationVO;
@@ -27,8 +28,16 @@ public class AdminReservationDAO {
       return sqlSession.selectList("adminReservationMapper.selectReservationList", keyword, rowBounds);
   }
 
-  public AdminReservationDetailDTO findReservationByResCd(String resCode) {
+  public ReservationVO findReservationByResCd(String resCode) {
     return sqlSession.selectOne("adminReservationMapper.findReservationByResCd", resCode);
+  }
+
+  public int selectCancelTotalCount() {
+    return sqlSession.selectOne("adminReservationMapper.selectCancelTotalCount");
+  }
+
+  public List<AdminReservationCancelListDTO> selectReservationCancelList(String keyword, RowBounds rowBounds) {
+    return sqlSession.selectList("adminReservationMapper.selectReservationCancelList", keyword, rowBounds);
   }
 
 }

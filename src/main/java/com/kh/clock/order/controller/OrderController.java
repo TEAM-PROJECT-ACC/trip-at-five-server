@@ -48,6 +48,8 @@ public class OrderController {
     if(!receiptId.equals("") && receiptId != null) {
       orderInfo = orderService.findOrderByReceiptId(receiptId);
     }
+    
+    System.out.println("orderInfo : " + orderInfo);
 
     if(orderInfo != null) {
       // 회원 경험치 증가

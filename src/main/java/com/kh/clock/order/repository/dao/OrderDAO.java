@@ -22,6 +22,7 @@ public class OrderDAO {
   }
 
   public int insertOrder(OrderVO orderVO) {
+    System.out.println("orderVO : " + orderVO);
     return sqlSession.insert("orderMapper.insertOrder", orderVO);
   }
 
@@ -30,12 +31,14 @@ public class OrderDAO {
   }
 
   public int insertMemExp(List<OrderResInfoDTO> resInfo, int payPrice) {
+    resInfo.forEach(value -> System.out.println("value : " + value));
+    
     int result = 0;
     
     for(int i = 0; i < resInfo.size(); i++) {
       int memExp = calcMemExp(resInfo.get(i).getRoomPrice(), payPrice);
       
-      result += sqlSession.insert("orderMapper.insertMemExp", new MemExpDTO(resInfo.get(i).getMemNo(), resInfo.get(i).getResCode(), memExp));
+      result += sqlSession.insert("orderMapper.insertMemExp", new MemExpDTO(resInfo.get(i).getMemNo(), resInfo.get(i).getResCd(), memExp));
       // TODO: 회원 경험치 내역 로그 출력
     }
     
