@@ -14,9 +14,9 @@ import com.kh.clock.admin.repository.dto.AdminReservationCancelListDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationDetailDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationListDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationSearchDTO;
+import com.kh.clock.admin.repository.dto.ReservationCancelDetailDTO;
 import com.kh.clock.admin.service.impl.AdminReservationServiceImpl;
 import com.kh.clock.common.pageInfo.PageInfo;
-import com.kh.clock.reservation.domain.ReservationVO;
 
 @RestController
 @RequestMapping("/admin/reservations")
@@ -49,9 +49,9 @@ public class AdminReservationController {
       return ResponseEntity.ok(response);
   }
 
-  @GetMapping("/{resCode}")
-  public ResponseEntity<Object> reservationDetail(@PathVariable String resCode) {
-    ReservationVO resVO = adminReservationService.findReservationByResCd(resCode);
+  @GetMapping("/{resCd}")
+  public ResponseEntity<Object> reservationDetail(@PathVariable String resCd) {
+    AdminReservationDetailDTO resVO = adminReservationService.findReservationByResCd(resCd);
     
     System.out.println(resVO);
     
@@ -80,12 +80,20 @@ public class AdminReservationController {
     return ResponseEntity.ok(response);
   }
   
-  @GetMapping("/cancel/detail/{resCode}")
+  /**
+   * 취소 예약 단건 조회
+   * @param resCd
+   * @return
+   */
+  @GetMapping("/cancel/detail/{resCd}")
   public ResponseEntity<Object> findReservationByResCd(@PathVariable String resCd) {
+   System.out.println("취소 모달창 resCd : " + resCd);
     
-    ReservationVO resVO = adminReservationService.findReservationByResCd(resCd);
+   ReservationCancelDetailDTO reservationCancelDetailDTO = adminReservationService.findReservationCancelByResCd(resCd);
     
-    if(resVO != null) return ResponseEntity.status(HttpStatus.OK).body(resVO);
+    System.out.println("취소 모달창 reservationCancelDetailDTO : " + reservationCancelDetailDTO);
+    
+    if(reservationCancelDetailDTO != null) return ResponseEntity.status(HttpStatus.OK).body(reservationCancelDetailDTO);
     else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("예약 상세 조회에 실패했습니다.");
   }
 }

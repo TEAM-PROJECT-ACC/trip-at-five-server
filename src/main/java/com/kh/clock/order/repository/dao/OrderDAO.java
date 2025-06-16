@@ -37,7 +37,7 @@ public class OrderDAO {
     
     for(int i = 0; i < resInfo.size(); i++) {
       int memExp = calcMemExp(resInfo.get(i).getRoomPrice(), payPrice);
-      
+      System.out.println("memExp : " + memExp);
       result += sqlSession.insert("orderMapper.insertMemExp", new MemExpDTO(resInfo.get(i).getMemNo(), resInfo.get(i).getResCd(), memExp));
       // TODO: 회원 경험치 내역 로그 출력
     }
@@ -52,6 +52,6 @@ public class OrderDAO {
    * @return
    */
   private int calcMemExp(int roomPrice, int payPrice) {
-    return (((roomPrice / 1000) * ALPHA) + ((payPrice / 10000) * BETA)) / PERCENT;
+    return (((roomPrice / 10) * ALPHA) + ((payPrice / 100) * BETA)) / PERCENT;
   }
 }

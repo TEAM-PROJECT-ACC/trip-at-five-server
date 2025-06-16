@@ -4,10 +4,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import com.kh.clock.admin.repository.dao.AdminReservationDAO;
 import com.kh.clock.admin.repository.dto.AdminReservationCancelListDTO;
+import com.kh.clock.admin.repository.dto.AdminReservationDetailDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationListDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationSearchDTO;
+import com.kh.clock.admin.repository.dto.ReservationCancelDetailDTO;
 import com.kh.clock.admin.service.AdminReservationService;
-import com.kh.clock.reservation.domain.ReservationVO;
 
 @Service
 public class AdminReservationServiceImpl implements AdminReservationService {
@@ -29,8 +30,8 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   }
 
   @Override
-  public ReservationVO findReservationByResCd(String resCode) {
-    return reservationDAO.findReservationByResCd(resCode);
+  public AdminReservationDetailDTO findReservationByResCd(String resCd) {
+    return reservationDAO.findReservationByResCd(resCd);
   }
 
   @Override
@@ -42,5 +43,10 @@ public class AdminReservationServiceImpl implements AdminReservationService {
   public List<AdminReservationCancelListDTO> selectReservationCancelList(AdminReservationSearchDTO adminReservationSearchDTO) {
     return reservationDAO.selectReservationCancelList(adminReservationSearchDTO.getKeyword(), adminReservationSearchDTO.getPageInfo().getRowBounds());
   }
+
+  @Override
+  public ReservationCancelDetailDTO findReservationCancelByResCd(String resCd) {
+    return reservationDAO.findReservationCancelByResCd(resCd);
+    }
 
 }

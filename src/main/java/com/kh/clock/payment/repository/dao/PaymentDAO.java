@@ -27,4 +27,8 @@ public class PaymentDAO {
     return sqlSession.insert("paymentMapper.updatePayment", confirmDTO);
   }
 
+  public int payCancel(String receiptId) {
+    return sqlSession.insert("paymentMapper.payCancel", receiptId);
+  }
+
 }

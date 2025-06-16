@@ -5,8 +5,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.kh.clock.payment.domain.PaymentVO;
 import com.kh.clock.payment.repository.dao.PaymentDAO;
+import com.kh.clock.payment.repository.dto.CancelDTO;
 import com.kh.clock.payment.repository.dto.ConfirmDTO;
+import com.kh.clock.reservation.repository.dao.ReservationDAO;
 import kr.co.bootpay.pg.Bootpay;
+import kr.co.bootpay.pg.model.request.Cancel;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -20,9 +23,11 @@ public class PaymentServiceImpl implements PaymentService {
   private String priKey;
   
   private final PaymentDAO payDAO;
+  private final ReservationDAO resDAO;
   
-  public PaymentServiceImpl(PaymentDAO payDAO) {
+  public PaymentServiceImpl(PaymentDAO payDAO, ReservationDAO resDAO) {
     this.payDAO = payDAO;
+    this.resDAO = resDAO;
   }
 
   @Override
@@ -66,6 +71,36 @@ public class PaymentServiceImpl implements PaymentService {
   @Override
   public int updatePayState(ConfirmDTO confirmDTO) {
     return payDAO.updatePayState(confirmDTO);
+  }
+
+  @Override
+  public int payCancel(CancelDTO cancelDTO) {
+    int result = 0;
+    try {
+      Bootpay bootpay = new Bootpay(restKey, priKey);
+      HashMap token = bootpay.getAccessToken();
+      if(token.get("error_code") != null) { //failed
+          return result;
+      }
+      Cancel cancel = new Cancel();
+      cancel.receiptId = cancelDTO.getReceiptId();
+      cancel.cancelUsername = "관리자";
+      cancel.cancelMessage = cancelDTO.getReceiptId() + " 결제 취소";
+
+      HashMap res = bootpay.receiptCancel(cancel);
+      if(res.get("error_code") == null) { //success
+          System.out.println("receiptCancel success: " + res);
+          
+          result += payDAO.payCancel(cancelDTO.getReceiptId());
+          result += resDAO.payStateCancel(cancelDTO);
+          
+      } else {
+          System.out.println("receiptCancel false: " + res);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return result;
   }
 
 }

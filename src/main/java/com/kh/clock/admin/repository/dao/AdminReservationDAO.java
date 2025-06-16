@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.clock.admin.repository.dto.AdminReservationCancelListDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationDetailDTO;
 import com.kh.clock.admin.repository.dto.AdminReservationListDTO;
+import com.kh.clock.admin.repository.dto.ReservationCancelDetailDTO;
 import com.kh.clock.reservation.domain.ReservationVO;
 
 @Repository
@@ -28,8 +29,8 @@ public class AdminReservationDAO {
       return sqlSession.selectList("adminReservationMapper.selectReservationList", keyword, rowBounds);
   }
 
-  public ReservationVO findReservationByResCd(String resCode) {
-    return sqlSession.selectOne("adminReservationMapper.findReservationByResCd", resCode);
+  public AdminReservationDetailDTO findReservationByResCd(String resCd) {
+    return sqlSession.selectOne("adminReservationMapper.findReservationByResCd", resCd);
   }
 
   public int selectCancelTotalCount() {
@@ -39,5 +40,9 @@ public class AdminReservationDAO {
   public List<AdminReservationCancelListDTO> selectReservationCancelList(String keyword, RowBounds rowBounds) {
     return sqlSession.selectList("adminReservationMapper.selectReservationCancelList", keyword, rowBounds);
   }
+
+  public ReservationCancelDetailDTO findReservationCancelByResCd(String resCd) {
+    return sqlSession.selectOne("adminReservationMapper.findReservationCancelByResCd", resCd);
+    }
 
 }

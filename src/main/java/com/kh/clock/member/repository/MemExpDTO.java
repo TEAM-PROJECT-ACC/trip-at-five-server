@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MemExpDTO {
   private String memNo;
-  private String resCode;
+  private String resCd;
   private int memExp;
 }

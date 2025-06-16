@@ -45,18 +45,18 @@ public class OrderServiceImpl implements OrderService {
   @Override
   public OrderInfo findOrderByReceiptId(String receiptId) {
     // 영수증ID로 주문 테이블에서 예약코드 목록을 구한다.
-    List<String> resCodeList = orderDAO.findOrderByReceiptId(receiptId);
+    List<String> resCdList = orderDAO.findOrderByReceiptId(receiptId);
     
     // 예약자 정보를 조회한다.
-    ResUserInfoDTO resUser = resDAO.findResUserInfo(resCodeList.get(0));
+    ResUserInfoDTO resUser = resDAO.findResUserInfo(resCdList.get(0));
     
     // 구한 예약코드 목록으로 OrderResInfo 타입의 List 를 구한다.
-    List<OrderResInfoDTO> orderResList = resDAO.findReservationByResCd(resCodeList);
+    List<OrderResInfoDTO> orderResList = resDAO.findReservationByResCd(resCdList);
 
     // 영수증ID로 결제수단과 총 금액을 구한다.
     PayInfoDTO payInfo = paymentDAO.findPaymentByReceiptId(receiptId);
     
-    if(resCodeList != null && resUser != null && orderResList != null) {
+    if(resCdList != null && resUser != null && orderResList != null) {
       // 구한 정보를 기반으로 OrderInfo를 완성하여 반환한다.
       return new OrderInfo(resUser, orderResList, payInfo);
     } else return null;

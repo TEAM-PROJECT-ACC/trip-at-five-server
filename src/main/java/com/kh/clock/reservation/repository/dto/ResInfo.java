@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResInfo {
-  private String resCode;
+  private String resCd;
   private String accomName;
   private String roomName;
   private Date checkInDt;

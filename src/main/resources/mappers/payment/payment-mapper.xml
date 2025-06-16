@@ -24,6 +24,13 @@
 		)
     </insert>
     
+    <update id="payCancel">
+    	UPDATE PAYMENT_TB SET
+    		PAY_ST_CK = 0,
+    		PAY_ST_DT = SYSDATE
+		WHERE RECEIPT_ID = #{receiptId}
+    </update>
+    
     <select id="findPaymentByReceiptId" resultType="com.kh.clock.payment.repository.dto.PayInfoDTO">
     	SELECT RECEIPT_ID, PAY_METHOD, PAY_PRICE
     	FROM PAYMENT_TB

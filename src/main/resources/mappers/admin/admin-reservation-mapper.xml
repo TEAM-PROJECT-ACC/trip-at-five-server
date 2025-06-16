@@ -77,7 +77,26 @@
             LEFT JOIN ACCOMMODATION_TYPE_TB ACC_TYPE ON ACC.ACCOM_TYPE_NO = ACC_TYPE.ACCOM_TYPE_SQ
             LEFT JOIN ORDER_TB O ON RES.RES_CD = O.RES_CD
             LEFT JOIN PAYMENT_TB P ON O.RECEIPT_ID = P.RECEIPT_ID
-        WHERE RES.RES_CD = #{resCode}
+        WHERE RES.RES_CD = #{resCd}
     </select>
 
+	<select id="findReservationCancelByResCd" resultType="com.kh.clock.admin.repository.dto.ReservationCancelDetailDTO">
+		SELECT
+			O.RECEIPT_ID,
+			RES.RES_CD,
+			RES.RES_EMAIL_ID,
+			RES.RES_NAME,
+			RES.RES_PHONE,
+			RES.RES_NUM_OF_PEO,
+			RES.CHECK_IN_DT,
+			RES.CHECK_OUT_DT,
+			RES.RES_REG_DT,
+			R.ROOM_NAME,
+			ACC.ACCOM_NAME
+		FROM RESERVATION_TB RES
+			LEFT JOIN ROOM_TB R ON (RES.ROOM_NO = R.ROOM_SQ)
+			LEFT JOIN ACCOMMODATION_TB ACC ON (R.ACCOM_NO = ACC.ACCOM_SQ)
+			LEFT JOIN ORDER_TB O ON (RES.RES_CD = O.RES_CD)
+		WHERE RES.RES_CD = #{resCd} AND RES.CK_RES_ST = 'PROCESSING'
+	</select>
 </mapper>
