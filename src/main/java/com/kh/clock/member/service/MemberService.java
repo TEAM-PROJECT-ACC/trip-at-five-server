@@ -77,6 +77,9 @@ public interface MemberService {
 	/* 예약 취소 수정 */
 	public int reservationCancelUpdate(ReservationSelectDTO cancelInfo);
 
+	/* 유저 레벨 조회 */
+	public int levelSearch(String userMemSq);
+
 
 
 }

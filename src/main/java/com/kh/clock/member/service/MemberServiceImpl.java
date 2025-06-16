@@ -173,5 +173,11 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.getChallengeCompletion(list);
 	}
 
+	@Override
+	public int levelSearch(String userMemSq) {
+		return memberDAO.levelSearch(userMemSq);
+	}
+
+	
 	
 }

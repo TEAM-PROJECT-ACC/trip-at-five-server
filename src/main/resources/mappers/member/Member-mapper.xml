@@ -133,6 +133,7 @@
 		join coupon_tb cp on
 		cp.coupon_sq = ct.coupon_no
 		where mem_no = #{memNo}
+
 	</select>
 
 
@@ -143,10 +144,12 @@
 		select CK_COUPON_ST,
 		mem_no as userMemSq,
 		chal_no as chalHistoryNo
-		from challenge_member_history_tb
+		from
+		challenge_member_history_tb
 		cmht
 		join
-		challenge_completed_tb cct using(mem_no,chal_no)
+		challenge_completed_tb cct
+		using(mem_no,chal_no)
 		where
 		<foreach collection="list" item="chal" separator=" OR ">
 			(mem_no =
@@ -215,5 +218,13 @@
 		set CK_RES_ST = 'PROCESSING'
 		where RES_CD = #{resCd}
 	</update>
+
+	<select id="levelSearch" resultType="_int">
+
+		select mem_lvl from member_level_tb
+		where mem_no = #{userMemSq}
+
+
+	</select>
 
 </mapper>

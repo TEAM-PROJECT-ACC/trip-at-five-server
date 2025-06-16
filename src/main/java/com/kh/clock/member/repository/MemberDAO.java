@@ -139,4 +139,7 @@ public class MemberDAO {
 		return sqlsession.selectList("mamberMapper.getChallengeCompletion", list);
 	}
 
+	public int levelSearch(String userMemSq) {
+		return sqlsession.selectOne("mamberMapper.levelSearch", userMemSq);
+	}
 }

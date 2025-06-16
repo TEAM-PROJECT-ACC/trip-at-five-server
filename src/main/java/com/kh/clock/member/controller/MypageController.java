@@ -99,9 +99,11 @@ public class MypageController {
 	}
 
 	@GetMapping("/challenge")
-	public ResponseEntity<List<ChallengHistoryDTO>> getChallengeList(@RequestParam String userMemSq) {
+	public ResponseEntity<List<ChallengHistoryDTO>> getChallengeList(@RequestParam String userMemSq,
+			@RequestParam String memLvl ) {
 
 		List<ChallengHistoryDTO> list = mService.getChallengeUserList(userMemSq);
+		List<ChallengHistoryDTO> list2 = mService.getChallengeUserList(memLvl);
 
 		List<ChallengHistoryDTO> ckCouponStlist = mService.getChallengeCompletion(list);
 
@@ -114,6 +116,7 @@ public class MypageController {
 		}
 
 		return ResponseEntity.ok(list);
+
 	}
 
 	@PutMapping("/challengeSuccess")
