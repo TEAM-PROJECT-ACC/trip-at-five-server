@@ -43,11 +43,12 @@
 	        RES.RES_CD AS NO,  
 	        P.RECEIPT_ID,  
 	        RES.RES_NAME,  
-	        P.PAY_PRICE,  
+	        R.ROOM_PRICE,  
 	        RES.CK_RES_ST  
 	    FROM RESERVATION_TB RES  
 	        LEFT JOIN ORDER_TB O ON (RES.RES_CD = O.RES_CD)
 	        LEFT JOIN PAYMENT_TB P ON (O.RECEIPT_ID = P.RECEIPT_ID)  
+	        LEFT JOIN ROOM_TB R ON (RES.ROOM_NO = R.ROOM_SQ)
 	    <where>
 	        RES.CK_RES_ST = 'PROCESSING'
 	        <if test="keyword != null and keyword != ''">

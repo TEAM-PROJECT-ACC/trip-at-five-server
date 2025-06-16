@@ -1,8 +1,10 @@
 package com.kh.clock.payment.service;
 
 import java.util.HashMap;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import com.kh.clock.order.repository.dao.OrderDAO;
 import com.kh.clock.payment.domain.PaymentVO;
 import com.kh.clock.payment.repository.dao.PaymentDAO;
 import com.kh.clock.payment.repository.dto.CancelDTO;
@@ -24,10 +26,12 @@ public class PaymentServiceImpl implements PaymentService {
   
   private final PaymentDAO payDAO;
   private final ReservationDAO resDAO;
+  private final OrderDAO orderDAO;
   
-  public PaymentServiceImpl(PaymentDAO payDAO, ReservationDAO resDAO) {
+  public PaymentServiceImpl(PaymentDAO payDAO, ReservationDAO resDAO, OrderDAO orderDAO) {
     this.payDAO = payDAO;
     this.resDAO = resDAO;
+    this.orderDAO = orderDAO;
   }
 
   @Override
@@ -82,17 +86,26 @@ public class PaymentServiceImpl implements PaymentService {
       if(token.get("error_code") != null) { //failed
           return result;
       }
+      
+      String receiptId = cancelDTO.getReceiptId();
+      
       Cancel cancel = new Cancel();
-      cancel.receiptId = cancelDTO.getReceiptId();
+      cancel.receiptId = receiptId;
       cancel.cancelUsername = "관리자";
       cancel.cancelMessage = cancelDTO.getReceiptId() + " 결제 취소";
 
       HashMap res = bootpay.receiptCancel(cancel);
       if(res.get("error_code") == null) { //success
           System.out.println("receiptCancel success: " + res);
+          // 해당 영수증 ID로 주문 테이블에서 예약코드 목록 가져오기
+          List<String> resCodeList = orderDAO.findOrderByReceiptId(receiptId);
+
+          result += payDAO.payCancel(receiptId);
           
-          result += payDAO.payCancel(cancelDTO.getReceiptId());
-          result += resDAO.payStateCancel(cancelDTO);
+          for(String resCd : resCodeList) {
+            result += resDAO.payStateCancel(resCd);
+          }
+          
           
       } else {
           System.out.println("receiptCancel false: " + res);
