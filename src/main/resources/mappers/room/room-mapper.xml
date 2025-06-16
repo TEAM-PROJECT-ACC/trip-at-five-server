@@ -82,8 +82,8 @@
 				FROM RESERVATION_TB RES
 				WHERE 
 					RES.CK_RES_ST IN ('UNPAID', 'COMPLETED', 'PROCESSING')
-					AND #{checkInDt} &lt; RES.CHECK_OUT_DT
-					AND #{checkOutDt} &gt; RES.CHECK_IN_DT
+					AND RES.CHECK_OUT_DT &gt; #{checkInDt}
+					AND RES.CHECK_IN_DT &lt; #{checkOutDt}
 				GROUP BY RES.ROOM_NO
 			) SUB ON R.ROOM_SQ = SUB.ROOM_NO
 		WHERE R.ACCOM_NO = #{accomNo}
