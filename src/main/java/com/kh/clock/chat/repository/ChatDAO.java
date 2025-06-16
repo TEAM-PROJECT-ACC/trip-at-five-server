@@ -79,4 +79,12 @@ public class ChatDAO {
   public AdminVO selectChatAdmin(int adminSq) {
     return sqlSession.selectOne("chatMapper.selectChatAdmin", adminSq);
   }
+
+  /**
+   * @param chatRoomSq
+   * @return int
+   */
+  public int updateChatRoomInactive(int chatRoomSq) {
+    return sqlSession.update("chatMapper.updateChatRoomInactive", chatRoomSq);
+  }
 }

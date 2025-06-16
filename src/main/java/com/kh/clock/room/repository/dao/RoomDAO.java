@@ -1,11 +1,14 @@
 package com.kh.clock.room.repository.dao;
 
 import java.util.List;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import com.kh.clock.room.domain.RoomVO;
-import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
+import com.kh.clock.room.repository.dto.AvailableRoomRequestDTO;
+import com.kh.clock.room.repository.dto.RoomCntDTO;
 import com.kh.clock.room.repository.dto.RoomDetailDTO;
+import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
 import com.kh.clock.room.repository.dto.RoomSearchDTO;
 
@@ -27,8 +30,8 @@ public class RoomDAO {
     return sqlSession.selectOne("roomMapper.findByAccomNo", accomNo);
   }
 
-  public List<RoomListDTO> selectAllList(RoomSearchDTO roomSearchDTO) {
-    return sqlSession.selectList("roomMapper.selectAllList", roomSearchDTO);
+  public List<RoomListDTO> selectRoomList(RoomSearchDTO roomSearchDTO) {
+    return sqlSession.selectList("roomMapper.selectRoomList", roomSearchDTO);
   }
 
   // 객실 상세 조회
@@ -45,5 +48,14 @@ public class RoomDAO {
   public int deleteRoomAndRoomImageByAccomNoAndRoomSq(RoomIdentifierDTO roomIdenDTO) {
     System.out.println(roomIdenDTO);
     return sqlSession.delete("roomMapper.deleteRoomAndRoomImageByAccomNoAndRoomSq", roomIdenDTO);
+  }
+
+  // 객실 수 조회
+  public List<RoomCntDTO> selectRoomCnt(AvailableRoomRequestDTO availableRoomRequestDTO) {
+    return sqlSession.selectList("roomMapper.selectRoomCnt", availableRoomRequestDTO);
+  }
+
+  public int selectTotalCount(int accomNo) {
+    return sqlSession.selectOne("roomMapper.selectTotalCount", accomNo);
   }
 }

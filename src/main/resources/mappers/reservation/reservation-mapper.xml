@@ -18,8 +18,8 @@
 			ROOM_NO,
 			MEM_NO
 		) VALUES (
-			#{resCode},
-			#{resEmail},
+			#{resCd},
+			#{resEmailId},
 			#{resName},
 			#{resPhone},
 			#{resNumOfPeo},
@@ -35,18 +35,24 @@
     <update id="updatePayState">
     	UPDATE RESERVATION_TB SET
     		CK_RES_ST = 'COMPLETED'
-		WHERE RES_CD = #{resCode} AND CK_RES_ST = 'UNPAID'
+		WHERE RES_CD = #{resCd} AND CK_RES_ST = 'UNPAID'
+    </update>
+    
+    <update id="payStateCancel">
+    	UPDATE RESERVATION_TB SET
+    		CK_RES_ST = 'CANCEL'
+    	WHERE RES_CD = #{resCd}
     </update>
     
     <select id="findReservationByResCd" resultType="com.kh.clock.order.repository.dto.OrderResInfoDTO">
-    	SELECT ACC.ACCOM_NAME, R.ROOM_NAME, RES.CHECK_IN_DT, RES.CHECK_OUT_DT, R.ROOM_PRICE, RES.RES_CD
+    	SELECT ACC.ACCOM_NAME, R.ROOM_NAME, RES.CHECK_IN_DT, RES.CHECK_OUT_DT, R.ROOM_PRICE, RES.RES_CD, RES.MEM_NO
     	FROM RESERVATION_TB RES
     		LEFT JOIN ROOM_TB R ON (RES.ROOM_NO = R.ROOM_SQ)
     		LEFT JOIN ACCOMMODATION_TB ACC ON (R.ACCOM_NO = ACC.ACCOM_SQ)
-    	WHERE RES.RES_CD = #{resCode}
+    	WHERE RES.RES_CD = #{resCd}
     </select>
 
 	<select id="findResUserInfo" resultType="com.kh.clock.reservation.repository.dto.ResUserInfoDTO">
-		SELECT RES_NAME, RES_PHONE FROM RESERVATION_TB WHERE RES_CD = #{resCode}
+		SELECT RES_NAME, RES_PHONE FROM RESERVATION_TB WHERE RES_CD = #{resCd}
 	</select>
 </mapper>
