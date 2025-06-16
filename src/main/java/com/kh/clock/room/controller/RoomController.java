@@ -1,6 +1,7 @@
 package com.kh.clock.room.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.kh.clock.common.file.dto.ImageFileDTO;
+import com.kh.clock.common.pageInfo.PageInfo;
 import com.kh.clock.room.domain.RoomVO;
 import com.kh.clock.room.repository.dto.RoomDetailDTO;
 import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
@@ -45,19 +47,21 @@ public class RoomController {
    * @return
    */
   @GetMapping("")
-  public ResponseEntity<Object> selectRoomList(
+  public ResponseEntity<Map<String, Object>> selectRoomList(
     @PathVariable(value="accomNo", required=true) int accomNo,
-    @RequestParam(value="currentPage", required = false, defaultValue="1") int currentPage,
-    @RequestParam(value="keyword", required = false, defaultValue = "") String keyword
+    @RequestParam(defaultValue = "") String keyword,
+    @RequestParam(defaultValue = "1") int currentPage,
+    @RequestParam(defaultValue = "10") int numOfRows
   ) {
-//    System.out.println("GetMapping : " + accomNo);
-//    System.out.println((currentPage != 0 ? currentPage : "null입니다."));
-    List<RoomListDTO> roomList = roomService.selectAllList(new RoomSearchDTO(accomNo, keyword));
+    PageInfo pageInfo = new PageInfo(roomService.selectTotalCount(accomNo), currentPage, numOfRows);
+    List<RoomListDTO> roomList = roomService.selectRoomList(new RoomSearchDTO(pageInfo, accomNo, keyword));
     
-//    for(RoomListDTO rlDTO : roomList) System.out.println(rlDTO.toString());
+   
+    Map<String, Object> response = new HashMap<>();
+    response.put("dataList", roomList);
+    response.put("totalCount", pageInfo.getTotalCount());
 
-    if(roomList != null) return ResponseEntity.status(HttpStatus.OK).body(roomList);
-    else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 전체 조회에 실패했습니다.");
+    return ResponseEntity.ok(response);
   }
   
   /**

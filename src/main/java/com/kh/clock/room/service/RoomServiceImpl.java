@@ -34,12 +34,15 @@ public class RoomServiceImpl implements RoomService {
    * 전체 목록 조회
    */
   @Override
-  public List<RoomListDTO> selectAllList(RoomSearchDTO roomSearchDTO) {
-    List<RoomListDTO> roomList = roomDAO.selectAllList(roomSearchDTO);
-    
-    return roomList != null ? roomList : null;
-  }
+  public List<RoomListDTO> selectRoomList(RoomSearchDTO roomSearchDTO) {
+    return roomDAO.selectRoomList(roomSearchDTO);
+    }
 
+  @Override
+  public int selectTotalCount(int accomNo) {
+    return roomDAO.selectTotalCount(accomNo);
+  }
+  
   /**
    * 객실 정보 저장
    */
@@ -212,15 +215,5 @@ public class RoomServiceImpl implements RoomService {
   @Override
   public RoomDetailDTO findRoomByAccomNoAndRoomSq(RoomIdentifierDTO getRoomDTO) {
     return roomDAO.findRoomByAccomNoAndRoomSq(getRoomDTO);
-  }
-
-  /**
-   * 숙박번호로 객실과 객실 수 조회
-   * @param availableRoomRequestDTO
-   * @return
-   */
-  @Override
-  public List<RoomCntDTO> selectRoomCnt(AvailableRoomRequestDTO availableRoomRequestDTO) {
-    return roomDAO.selectRoomCnt(availableRoomRequestDTO);
   }
 }

@@ -12,6 +12,7 @@
         SELECT COUNT(*) FROM RESERVATION_TB WHERE CK_RES_ST = 'PROCESSING'
     </select>
 
+	<!-- 예약목록 -->
     <select id="selectReservationList" resultType="com.kh.clock.admin.repository.dto.AdminReservationListDTO">
         SELECT 
             RES.RES_CD AS NO,
@@ -35,6 +36,7 @@
         ORDER BY RES.RES_CD DESC
     </select>
 
+	<!-- 예약 취소 요청 목록 -->
     <select id="selectReservationCancelList" resultType="com.kh.clock.admin.repository.dto.AdminReservationCancelListDTO">
 	    SELECT  
 	        RES.RES_CD AS NO,  
@@ -58,6 +60,7 @@
 	    ORDER BY P.PAY_DT DESC, RES.RES_CD DESC
 	</select>
 
+	<!-- 예약 상세 페이지 -->
     <select id="findReservationByResCd" resultType="com.kh.clock.admin.repository.dto.AdminReservationDetailDTO">
         SELECT 
             RES.RES_CD,
@@ -80,6 +83,7 @@
         WHERE RES.RES_CD = #{resCd}
     </select>
 
+	<!-- 취소요청 모달 창 -->
 	<select id="findReservationCancelByResCd" resultType="com.kh.clock.admin.repository.dto.ReservationCancelDetailDTO">
 		SELECT
 			O.RECEIPT_ID,

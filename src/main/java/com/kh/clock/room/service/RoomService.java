@@ -12,12 +12,6 @@ import com.kh.clock.room.repository.dto.RoomSearchDTO;
 
 
 public interface RoomService {
-  /**
-   * 객실 목록 전체 조회
-   * @param accomNo : 숙박업소번호
-   * @return
-   */
-  List<RoomListDTO> selectAllList(RoomSearchDTO roomSearchDTO);
   
   /**
    * 객실 저장
@@ -49,11 +43,11 @@ public interface RoomService {
    */
   RoomDetailDTO findRoomByAccomNoAndRoomSq(RoomIdentifierDTO getRoomDTO);
 
+  int selectTotalCount(int accomNo);
+
   /**
-   * AvailableRoomRequestDTO로 객실과 객실 수 조회
-   * @param availableRoomRequestDTO
-   * @return
+   * 전체 목록 조회
    */
-  List<RoomCntDTO> selectRoomCnt(AvailableRoomRequestDTO availableRoomRequestDTO);
+  List<RoomListDTO> selectRoomList(RoomSearchDTO roomSearchDTO);
 
 }

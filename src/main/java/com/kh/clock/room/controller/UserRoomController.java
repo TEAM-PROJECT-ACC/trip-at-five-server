@@ -26,16 +26,16 @@ public class UserRoomController {
    * @param availableRoomRequestDTO
    * @return
    */
-  @GetMapping("/room-cnt")
-  public ResponseEntity<Object> getRoomCnt(@ModelAttribute AvailableRoomRequestDTO availableRoomRequestDTO) {
-      System.out.println("객실 수 조회 요청 DTO : " + availableRoomRequestDTO);
-      
-      List<RoomCntDTO> roomCntList = roomService.selectRoomCnt(availableRoomRequestDTO);
-      
-      System.out.println(roomCntList);
-
-      if(roomCntList != null) return ResponseEntity.status(HttpStatus.OK).body(roomCntList);
-      else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 수 조회에 실패했습니다.");
-  }
+//  @GetMapping("/room-cnt")
+//  public ResponseEntity<Object> getRoomCnt(@ModelAttribute AvailableRoomRequestDTO availableRoomRequestDTO) {
+//      System.out.println("객실 수 조회 요청 DTO : " + availableRoomRequestDTO);
+//      
+//      List<RoomCntDTO> roomCntList = roomService.selectRoomCnt(availableRoomRequestDTO);
+//      
+//      System.out.println(roomCntList);
+//
+//      if(roomCntList != null) return ResponseEntity.status(HttpStatus.OK).body(roomCntList);
+//      else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("객실 수 조회에 실패했습니다.");
+//  }
 
 }

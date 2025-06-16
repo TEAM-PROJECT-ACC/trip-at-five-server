@@ -38,7 +38,7 @@ public class AdminReservationController {
    * @param numOfRows
    * @return
    */
-  @GetMapping
+  @GetMapping("")
   public ResponseEntity<Map<String, Object>> selectReservationList(
       @RequestParam(defaultValue = "") String keyword,
       @RequestParam(defaultValue = "1") int currentPage,
@@ -100,6 +100,8 @@ public class AdminReservationController {
     Map<String, Object> response = new HashMap<>();
     response.put("dataList", reservations);
     response.put("totalCount", pageInfo.getTotalCount());
+
+    System.out.println(response);
 
     return ResponseEntity.ok(response);
   }
