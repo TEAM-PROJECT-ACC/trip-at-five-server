@@ -11,6 +11,7 @@ import com.kh.clock.member.repository.ChallengeHistoryCreateDTO;
 import com.kh.clock.member.repository.CouponDTO;
 import com.kh.clock.member.repository.LoginDTO;
 import com.kh.clock.member.repository.RegisterDTO;
+import com.kh.clock.member.repository.ReservationSelectDTO;
 
 public interface MemberService {
 
@@ -49,7 +50,7 @@ public interface MemberService {
 	/* 챌린지 리스트 조회 */
 	public List<ChallengeVO> getChallengeList();
 
-	/* 회원 가입시 챌린지 추가  */
+	/* 회원 가입시 챌린지 추가 */
 	public int insertUserChallengeList(List<ChallengeHistoryCreateDTO> list);
 
 	/* 챌린지 테이블 리스트 총 숫자 조회 */
@@ -58,7 +59,7 @@ public interface MemberService {
 	/* 유저 챌린지 진형 내역 조회 */
 	public List<ChallengHistoryDTO> getChallengeUserList(String memNo);
 
-	/* 유저 레벨 및 경험치 추가  */
+	/* 유저 레벨 및 경험치 추가 */
 	public int memberLevelSetting(int memSq);
 
 	/* 챌린지 완료 처리 */
@@ -66,5 +67,11 @@ public interface MemberService {
 
 	/* 쿠폰 정보 조회 */
 	public List<CouponDTO> couponSelect(String userMemSq);
+
+	/* 예약 조회 */
+	public List<ReservationSelectDTO> reservationSelect(String userMemSq);
+
+	/* 예약 취소 수정 */
+	public int reservationCancelUpdate(ReservationSelectDTO cancelInfo);
 
 }
