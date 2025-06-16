@@ -25,6 +25,7 @@
             LEFT JOIN ROOM_TB R ON (RES.ROOM_NO = R.ROOM_SQ)
             LEFT JOIN ACCOMMODATION_TB ACC ON (ACC.ACCOM_SQ = R.ACCOM_NO) 
         <where>
+	        RES.CK_RES_ST != 'PROCESSING'
             <if test="keyword != null and keyword != ''">
                 ( 
                     RES.RES_CD LIKE '%' || #{keyword} || '%' 
