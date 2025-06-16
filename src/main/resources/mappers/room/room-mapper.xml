@@ -4,11 +4,16 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="roomMapper">
 
+	<select id="selectTotalCount" resultType="_int">
+		SELECT COUNT(*) FROM ROOM_TB WHERE ACCOM_NO = #{accomNo}
+	</select>
+	
 	<!-- 객실 전체 조회 -->
-	<select id="selectAllList" resultType="com.kh.clock.room.repository.dto.RoomListDTO">
+	<select id="selectRoomList" resultType="com.kh.clock.room.repository.dto.RoomListDTO">
 		SELECT ROOM_SQ AS NO, ROOM_NAME, ROOM_CNT, ROOM_PRICE
 		FROM ROOM_TB
 		WHERE ACCOM_NO = #{accomNo} AND ROOM_NAME LIKE '%${keyword}%'
+        ORDER BY NO DESC
 	</select>
 	
 	<!-- 특정 객실 조회 -->
@@ -63,4 +68,25 @@
   		DELETE FROM ROOM_TB
   		WHERE ACCOM_NO = #{accomNo} AND ROOM_SQ = #{roomSq}
   	</delete>
+  	
+  	<!-- 객실 수 조회 -->
+	<select id="selectRoomCnt" parameterType="com.kh.clock.room.repository.dto.AvailableRoomRequestDTO" resultType="com.kh.clock.room.repository.dto.RoomCntDTO">
+		SELECT 
+			R.ROOM_SQ,
+			R.ROOM_CNT - NVL(SUB.CNT, 0)
+		FROM ROOM_TB R
+			LEFT JOIN (
+				SELECT 
+					RES.ROOM_NO,
+					COUNT(*) AS CNT
+				FROM RESERVATION_TB RES
+				WHERE 
+					RES.CK_RES_ST IN ('UNPAID', 'COMPLETED', 'PROCESSING')
+					AND RES.CHECK_OUT_DT &gt; #{checkInDt}
+					AND RES.CHECK_IN_DT &lt; #{checkOutDt}
+				GROUP BY RES.ROOM_NO
+			) SUB ON R.ROOM_SQ = SUB.ROOM_NO
+		WHERE R.ACCOM_NO = #{accomNo}
+	</select>
+
 </mapper>

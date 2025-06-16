@@ -3,6 +3,8 @@ package com.kh.clock.room.service;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 import com.kh.clock.room.domain.RoomVO;
+import com.kh.clock.room.repository.dto.AvailableRoomRequestDTO;
+import com.kh.clock.room.repository.dto.RoomCntDTO;
 import com.kh.clock.room.repository.dto.RoomDetailDTO;
 import com.kh.clock.room.repository.dto.RoomIdentifierDTO;
 import com.kh.clock.room.repository.dto.RoomListDTO;
@@ -10,12 +12,6 @@ import com.kh.clock.room.repository.dto.RoomSearchDTO;
 
 
 public interface RoomService {
-  /**
-   * 객실 목록 전체 조회
-   * @param accomNo : 숙박업소번호
-   * @return
-   */
-  List<RoomListDTO> selectAllList(RoomSearchDTO roomSearchDTO);
   
   /**
    * 객실 저장
@@ -46,5 +42,14 @@ public interface RoomService {
    * @return
    */
   RoomDetailDTO findRoomByAccomNoAndRoomSq(RoomIdentifierDTO getRoomDTO);
+
+  int selectTotalCount(int accomNo);
+
+  /**
+   * 전체 목록 조회
+   */
+  List<RoomListDTO> selectRoomList(RoomSearchDTO roomSearchDTO);
+
+  List<RoomCntDTO> selectRoomCnt(AvailableRoomRequestDTO availableRoomRequestDTO);
 
 }

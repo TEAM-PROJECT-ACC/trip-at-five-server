@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class OrderVO {
   private String orderId;
   private String receiptId;
-  private String resCode;
+  private String resCd;
 }

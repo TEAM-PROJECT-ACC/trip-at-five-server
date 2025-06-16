@@ -9,22 +9,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReservationVO {
-  private String resCode;
-  private String resEmail;
+  private String resCd;
+  private String resEmailId;
   private String resName;
   private String resPhone;
   private int resNumOfPeo;
-  private String checkInDt;
-  private String checkOutDt;
+  private Date checkInDt;
+  private Date checkOutDt;
   private String ckResSt;
   private Date resRegDT;
   private int roomNo;
   private int memNo;
 
-  public ReservationVO(String resCode, String resEmail, String resName, String resPhone,
-      int resNumOfPeo, String checkInDt, String checkOutDt, int roomNo, int memNo) {
-    this.resCode = resCode;
-    this.resEmail = resEmail;
+  public ReservationVO(String resCd, String resEmailId, String resName, String resPhone,
+      int resNumOfPeo, Date checkInDt, Date checkOutDt, int roomNo, int memNo) {
+    this.resCd = resCd;
+    this.resEmailId = resEmailId;
     this.resName = resName;
     this.resPhone = resPhone;
     this.resNumOfPeo = resNumOfPeo;

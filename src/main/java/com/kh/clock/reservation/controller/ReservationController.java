@@ -3,13 +3,11 @@ package com.kh.clock.reservation.controller;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.kh.clock.payment.repository.dto.ConfirmDTO;
 import com.kh.clock.reservation.repository.dto.ResCodeListDTO;
 import com.kh.clock.reservation.repository.dto.ReservationDTO;
 import com.kh.clock.reservation.service.ReservationServiceImpl;
@@ -31,7 +29,7 @@ public class ReservationController {
     
     String orderId = resService.createOrderId(resCodeListDTO);
     
-    System.out.println("Controller resCode : " + orderId);
+    System.out.println("Controller resCd : " + orderId);
     
     if(orderId != null) return ResponseEntity.status(HttpStatus.OK).body(orderId);
     else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("주문ID 생성에 실패했습니다.");
@@ -47,21 +45,21 @@ public class ReservationController {
     reservationDTO.getRoomInfo().forEach(value -> System.out.println("roomInfo : " + value));
     
     // 예약 저장 후 예약코드 리스트 반환
-    List<String> resCodeList = resService.insertReservation(reservationDTO, reservationDTO.getRoomInfo());
+    List<String> resCdList = resService.insertReservation(reservationDTO, reservationDTO.getRoomInfo());
 
-    if(resCodeList != null) return ResponseEntity.status(HttpStatus.OK).body(resCodeList);
+    if(resCdList != null) return ResponseEntity.status(HttpStatus.OK).body(resCdList);
     else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("예약을 실패했습니다.");
   
   }
 
 
   @PutMapping("")
-  public ResponseEntity<Object> updatePayState(@RequestBody List<String> resCodeList) {
-    System.out.println(resCodeList);
+  public ResponseEntity<Object> updatePayState(@RequestBody List<String> resCdList) {
+    System.out.println(resCdList);
     
-    int updatePayResult = resService.updatePayState(resCodeList);
+    int updatePayResult = resService.updatePayState(resCdList);
 
-    if(updatePayResult > 0) return ResponseEntity.status(HttpStatus.OK).body(resCodeList);
+    if(updatePayResult > 0) return ResponseEntity.status(HttpStatus.OK).body(resCdList);
     else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("결제 상태 업데이트를 실패했습니다.");
   }
 }

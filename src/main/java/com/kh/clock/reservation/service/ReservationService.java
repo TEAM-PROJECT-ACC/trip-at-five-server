@@ -7,6 +7,6 @@ public interface ReservationService {
 
   List<String> insertReservation(ReservationDTO reservationDTO, List<Integer> roomInfo);
 
-  int updatePayState(List<String> resCodeList);
+  int updatePayState(List<String> resCdList);
 
 }

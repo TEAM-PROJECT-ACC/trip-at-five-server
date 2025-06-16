@@ -72,4 +72,11 @@ public interface ChatService {
    * @return AdminVO
    */
   public AdminVO selectChatAdmin(int adminSq);
+
+
+  /**
+   * @param chatRoomSq
+   * @return int
+   */
+  public int updateChatRoomInactive(int chatRoomSq);
 }
