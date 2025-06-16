@@ -133,7 +133,7 @@
 		join coupon_tb cp on
 		cp.coupon_sq = ct.coupon_no
 		where mem_no = #{memNo}
-
+		order by currentStep desc
 	</select>
 
 
