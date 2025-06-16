@@ -14,15 +14,15 @@ public class ReservationVO {
   private String resName;
   private String resPhone;
   private int resNumOfPeo;
-  private String checkInDt;
-  private String checkOutDt;
+  private Date checkInDt;
+  private Date checkOutDt;
   private String ckResSt;
   private Date resRegDT;
   private int roomNo;
   private int memNo;
 
   public ReservationVO(String resCd, String resEmailId, String resName, String resPhone,
-      int resNumOfPeo, String checkInDt, String checkOutDt, int roomNo, int memNo) {
+      int resNumOfPeo, Date checkInDt, Date checkOutDt, int roomNo, int memNo) {
     this.resCd = resCd;
     this.resEmailId = resEmailId;
     this.resName = resName;
