@@ -9,7 +9,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.kh.clock.payment.repository.dto.ConfirmDTO;
 import com.kh.clock.reservation.domain.ReservationVO;
 import com.kh.clock.reservation.repository.dao.ReservationDAO;
 import com.kh.clock.reservation.repository.dto.ResCodeListDTO;
@@ -41,7 +40,7 @@ public class ReservationServiceImpl implements ReservationService {
     
     String orderIdDeCoding = sb.toString();
     
-    String orderId = createResCode(orderIdDeCoding, salt);
+    String orderId = createresCd(orderIdDeCoding, salt);
     
     return orderId;
   }
@@ -53,7 +52,7 @@ public class ReservationServiceImpl implements ReservationService {
     
     int randomNumber = (int)(Math.random() * 10000 + 1);
 
-    String resCodeDeCoding = new StringBuilder()
+    String resCdDeCoding = new StringBuilder()
         .append(resCodeDTO.getResEmail())
         .append(resCodeDTO.getResName())
         .append(resCodeDTO.getResPhone())
@@ -63,9 +62,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     System.out.println("salt : " + salt);
     
-    String resCode = createResCode(resCodeDeCoding, salt);
+    String resCd = createresCd(resCdDeCoding, salt);
     
-    return resCode;
+    return resCd;
   }
 
   private String createSalt() {
@@ -86,11 +85,11 @@ public class ReservationServiceImpl implements ReservationService {
     
   }
   
-  private String createResCode(String pwd, String salt) {
+  private String createresCd(String pwd, String salt) {
     System.out.println(pwd);
     System.out.println(salt);
     StringBuilder sb = new StringBuilder();
-    String resCode = null;
+    String resCd = null;
     try {
       MessageDigest md = MessageDigest.getInstance(algorithm);
       md.update(pwd.getBytes());
@@ -102,26 +101,26 @@ public class ReservationServiceImpl implements ReservationService {
         sb.append(String.format("%02x", b));
       }
       
-      resCode = sb.toString();
+      resCd = sb.toString();
       
     } catch (NoSuchAlgorithmException e) {
       e.printStackTrace();
     }
     
-    return resCode;
+    return resCd;
   }
 
   @Override
   @Transactional
   public List<String> insertReservation(ReservationDTO reservationDTO, List<Integer> roomInfo) {
     int result = 0;
-    List<String> resCodeList = new ArrayList<>();
+    List<String> resCdList = new ArrayList<>();
     
     for(int i = 0; i < roomInfo.size(); i++) {
-      String resCode = createReservationCode(new ReservationCodeDTO(reservationDTO.getResEmail(), reservationDTO.getResName(), reservationDTO.getResPhone(), roomInfo.get(i)));
+      String resCd = createReservationCode(new ReservationCodeDTO(reservationDTO.getResEmail(), reservationDTO.getResName(), reservationDTO.getResPhone(), roomInfo.get(i)));
       result += resDAO.insertReservation(
           new ReservationVO(
-              resCode,
+              resCd,
               reservationDTO.getResEmail(),
               reservationDTO.getResName(),
               reservationDTO.getResPhone(),
@@ -133,16 +132,16 @@ public class ReservationServiceImpl implements ReservationService {
          )
       );
       
-      if((i + 1) == result) resCodeList.add(resCode);
+      if((i + 1) == result) resCdList.add(resCd);
     }
     
-    return resCodeList;
+    return resCdList;
   }
   
 
   @Override
-  public int updatePayState(List<String> resCodeList) {
-    return resDAO.updatePayState(resCodeList);
+  public int updatePayState(List<String> resCdList) {
+    return resDAO.updatePayState(resCdList);
   }
 
 

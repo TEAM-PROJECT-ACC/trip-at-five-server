@@ -1,4 +1,4 @@
-package com.kh.clock.reservation.repository.dto;
+package com.kh.clock.room.repository.dto;
 
 import java.sql.Date;
 import lombok.AllArgsConstructor;
@@ -8,11 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResInfo {
-  private String resCd;
-  private String accomName;
-  private String roomName;
+public class AvailableRoomRequestDTO {
+  private int accomNo;
   private Date checkInDt;
   private Date checkOutDt;
-  private int roomPrice;
 }

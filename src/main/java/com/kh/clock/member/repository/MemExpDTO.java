@@ -1,4 +1,4 @@
-package com.kh.clock.order.domain;
+package com.kh.clock.member.repository;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderVO {
-  private String orderId;
-  private String receiptId;
+public class MemExpDTO {
+  private String memNo;
   private String resCd;
+  private int memExp;
 }

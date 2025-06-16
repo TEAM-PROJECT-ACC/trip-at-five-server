@@ -1,4 +1,4 @@
-package com.kh.clock.room.repository.dto;
+package com.kh.clock.admin.repository.dto;
 
 import com.kh.clock.common.pageInfo.PageInfo;
 import lombok.AllArgsConstructor;
@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomSearchDTO {
+public class AdminReservationSearchDTO {
   private PageInfo pageInfo;
-  private int accomNo;
   private String keyword;
 }
