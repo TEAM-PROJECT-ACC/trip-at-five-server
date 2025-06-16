@@ -55,7 +55,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     int adminNo = CommonGson.getJsonInt(chatRoomObj, "adminNo");
     String inqCtgCd = CommonGson.getJsonString(chatRoomObj, "inqCtgCd");
     
-    ChatRoom chatRoom = new ChatRoom(chatRoomSq, ckChatSt, memNo, userEmail, adminNo, inqCtgCd);      
+    ChatRoom chatRoom = new ChatRoom(chatRoomSq, ckChatSt, memNo, userEmail, adminNo, inqCtgCd);
+    System.out.println("비회원인 경우 memNo 값 확인 : " + memNo);
     sessionAttributes.put("chatRoom", chatRoom);
     ChatDTO chatDTO = null;
     ArrayList<ChatMessage> messages = null;
@@ -136,5 +137,15 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     System.out.println("종료 상태 : " + status);
     String sessionId = session.getId();
     sessionList.remove(sessionId);
+    
+    ChatRoom chatRoom = (ChatRoom)session.getAttributes().get("chatRoom");
+    int memNo = chatRoom.getMemNo();
+    
+    if(memNo < 1) {
+      int chatRoomSq = chatRoom.getChatRoomSq();
+      int result = chatService.updateChatRoomInactive(chatRoomSq);
+      System.out.println("비회원 채팅 종료 : " + result);
+    }
+    
   }
 }
