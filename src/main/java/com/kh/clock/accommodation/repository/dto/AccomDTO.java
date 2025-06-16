@@ -30,5 +30,5 @@ public class AccomDTO {
   private List<ReviewDTO> reviewList;
   
   private int reviewCount;
-
+  private String accomImgPathName;
 }

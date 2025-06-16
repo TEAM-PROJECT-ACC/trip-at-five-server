@@ -60,6 +60,7 @@ public class AccomDAO {
 
   // 관리자 숙박 목록 조회
   public List<AccommodationDTO> selectAdminAccomList(AccomAdminSearchDTO accomSearchDTO, PageInfo pageInfo) {
+    System.out.println("DAO에 전달된 pageInfo 값: " + pageInfo.toString());
     return sqlSession.selectList("accommodationMapper.selectAdminAccomList", accomSearchDTO, pageInfo.getRowBounds());
   }
   
