@@ -169,8 +169,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<ChallengHistoryDTO> getChallengeCompletion(String userMemSq) {
-		return memberDAO.getChallengeCompletion(userMemSq);
+	public List<ChallengHistoryDTO> getChallengeCompletion(List<ChallengHistoryDTO> list) {
+		return memberDAO.getChallengeCompletion(list);
 	}
 
 	

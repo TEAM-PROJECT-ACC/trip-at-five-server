@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChallengHistoryDTO {
 
+	private int userMemSq;			 // 유저 번호
 	private String rewardCouponName; // 쿠폰이름
 	private String chalName; 		 // 챌린지명
 	private int chalCond; 			 // 챌린지 조건

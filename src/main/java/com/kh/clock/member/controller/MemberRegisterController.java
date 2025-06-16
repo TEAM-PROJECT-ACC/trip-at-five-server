@@ -94,10 +94,12 @@ public class MemberRegisterController {
 		List<Object> numlist = mService.getChallengeCountNo(); // 챌린지 각 번호 확인
 		List<ChallengeHistoryCreateDTO> list = new ArrayList<>();
 		int memLevelResult = mService.memberLevelSetting(loginUser.getMemSq());
-
+		
+		
+		
 		for (int i = 0; i < numlist.size(); i++) {
 
-			list.add(new ChallengeHistoryCreateDTO((int) numlist.get(i), loginUser.getMemSq()));
+			list.add(new ChallengeHistoryCreateDTO( loginUser.getMemSq(),(int) numlist.get(i)));
 		}
 
 		int chcN = mService.insertUserChallengeList(list);

@@ -102,22 +102,16 @@ public class MypageController {
 	public ResponseEntity<List<ChallengHistoryDTO>> getChallengeList(@RequestParam String userMemSq) {
 
 		List<ChallengHistoryDTO> list = mService.getChallengeUserList(userMemSq);
-		List<ChallengHistoryDTO> ckCouponStlist = mService.getChallengeCompletion(userMemSq);
 
+		List<ChallengHistoryDTO> ckCouponStlist = mService.getChallengeCompletion(list);
 
-
-		for (int i = 0; i < list.size(); i++) {
-			for (int j = 0; j < ckCouponStlist.size(); j++) {
-				if(i == j) {
-					list.get(i).setCkCouponSt(ckCouponStlist.get(i).getCkCouponSt());
-				}else {
-					break;
-				}
-				
-			} 
+		for (int i = 0; i < ckCouponStlist.size(); i++) {
+			if (list.get(i).getChalHistoryNo() == ckCouponStlist.get(i).getChalHistoryNo()) {
+				list.get(i).setCkCouponSt(ckCouponStlist.get(i).getCkCouponSt());
+			} else {
+				break;
+			}
 		}
-		System.out.println(list);
-		System.out.println(ckCouponStlist);
 
 		return ResponseEntity.ok(list);
 	}

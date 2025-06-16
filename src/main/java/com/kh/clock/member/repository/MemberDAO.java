@@ -135,8 +135,8 @@ public class MemberDAO {
 		return sqlsession.update("mamberMapper.reservationCancelUpdate", cancelInfo);
 	}
 
-	public List<ChallengHistoryDTO> getChallengeCompletion(String userMemSq) {
-		return sqlsession.selectList("mamberMapper.getChallengeCompletion", userMemSq);
+	public List<ChallengHistoryDTO> getChallengeCompletion(List<ChallengHistoryDTO> list) {
+		return sqlsession.selectList("mamberMapper.getChallengeCompletion", list);
 	}
 
 }

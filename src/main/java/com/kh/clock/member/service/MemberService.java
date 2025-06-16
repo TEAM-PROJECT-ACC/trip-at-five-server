@@ -66,7 +66,7 @@ public interface MemberService {
 	public int challengeSuccess(HashMap chalSuccessInfo);
 
 	/* 완료된 챌린지 조회 */
-	public List<ChallengHistoryDTO> getChallengeCompletion(String userMemSq);
+	public List<ChallengHistoryDTO> getChallengeCompletion(List<ChallengHistoryDTO> list);
 	
 	/* 쿠폰 정보 조회 */
 	public List<CouponDTO> couponSelect(String userMemSq);
