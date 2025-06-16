@@ -14,7 +14,6 @@ import com.kh.clock.review.repository.dao.ReviewDAO;
 import com.kh.clock.review.repository.dao.ReviewImageDAO;
 import com.kh.clock.review.repository.dto.ReviewDTO;
 import com.kh.clock.review.repository.dto.ReviewImageDTO;
-import com.kh.clock.room.repository.dto.RoomImageDTO;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -35,12 +34,13 @@ public class ReviewServiceImpl implements ReviewService{
     int insertResult = reviewDAO.insertReview(review);
 
     int revNo = review.getRevSq();
-    insertImageFun(insertResult, review.getRevSq(), images);
+    System.out.println(revNo);
+    insertImageFun(insertResult, revNo, images);
 
     return insertResult;
   }
 
-  private void insertImageFun(int judge, int typeNumKey, MultipartFile[] images) {
+  private void insertImageFun(int judge, int revNo, MultipartFile[] images) {
     int reviewImageResult = 0;
     List<MultipartFile> newImageList = new ArrayList<>();
     List<String> deleteList = new ArrayList<>();
@@ -61,7 +61,7 @@ public class ReviewServiceImpl implements ReviewService{
         // 객실 이미지 처리
         List<String> fileUrls = oFileUtils.saveImage(newImageList, typePath);    
         for(int i = 0; i < fileUrls.size(); i++) {
-          reviewImageResult += reviewImageService.insertReviewImage(new ReviewImageDTO(hashCodeList.get(i), newImageList.get(i).getOriginalFilename(), fileUrls.get(i), typeNumKey));
+          reviewImageResult += reviewImageService.insertReviewImage(new ReviewImageDTO(hashCodeList.get(i), newImageList.get(i).getOriginalFilename(), fileUrls.get(i), revNo));
         }
         // 전달 받은 파일의 갯수와 DB에서 INSERT 한 행의 갯수가 동일하면 저장 성공!
         if(reviewImageResult == fileUrls.size()) {
@@ -78,7 +78,8 @@ public class ReviewServiceImpl implements ReviewService{
   public List<ReviewDTO> selectReviewList(int accomNo) {
     List<ReviewDTO> reviewList = reviewDAO.selectReviewList(accomNo);
     for (ReviewDTO review : reviewList) {
-        List<ReviewImageDTO> imageList = reviewImageDAO.selectReviewImageListByRevNo(review.getRevSq());
+        int revNo = review.getRevSq();
+        List<ReviewImageDTO> imageList = reviewImageDAO.selectReviewImageListByRevNo(revNo);
         review.setImageList(imageList);
     }
     return reviewList;

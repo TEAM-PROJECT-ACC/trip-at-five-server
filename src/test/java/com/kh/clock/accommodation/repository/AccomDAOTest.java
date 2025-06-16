@@ -5,7 +5,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.kh.clock.accommodation.repository.dto.AccomListInfoDTO;
+import com.kh.clock.accommodation.repository.dto.AccomFilterDTO;
 @SpringBootTest
 class AccomDAOTest {
   @Autowired
@@ -15,7 +15,7 @@ class AccomDAOTest {
   void testSelectAccomList() {
     //fail("Not yet implemented");
     
-    AccomListInfoDTO accom = new AccomListInfoDTO();
+    AccomFilterDTO accom = new AccomFilterDTO();
     accom.setKeyword("서울");
   }
 

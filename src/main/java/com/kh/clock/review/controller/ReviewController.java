@@ -71,6 +71,7 @@ public class ReviewController {
   public ResponseEntity<ReviewDTO> getLatestReview(@PathVariable int accomNo) {
       return ResponseEntity.ok(reviewService.selectLatestReview(accomNo));
   }
+  
   // 숙소 전체 별점 평균
   @GetMapping("/accommodation/{accomNo}/average")
   public ResponseEntity<Double> getReviewAverageScore(@PathVariable int accomNo) {

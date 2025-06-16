@@ -13,9 +13,9 @@ private final SqlSession sqlSession;
     this.sqlSession = sqlsSession;
   }
   
-//후기 이미지 리스트 조회 (reviewMapper의 selectReviewImageListByRevNo 사용)
-  public List<ReviewImageDTO> selectReviewImageListByRevNo(int revSq) {
-      return sqlSession.selectList("reviewMapper.selectReviewImageListByRevNo", revSq);
+  //후기 이미지 리스트 조회 (reviewMapper의 selectReviewImageListByRevNo 사용)
+  public List<ReviewImageDTO> selectReviewImageListByRevNo(int revNo) {
+      return sqlSession.selectList("reviewMapper.selectReviewImageListByRevNo", revNo);
   }
 
   // 후기 이미지 저장 (reviewImageMapper의 insertReviewImage 사용)

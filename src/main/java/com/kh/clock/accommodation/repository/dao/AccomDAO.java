@@ -7,11 +7,12 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import com.kh.clock.accommodation.repository.dto.AccomAdminDetailDTO;
-import com.kh.clock.accommodation.repository.dto.AccomAdminListDTO;
+import com.kh.clock.accommodation.repository.dto.AccommodationDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminSearchDTO;
 import com.kh.clock.accommodation.repository.dto.AccomDTO;
 import com.kh.clock.accommodation.repository.dto.AccomKakaoDTO;
-import com.kh.clock.accommodation.repository.dto.AccomListInfoDTO;
+import com.kh.clock.accommodation.repository.dto.AccomFilterDTO;
+import com.kh.clock.common.pageInfo.PageInfo;
 import com.kh.clock.room.domain.RoomVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +26,14 @@ public class AccomDAO {
   
   
   // 숙박 목록 조회(키워드로)
-  public List<AccomDTO> selectAccomList(AccomListInfoDTO accomListInfoDTO) {
-    int offset = accomListInfoDTO.getPage() * accomListInfoDTO.getSize();
-    RowBounds rb = new RowBounds(offset, accomListInfoDTO.getSize());
+  public List<AccomDTO> selectAccomList(AccomFilterDTO accomFilterDTO) {
+    int offset = accomFilterDTO.getPage() * accomFilterDTO.getSize();
+    RowBounds rb = new RowBounds(offset, accomFilterDTO.getSize());
     
-    log.info("{}", accomListInfoDTO);
+    log.info("{}", accomFilterDTO);
     log.info("{}", offset);
    
-    return sqlSession.selectList("accommodationMapper.selectAccomList", accomListInfoDTO, rb);
+    return sqlSession.selectList("accommodationMapper.selectAccomList", accomFilterDTO, rb);
   }
  
   // 숙박 상세 조회
@@ -53,13 +54,13 @@ public class AccomDAO {
   }
   
   // 숙박 검색으로 숙박 목록 조회
-  public List<AccomDTO> searchAccom(AccomListInfoDTO searchFilter) {
+  public List<AccomDTO> searchAccom(AccomFilterDTO searchFilter) {
     return sqlSession.selectList("accommodationMapper.searchAccom", searchFilter);
   }
 
   // 관리자 숙박 목록 조회
-  public List<AccomAdminListDTO> selectAdminAccomList(AccomAdminSearchDTO accomSearchDTO) {
-    return sqlSession.selectList("accommodationMapper.selectAdminAccomList", accomSearchDTO);
+  public List<AccommodationDTO> selectAdminAccomList(AccomAdminSearchDTO accomSearchDTO, PageInfo pageInfo) {
+    return sqlSession.selectList("accommodationMapper.selectAdminAccomList", accomSearchDTO, pageInfo.getRowBounds());
   }
   
   // 관리자 숙박 상세 조회
@@ -98,5 +99,10 @@ public class AccomDAO {
     param.put("memNo", memNo);
     System.out.println("findUserResCd() accomSq=" + accomSq + ", memNo=" + memNo);
     return sqlSession.selectOne("accommodationMapper.findUserResCd", param);
-}
+  }
+
+  // 관리자 페이지 숙박 목록 개수
+  public int selectAdminAccomCount(AccomAdminSearchDTO accomSearchDTO) {
+    return sqlSession.selectOne("accommodationMapper.selectAdminAccomCount", accomSearchDTO);
+  }
 }

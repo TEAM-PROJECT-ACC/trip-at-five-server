@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.kh.clock.accommodation.repository.dto.AccomDTO;
-import com.kh.clock.accommodation.repository.dto.AccomListInfoDTO;
+import com.kh.clock.accommodation.repository.dto.AccomFilterDTO;
 import com.kh.clock.accommodation.service.AccomService;
 import com.kh.clock.review.service.ReviewImageServiceImpl;
 import com.kh.clock.review.service.ReviewService;
@@ -26,8 +26,8 @@ public class AccommodationController {
   
   // 숙박 목록 조회
   @GetMapping
-  public List<AccomDTO> selectAccomList(@ModelAttribute AccomListInfoDTO accomListInfoDTO){
-    return accomService.selectAccomList(accomListInfoDTO);
+  public List<AccomDTO> selectAccomList(@ModelAttribute AccomFilterDTO accomFilterDTO){
+    return accomService.selectAccomList(accomFilterDTO);
   }
   
   // 숙박 상세 페이지 조회

@@ -18,10 +18,13 @@
 	<!-- 리뷰 저장 -->
 	
     <insert id="insertReview" parameterType="com.kh.clock.review.domain.ReviewVO">
+		<selectKey keyProperty="revSq" order="BEFORE" resultType="int">
+		    SELECT REV_SEQ.NEXTVAL FROM DUAL
+		 </selectKey>
         INSERT INTO REVIEW_TB (
             REV_SQ, REV_SCO, CK_REV_ST, REV_CONT, REV_REG_DT, RES_CD
         ) VALUES (
-            REV_SEQ.NEXTVAL,
+            #{revSq},
             #{revSco},
             #{ckRevSt},
             #{revCont},
@@ -32,12 +35,12 @@
 
     <!-- 리뷰 목록 조회 -->
     <select id="selectReviewList" parameterType="int" resultType="com.kh.clock.review.repository.dto.ReviewDTO">
-        SELECT V.*, M.MEM_NICK, R.ROOM_NO, RM.ACCOM_NO
+        SELECT V.REV_SQ, V.REV_SCO, V.REV_CONT, M.MEM_NICK, R.ROOM_NO, RM.ACCOM_NO
         FROM REVIEW_TB V
         JOIN RESERVATION_TB R ON V.RES_CD = R.RES_CD
         JOIN ROOM_TB RM ON R.ROOM_NO = RM.ROOM_SQ
         JOIN MEMBER_TB M ON R.MEM_NO = M.MEM_SQ
-        WHERE RM.ACCOM_NO = #{accomSq}
+        WHERE RM.ACCOM_NO = #{accomNo}
         ORDER BY V.REV_REG_DT DESC
     </select>
 	
@@ -60,7 +63,7 @@
     <select id="selectReviewImageListByRevNo" parameterType="int" resultType="com.kh.clock.review.repository.dto.ReviewImageDTO">
         SELECT *
         FROM REVIEW_IMAGE_TB
-        WHERE REV_NO = #{revSq}
+        WHERE REV_NO = #{revNo}
         ORDER BY REV_IMG_SQ ASC
     </select>
 
@@ -69,7 +72,7 @@
         SELECT COUNT(*) FROM REVIEW_TB WHERE RES_CD = #{resCd}
     </select>
 
-    <!-- 유효 예약 내역 확인 (예약코드/숙박소 일치) -->
+    <!-- 유효 예약 내역 확인  -->
     <select id="countValidReservation" resultType="int">
         SELECT COUNT(*)
         FROM RESERVATION_TB R
