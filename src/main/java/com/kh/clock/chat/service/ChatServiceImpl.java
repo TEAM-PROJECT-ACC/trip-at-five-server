@@ -104,4 +104,10 @@ public class ChatServiceImpl implements ChatService {
     AdminVO admin = chatDAO.selectChatAdmin(adminSq);
     return admin;
   }
+
+  @Override
+  public int updateChatRoomInactive(int chatRoomSq) {
+    int result = chatDAO.updateChatRoomInactive(chatRoomSq);
+    return result;
+  }
 }

@@ -19,8 +19,11 @@
 				<when test="memType == 'admin'" >
 					AND ADMIN_NO = #{adminSq}
 				</when>
-				<when test="memType != 'admin'">
+				<when test="memType == 'user'">
 					AND MEM_NO = #{memSq}
+				</when>
+				<when test="memType == 'non-m'">
+					AND USER_EMAIL = #{memEmailId}
 				</when>
 			</choose>
 	</select>
@@ -96,7 +99,14 @@
 			)
 		VALUES (
 			CHAT_ROOM_SEQ.NEXTVAL,
-			#{memNo},
+			<choose >
+				<when test="memNo > 0" >
+					#{memNo},				
+				</when>
+				<when test="memNo == 0" >
+					null,
+				</when>
+			</choose>
 			#{userEmail},
 			#{adminNo},
 			#{inqCtgCd}
@@ -121,4 +131,12 @@
 			#{chatRoomNo}
 		)
 	</insert>
+	<update id="updateChatRoomInactive">
+		UPDATE 
+			CHAT_ROOM_TB
+		SET
+			CK_CHAT_ST = 'INACTIVE'
+		WHERE 
+			CHAT_ROOM_SQ = #{chatRoomSq}
+	</update>
 </mapper>

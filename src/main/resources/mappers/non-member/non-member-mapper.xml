@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nonMemberMapper">
+	<select id="selectReservation" resultType="NonMemberReserveItemVO" >
+		SELECT 
+			RES_CD,
+			RES_EMAIL_ID,
+			RES_NAME,
+			RES_PHONE,
+			RES_NUM_OF_PEO,
+			CHECK_IN_DT,
+			CHECK_OUT_DT,
+			CK_RES_ST,
+			RES_REG_DT,
+			ROOM_NO,
+			MEM_NO
+		FROM RESERVATION_TB
+		WHERE RES_CD = #{resCd}
+	</select>
+	<select id="selectReserveRoomInfo" resultType="NonMemberRoomInfo" >
+		SELECT
+			ROOM_SQ,
+			ROOM_NAME,
+			ROOM_PRICE,
+			ROOM_CHK_IN,
+			ROOM_CHK_OUT,
+			ROOM_STD_PPL,
+			ROOM_MAX_PPL,
+			ROOM_CNT,
+			ROOM_REG_DT,
+			ACCOM_NO
+		FROM 
+			ROOM_TB
+		WHERE ROOM_SQ = #{roomSq}
+	</select>
+	<select id="selectReserveAccomInfo" resultType="NonMemberAccomInfo" >
+		SELECT
+			ACCOM_SQ,
+			ACCOM_NAME,
+			ACCOM_PHONE
+		FROM 
+			ACCOMMODATION_TB
+		WHERE ACCOM_SQ = #{accomNo}
+	</select>
+</mapper>
