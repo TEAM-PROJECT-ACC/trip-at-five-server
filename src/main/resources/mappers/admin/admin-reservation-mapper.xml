@@ -53,7 +53,6 @@
 	            AND (  
 	                RES.RES_CD LIKE '%' || #{keyword} || '%'  
 	                OR RES.RES_NAME LIKE '%' || #{keyword} || '%'  
-	                OR RES.RES_PHONE LIKE '%' || #{keyword} || '%'  
 	            )
 	        </if>
 	    </where>
