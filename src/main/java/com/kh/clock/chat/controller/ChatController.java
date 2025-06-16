@@ -60,6 +60,7 @@ public class ChatController {
     } else {
       System.out.println("memType user : " + loginInfoJson);
       int memSq = CommonGson.getJsonInt(loginInfoJson, "memSq");
+
       String memEmailId = CommonGson.getJsonString(loginInfoJson, "memEmailId");
       String memNick = CommonGson.getJsonString(loginInfoJson, "memNick");
       
@@ -105,6 +106,7 @@ public class ChatController {
       int adminNo = admin.getAdminSq();
       ChatRoom newChatRoom = new ChatRoom(memNo, adminNo, userEmail, inqCtgCd);
       
+      System.out.println("new chat room info : " + newChatRoom);
       int result = chatService.insertChatRoom(newChatRoom);
       if(result > 0) {
         ArrayList<ChatMessage> chatMessageList = new ArrayList<>();
