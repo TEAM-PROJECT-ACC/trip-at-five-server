@@ -216,4 +216,14 @@ public class RoomServiceImpl implements RoomService {
   public RoomDetailDTO findRoomByAccomNoAndRoomSq(RoomIdentifierDTO getRoomDTO) {
     return roomDAO.findRoomByAccomNoAndRoomSq(getRoomDTO);
   }
+
+  /**
+   * 숙박번호로 객실과 객실 수 조회
+   * @param availableRoomRequestDTO
+   * @return
+   */
+  @Override
+  public List<RoomCntDTO> selectRoomCnt(AvailableRoomRequestDTO availableRoomRequestDTO) {
+    return roomDAO.selectRoomCnt(availableRoomRequestDTO);
+  }
 }

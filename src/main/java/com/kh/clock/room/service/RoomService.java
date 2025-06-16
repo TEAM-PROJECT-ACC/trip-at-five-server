@@ -50,4 +50,6 @@ public interface RoomService {
    */
   List<RoomListDTO> selectRoomList(RoomSearchDTO roomSearchDTO);
 
+  List<RoomCntDTO> selectRoomCnt(AvailableRoomRequestDTO availableRoomRequestDTO);
+
 }

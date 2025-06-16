@@ -40,7 +40,7 @@ public class ReservationServiceImpl implements ReservationService {
     
     String orderIdDeCoding = sb.toString();
     
-    String orderId = createresCd(orderIdDeCoding, salt);
+    String orderId = createResCd(orderIdDeCoding, salt);
     
     return orderId;
   }
@@ -62,7 +62,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     System.out.println("salt : " + salt);
     
-    String resCd = createresCd(resCdDeCoding, salt);
+    String resCd = createResCd(resCdDeCoding, salt);
     
     return resCd;
   }
@@ -85,7 +85,7 @@ public class ReservationServiceImpl implements ReservationService {
     
   }
   
-  private String createresCd(String pwd, String salt) {
+  private String createResCd(String pwd, String salt) {
     System.out.println(pwd);
     System.out.println(salt);
     StringBuilder sb = new StringBuilder();

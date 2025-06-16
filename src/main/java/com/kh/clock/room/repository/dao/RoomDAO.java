@@ -52,6 +52,7 @@ public class RoomDAO {
 
   // 객실 수 조회
   public List<RoomCntDTO> selectRoomCnt(AvailableRoomRequestDTO availableRoomRequestDTO) {
+    System.out.println(availableRoomRequestDTO);
     return sqlSession.selectList("roomMapper.selectRoomCnt", availableRoomRequestDTO);
   }
 
