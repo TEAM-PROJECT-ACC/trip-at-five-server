@@ -115,9 +115,9 @@ public class MemberDAO {
 	}
 
 	/* 챌린지 완료 처리 */
-	public int challengeSucces(HashMap chalSuccessInfo) {
+	public int challengeSuccess(HashMap chalSuccessInfo) {
 
-		return sqlsession.insert("mamberMapper.challengeSucces", chalSuccessInfo);
+		return sqlsession.insert("mamberMapper.challengeSuccess", chalSuccessInfo);
 	}
 
 	/* 쿠폰 정보 조회 */
@@ -135,4 +135,11 @@ public class MemberDAO {
 		return sqlsession.update("mamberMapper.reservationCancelUpdate", cancelInfo);
 	}
 
+	public List<ChallengHistoryDTO> getChallengeCompletion(List<ChallengHistoryDTO> list) {
+		return sqlsession.selectList("mamberMapper.getChallengeCompletion", list);
+	}
+
+	public int levelSearch(String userMemSq) {
+		return sqlsession.selectOne("mamberMapper.levelSearch", userMemSq);
+	}
 }

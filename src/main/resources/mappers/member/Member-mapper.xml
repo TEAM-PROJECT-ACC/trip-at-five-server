@@ -22,7 +22,8 @@
 	<select id="loginInfo" resultType="MemberVO">
 
 		select * from member_tb
-		left join member_level_tb on mem_no = mem_sq
+		left
+		join member_level_tb on mem_no = mem_sq
 		where
 		mem_email_id = #{email}
 
@@ -71,12 +72,15 @@
 
 	<!-- 마이페이지 부분 -->
 
-	<update id="infoUpdate"> UPDATE member_tb <trim prefix="SET"
-			suffixOverrides=",">
+	<update id="infoUpdate">
+		UPDATE member_tb
+		<trim prefix="SET" suffixOverrides=",">
 			<if test="pwd != null and pwd.length() > 0">mem_pwd = #{pwd},</if>
 			<if test="nickName != null and nickName.length() > 0">mem_nick =
-		#{nickName},</if>
-		</trim> WHERE mem_email_id = #{email} </update>
+				#{nickName},</if>
+		</trim>
+		WHERE mem_email_id = #{email}
+	</update>
 
 	<update id="userInactive">
 		update member_tb
@@ -96,27 +100,13 @@
 		challenge_tb
 	</select>
 
-
-	<select id="getChallengeUserList"
-		resultType="com.kh.clock.member.repository.ChallengHistoryDTO">
-		select
-		coupon_name as rewardCouponName ,
-		chal_name,
-		cmht.CHAL_NO as chalHistoryNo ,
-		chal_cond,
-		chal_hx_val as currentStep
-		from challenge_member_history_tb cmht
-		join challenge_tb ct on cmht.chal_no = ct.chal_sq
-		join coupon_tb cp on cp.coupon_sq = ct.coupon_no
-		where mem_no = #{memNo}
-	</select>
-
-
 	<insert id="insertUserChallengeList"
-		parameterType="java.util.List"> INSERT INTO challenge_member_history_tb
-		( CHAL_HX_SQ, CHAL_HX_VAL, CHAL_NO, MEM_NO ) SELECT
-		chal_history_seq.nextval, A.* FROM ( <foreach collection="list"
-			item="chal" separator=" UNION ALL ">
+		parameterType="java.util.List">
+		INSERT INTO challenge_member_history_tb
+		( CHAL_HX_SQ, CHAL_HX_VAL,
+		CHAL_NO, MEM_NO ) SELECT
+		chal_history_seq.nextval, A.* FROM (
+		<foreach collection="list" item="chal" separator=" UNION ALL ">
 			SELECT
 			0 AS
 			CHAL_HX_VAL,
@@ -125,16 +115,49 @@
 			MEM_NO
 			FROM DUAL
 		</foreach>
-		) A </insert>
-
-
-	<insert id="memberLevelSetting">
-
-		insert into member_level_tb(mem_no) values (
-		#{memSq})
+		) A
 	</insert>
 
-	<insert id="challengeSucces">
+	<select id="getChallengeUserList"
+		resultType="com.kh.clock.member.repository.ChallengHistoryDTO">
+		select
+		coupon_name as rewardCouponName ,
+		chal_name,
+		cmht.CHAL_NO as chalHistoryNo ,
+		chal_cond,
+		chal_hx_val as currentStep,
+		cmht.mem_no as userMemSq
+		from challenge_member_history_tb cmht
+		join
+		challenge_tb ct on cmht.chal_no = ct.chal_sq
+		join coupon_tb cp on
+		cp.coupon_sq = ct.coupon_no
+		where mem_no = #{memNo}
+		order by currentStep desc
+	</select>
+
+
+	<select id="getChallengeCompletion"
+		resultType="com.kh.clock.member.repository.ChallengHistoryDTO"
+		parameterType="java.util.List">
+
+		select CK_COUPON_ST,
+		mem_no as userMemSq,
+		chal_no as chalHistoryNo
+		from
+		challenge_member_history_tb
+		cmht
+		join
+		challenge_completed_tb cct
+		using(mem_no,chal_no)
+		where
+		<foreach collection="list" item="chal" separator=" OR ">
+			(mem_no =
+			#{chal.userMemSq} AND chal_no = #{chal.chalHistoryNo})
+		</foreach>
+	</select>
+
+	<insert id="challengeSuccess">
 
 		insert into challenge_completed_tb
 		values(chal_history_seq.nextval,
@@ -143,6 +166,13 @@
 		#{chalHistoryNo}
 		)
 	</insert>
+
+	<insert id="memberLevelSetting">
+
+		insert into member_level_tb(mem_no) values (
+		#{memSq})
+	</insert>
+
 
 	<select id="couponSelect"
 		resultType="com.kh.clock.member.repository.CouponDTO">
@@ -173,10 +203,12 @@
 		accom_name ,
 		room_no
 		from member_tb
-		join reservation_tb on mem_sq = mem_no
+		join
+		reservation_tb on mem_sq = mem_no
 		join room_tb on room_sq = ROOM_NO
 		join accommodation_tb on accom_sq = accom_no
-		where mem_no = #{userMemSq}
+		where mem_no =
+		#{userMemSq}
 
 	</select>
 
@@ -186,5 +218,13 @@
 		set CK_RES_ST = 'PROCESSING'
 		where RES_CD = #{resCd}
 	</update>
+
+	<select id="levelSearch" resultType="_int">
+
+		select mem_lvl from member_level_tb
+		where mem_no = #{userMemSq}
+
+
+	</select>
 
 </mapper>

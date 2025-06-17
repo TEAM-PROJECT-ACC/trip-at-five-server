@@ -49,8 +49,12 @@ public class ReservationDAO {
     return result;
   }
 
-  public int payStateCancel(CancelDTO cancelDTO) {
-    return sqlSession.update("reservationMapper.payStateCancel", cancelDTO);
+  public int payStateCancel(String resCd) {
+    return sqlSession.update("reservationMapper.payStateCancel", resCd);
+  }
+
+  public int selectRoomPrice(String resCd) {
+    return sqlSession.selectOne("reservationMapper.selectRoomPrice", resCd);
   }
 
 

@@ -303,12 +303,11 @@ class MemLoginController {
 
 		for (int i = 0; i < numlist.size(); i++) {
 
-			list.add(new ChallengeHistoryCreateDTO((int) numlist.get(i), loginUser.getMemSq()));
+			list.add(new ChallengeHistoryCreateDTO( loginUser.getMemSq(),(int) numlist.get(i)));
 		}
 
 		int memLevelResult = mService.memberLevelSetting(loginUser.getMemSq());
 		int chcN = mService.insertUserChallengeList(list);
-		System.out.println(chcN);
 
 		if (chcN > 1) {
 			return 1;
