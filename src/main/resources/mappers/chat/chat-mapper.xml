@@ -27,6 +27,20 @@
 				</when>
 			</choose>
 	</select>
+	<select id="selectChatRoomByNo" resultType="ChatRoom" >
+		SELECT 
+			CHAT_ROOM_SQ,
+			USER_EMAIL,
+			CK_CHAT_ST,
+			CHAT_ROOM_REG_DT,
+			MEM_NO,
+			ADMIN_NO,
+			INQ_CTG_CD
+		FROM CHAT_ROOM_TB 
+		WHERE
+			CK_CHAT_ST = 'ACTIVE'
+			AND CHAT_ROOM_SQ = #{roomNo}
+	</select>
 	<select id="selectChatMessageList" resultType="ChatMessage" >
 		SELECT
 			CHAT_MSG_SQ,
