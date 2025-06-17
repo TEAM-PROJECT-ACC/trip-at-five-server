@@ -47,11 +47,12 @@ public class DiaryController {
   @GetMapping("select/all")
   public String selectAllList(@RequestParam int memNo, @RequestParam int pageNo, @RequestParam int numOfRows) {
     int totalCount = selectTotalCount(memNo);
+    System.out.println(memNo);
     PageInfo pageInfo = new PageInfo(totalCount, pageNo, numOfRows);
     Gson gson = CommonGson.getDateFormattedGson("yyyy-MM-dd");
     ArrayList<DiaryVO> diaryList = diaryService.selectAllList(memNo, pageInfo);
     DiaryListDTO diaryListDTO = new DiaryListDTO(diaryList, pageInfo);
-
+    System.out.println(pageInfo);
     String responseData = gson.toJson(diaryListDTO);
 
     return responseData;
