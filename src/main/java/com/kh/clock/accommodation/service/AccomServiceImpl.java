@@ -41,9 +41,16 @@ public class AccomServiceImpl implements AccomService {
   @Override
   public AccomDTO getAccommodationById(int accomSq, Integer memNo) {
       AccomDTO accomDetail = accomDAO.selectAccomDetail(accomSq);
+      if (accomDetail == null) {
+        return null;
+      }
+      // 숙소 존재하지 않는 경우
       List<RoomVO> accomRoom = accomDAO.selectRoomList(accomSq);
       accomDetail.setRoomList(accomRoom);
 
+      List<AccomAdminImageDTO> imageList = accomImageService.findAccomImageByAccomSq(accomSq);
+      accomDetail.setImages(imageList);
+      
       if (memNo != null && memNo > 0) {
           String resCd = accomDAO.findUserResCd(accomSq, memNo); // accomSq=숙박번호, memNo=회원번호
           accomDetail.setResCd(resCd);
