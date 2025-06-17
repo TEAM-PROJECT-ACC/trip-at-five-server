@@ -80,6 +80,9 @@ public interface MemberService {
 	/* 유저 레벨 조회 */
 	public int levelSearch(String userMemSq);
 
+	/* 예약취소 요청 취소 */
+	public int reservationCancellationUpdate(ReservationSelectDTO cancelInfo);
+
 
 
 }

@@ -153,5 +153,12 @@ public class MypageController {
 		int result = mService.reservationCancelUpdate(cancelInfo);
 		return result;
 	}
+	
+	@PutMapping("/reservationCancellationUpdate")
+	public int reservationCancellationUpdate(@RequestBody ReservationSelectDTO cancelInfo) {
+
+		int result = mService.reservationCancellationUpdate(cancelInfo);
+		return result;
+	}
 
 }
