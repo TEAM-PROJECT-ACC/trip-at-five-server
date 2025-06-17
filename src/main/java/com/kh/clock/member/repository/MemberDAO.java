@@ -146,4 +146,18 @@ public class MemberDAO {
 	public int reservationCancellationUpdate(ReservationSelectDTO cancelInfo) {
 		return sqlsession.update("mamberMapper.reservationCancellationUpdate", cancelInfo);
 	}
+
+	public int reviewCount(String userMemSq) {
+		return sqlsession.selectOne("mamberMapper.reviewCount", userMemSq);
+	}
+
+	public int accommodationCount(String userMemSq) {
+		return sqlsession.selectOne("mamberMapper.accommodationCount", userMemSq);
+	}
+
+	public int locCount(String userMemSq) {
+		return sqlsession.selectOne("mamberMapper.locCount", userMemSq);
+	}
+
+
 }
