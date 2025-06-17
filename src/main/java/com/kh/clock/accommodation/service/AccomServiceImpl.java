@@ -8,25 +8,27 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.clock.accommodation.repository.dao.AccomDAO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminDetailDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminImageDTO;
-import com.kh.clock.accommodation.repository.dto.AccommodationDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminSearchDTO;
 import com.kh.clock.accommodation.repository.dto.AccomDTO;
 import com.kh.clock.accommodation.repository.dto.AccomFilterDTO;
+import com.kh.clock.accommodation.repository.dto.AccommodationDTO;
 import com.kh.clock.common.file.OclockFileUtils;
 import com.kh.clock.common.file.UploadFileType;
 import com.kh.clock.common.pageInfo.PageInfo;
 import com.kh.clock.room.domain.RoomVO;
-import com.kh.clock.room.repository.dto.RoomImageDTO;
+import com.kh.clock.room.repository.dao.RoomImageDAO;
 
 @Service
 public class AccomServiceImpl implements AccomService {
   
   private final AccomDAO accomDAO;
+  private final RoomImageDAO roomImgDAO;
   private final OclockFileUtils oFileUtils;
   private final AccomImageServiceImpl accomImageService;
   
-  public AccomServiceImpl(AccomDAO accomDAO, OclockFileUtils oFileUtils, AccomImageServiceImpl accomImageService) {
+  public AccomServiceImpl(AccomDAO accomDAO, RoomImageDAO roomImgDAO, OclockFileUtils oFileUtils, AccomImageServiceImpl accomImageService) {
       this.accomDAO = accomDAO;
+      this.roomImgDAO = roomImgDAO;
       this.oFileUtils = oFileUtils;
       this.accomImageService = accomImageService;
   }
@@ -50,6 +52,14 @@ public class AccomServiceImpl implements AccomService {
 
       List<AccomAdminImageDTO> imageList = accomImageService.findAccomImageByAccomSq(accomSq);
       accomDetail.setImages(imageList);
+      
+      List<String> roomImageList = new ArrayList<>();
+      
+      for(int i = 0; i < accomRoom.size(); i++) {
+        roomImageList.add(roomImgDAO.findRoomImageByRoomSqOne(accomRoom.get(i).getRoomSq()));
+      }
+
+      accomDetail.setRoomImageList(roomImageList);
       
       if (memNo != null && memNo > 0) {
           String resCd = accomDAO.findUserResCd(accomSq, memNo); // accomSq=숙박번호, memNo=회원번호
