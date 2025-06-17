@@ -33,4 +33,5 @@ public class AccomDTO {
   private String accomImgPathName;
   
   private List<AccomAdminImageDTO> images; 
+  private List<String> roomImageList;
 }
