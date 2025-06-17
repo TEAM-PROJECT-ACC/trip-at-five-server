@@ -6,51 +6,53 @@
 	<!-- 사용자 페이지 숙박 목록 조회(키워드/검색 데이터) -->
     <select id="selectAccomList" parameterType="com.kh.clock.accommodation.repository.dto.AccomFilterDTO" resultType="com.kh.clock.accommodation.repository.dto.AccomDTO">
       SELECT         
-        A.*,        
-        (SELECT COUNT(*) 
-          FROM REVIEW_TB V
-            JOIN RESERVATION_TB R ON V.RES_CD = R.RES_CD
-            JOIN ROOM_TB RM ON R.ROOM_NO = RM.ROOM_SQ
-          WHERE RM.ACCOM_NO = A.ACCOM_SQ
-        ) AS reviewCount,
-        R.ROOM_PRICE,
-        R.ROOM_CHK_IN,
-        R.ROOM_CHK_OUT,
-        IMG.ACCOM_IMG_PATH_NAME 
-    FROM ACCOMMODATION_TB A
-    JOIN (
-        SELECT R1.ACCOM_NO, R1.ROOM_PRICE, R1.ROOM_CHK_IN, R1.ROOM_CHK_OUT, R1.ROOM_STD_PPL
-        FROM (
-            SELECT R.*,
-            ROW_NUMBER() OVER (PARTITION BY R.ACCOM_NO ORDER BY R.ROOM_PRICE ASC) AS RN
-            FROM ROOM_TB R
-        ) R1
-        WHERE R1.RN = 1
-    ) R ON A.ACCOM_SQ = R.ACCOM_NO
-    JOIN LOCATION_TB L ON A.LOC_ID = L.LOC_ID
-
-    LEFT JOIN (
-        SELECT
-            ACCOM_NO,
-            ACCOM_IMG_PATH_NAME,
-            ROW_NUMBER() OVER(PARTITION BY ACCOM_NO ORDER BY ACCOM_IMG_REG_DT ASC) AS RN
-        FROM ACCOMMODATION_IMAGE_TB
-    ) IMG ON A.ACCOM_SQ = IMG.ACCOM_NO AND IMG.RN = 1
-
-    WHERE 1=1
-    <if test="guests != null and guests != ''">
-    	AND R.ROOM_STD_PPL >= #{guests}
-    </if>
-    <if test="keyword != null and keyword != ''">
-        AND (
-            LOC_NAME LIKE '%' || #{keyword} || '%'
-            OR A.ACCOM_NAME LIKE '%' || #{keyword} || '%'
-        )
-    </if>
-    <if test="minPrice != null and maxPrice != null">
-        AND R.ROOM_PRICE BETWEEN #{minPrice} AND #{maxPrice}
-    </if>
-    ORDER BY ACCOM_NAME
+	    A.*,        
+	    (SELECT COUNT(*) 
+	      FROM REVIEW_TB V
+	        JOIN RESERVATION_TB R ON V.RES_CD = R.RES_CD
+	        JOIN ROOM_TB RM ON R.ROOM_NO = RM.ROOM_SQ
+	      WHERE RM.ACCOM_NO = A.ACCOM_SQ
+	    ) AS reviewCount,
+	    R.ROOM_PRICE,
+	    R.ROOM_CHK_IN,
+	    R.ROOM_CHK_OUT,
+	    IMG.ACCOM_IMG_PATH_NAME 
+	  FROM ACCOMMODATION_TB A
+	  JOIN (
+	    SELECT R1.*
+	    FROM (
+	      SELECT 
+	        R.*,
+	        ROW_NUMBER() OVER (PARTITION BY R.ACCOM_NO ORDER BY R.ROOM_PRICE ASC) AS RN
+	      FROM ROOM_TB R
+	      WHERE 1=1
+	      <if test="guests != null and guests != '' and guests > 0">
+	        AND #{guests} BETWEEN R.ROOM_STD_PPL AND R.ROOM_MAX_PPL
+	      </if>
+	      ) R1
+	    WHERE R1.RN = 1
+	  ) R ON A.ACCOM_SQ = R.ACCOM_NO
+	  JOIN LOCATION_TB L ON A.LOC_ID = L.LOC_ID
+	
+	  LEFT JOIN (
+	    SELECT
+	      ACCOM_NO,
+	      ACCOM_IMG_PATH_NAME,
+	      ROW_NUMBER() OVER(PARTITION BY ACCOM_NO ORDER BY ACCOM_IMG_REG_DT ASC) AS RN
+	    FROM ACCOMMODATION_IMAGE_TB
+	  ) IMG ON A.ACCOM_SQ = IMG.ACCOM_NO AND IMG.RN = 1
+	
+	  WHERE 1=1
+	    <if test="keyword != null and keyword != ''">
+	      AND (
+	        LOC_NAME LIKE '%' || #{keyword} || '%'
+	        OR A.ACCOM_NAME LIKE '%' || #{keyword} || '%'
+	      )
+	    </if>
+	    <if test="minPrice != null and maxPrice != null">
+	      AND R.ROOM_PRICE BETWEEN #{minPrice} AND #{maxPrice}
+	    </if>
+	  ORDER BY A.ACCOM_NAME
     </select>
 	
 	<!-- 사용자 페이지 숙박 상세 페이지 -->
