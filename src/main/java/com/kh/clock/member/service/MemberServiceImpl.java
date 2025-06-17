@@ -178,6 +178,12 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.levelSearch(userMemSq);
 	}
 
+	@Override
+	public int reservationCancellationUpdate(ReservationSelectDTO cancelInfo) {
+		return memberDAO.reservationCancellationUpdate(cancelInfo);
+	}
+
+	
 	
 	
 }

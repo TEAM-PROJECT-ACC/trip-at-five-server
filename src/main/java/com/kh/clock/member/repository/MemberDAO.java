@@ -142,4 +142,8 @@ public class MemberDAO {
 	public int levelSearch(String userMemSq) {
 		return sqlsession.selectOne("mamberMapper.levelSearch", userMemSq);
 	}
+
+	public int reservationCancellationUpdate(ReservationSelectDTO cancelInfo) {
+		return sqlsession.update("mamberMapper.reservationCancellationUpdate", cancelInfo);
+	}
 }

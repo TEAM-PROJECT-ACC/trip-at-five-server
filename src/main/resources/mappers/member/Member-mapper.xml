@@ -133,7 +133,8 @@
 		join coupon_tb cp on
 		cp.coupon_sq = ct.coupon_no
 		where mem_no = #{memNo}
-		order by currentStep desc
+		order by currentStep
+		desc
 	</select>
 
 
@@ -219,9 +220,18 @@
 		where RES_CD = #{resCd}
 	</update>
 
+	<update id="reservationCancellationUpdate">
+
+		update reservation_tb
+		set CK_RES_ST = 'COMPLETED'
+		where RES_CD = #{resCd}
+	</update>
+
+
 	<select id="levelSearch" resultType="_int">
 
-		select mem_lvl from member_level_tb
+		select mem_lvl from
+		member_level_tb
 		where mem_no = #{userMemSq}
 
 
