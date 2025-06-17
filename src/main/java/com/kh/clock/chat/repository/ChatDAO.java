@@ -23,6 +23,10 @@ public class ChatDAO {
   public ChatRoom selectChatRoom(Object loginInfoObj) {
     return sqlSession.selectOne("chatMapper.selectChatRoom", loginInfoObj);
   }
+  
+  public ChatRoom selectChatRoom(int roomNo) {
+    return sqlSession.selectOne("chatMapper.selectChatRoomByNo", roomNo);
+  }
 
   /**
    * @param chatRoom

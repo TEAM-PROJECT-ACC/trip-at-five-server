@@ -28,6 +28,12 @@ public class ChatServiceImpl implements ChatService {
     return chatRoom;
   }
   
+  @Override
+  public ChatRoom selectChatRoom(int roomNo) {
+    ChatRoom chatRoom = chatDAO.selectChatRoom(roomNo);
+    return chatRoom;
+  }
+  
   /**
    * [PUT] 채팅 방 생성
    * @param newChatRoom

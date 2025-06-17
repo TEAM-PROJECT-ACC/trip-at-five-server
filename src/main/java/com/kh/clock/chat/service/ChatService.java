@@ -16,6 +16,7 @@ public interface ChatService {
    * @return ChatRoom
    */
   public ChatRoom selectChatRoom(Object loginInfoObj);
+  public ChatRoom selectChatRoom(int roomNo);
   
   
   /**
