@@ -19,7 +19,7 @@
         IMG.ACCOM_IMG_PATH_NAME 
     FROM ACCOMMODATION_TB A
     JOIN (
-        SELECT R1.ACCOM_NO, R1.ROOM_PRICE, R1.ROOM_CHK_IN, R1.ROOM_CHK_OUT
+        SELECT R1.ACCOM_NO, R1.ROOM_PRICE, R1.ROOM_CHK_IN, R1.ROOM_CHK_OUT, R1.ROOM_STD_PPL
         FROM (
             SELECT R.*,
             ROW_NUMBER() OVER (PARTITION BY R.ACCOM_NO ORDER BY R.ROOM_PRICE ASC) AS RN
@@ -38,6 +38,9 @@
     ) IMG ON A.ACCOM_SQ = IMG.ACCOM_NO AND IMG.RN = 1
 
     WHERE 1=1
+    <if test="guests != null and guests != ''">
+    	AND R.ROOM_STD_PPL >= #{guests}
+    </if>
     <if test="keyword != null and keyword != ''">
         AND (
             LOC_NAME LIKE '%' || #{keyword} || '%'
