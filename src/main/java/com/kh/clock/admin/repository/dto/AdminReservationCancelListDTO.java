@@ -11,6 +11,6 @@ public class AdminReservationCancelListDTO {
   private String no;
   private String receiptId;
   private String resName;
-  private String payPrice;
+  private int roomPrice;
   private String ckResSt;
 }

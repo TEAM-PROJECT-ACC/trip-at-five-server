@@ -38,6 +38,17 @@ public class ChatController {
     return chatMessageList;
   }
   
+  
+  public ChatRoom selectChatRoom(int roomNo) {
+    ChatRoom chatRoom = chatService.selectChatRoom(roomNo);
+    return chatRoom;
+  }
+  
+  public ChatRoom selectChatRoom(Object loginInfo) {
+    ChatRoom chatRoom = chatService.selectChatRoom(loginInfo);
+    return chatRoom;
+  }
+  
   /**
    * [GET] 채팅방 조회
    * @param memType
@@ -48,10 +59,12 @@ public class ChatController {
    * @return String
    */
   @GetMapping("{memType}/{memNo}")
-  public String selectInitChat( @PathVariable String memType, @PathVariable int memNo, @RequestParam String loginInfo, @RequestParam String userEmail, @RequestParam String inqCtgCd) {
+  public String selectInitChat( @PathVariable String memType, @PathVariable int memNo, 
+      @RequestParam String loginInfo, @RequestParam String userEmail, @RequestParam String inqCtgCd, @RequestParam int roomNo) {
     JsonObject loginInfoJson = JsonParser.parseString(loginInfo).getAsJsonObject();
     Object loginInfoObj = null;
     System.out.println(memType);
+    System.out.println(userEmail);
     if(memType.equals("admin")) {
       int adminSq = CommonGson.getJsonInt(loginInfoJson, "adminSq");
       String adminEmailId = CommonGson.getJsonString(loginInfoJson, "adminEmailId");
@@ -66,11 +79,15 @@ public class ChatController {
       
       loginInfoObj = new MemberInfo(memEmailId, memNick, memSq, memType);
     }
-    // TODO: 비회원 vo 생성
-    
     // memNo로 채팅 방 조회
-    ChatRoom chatRoom = chatService.selectChatRoom(loginInfoObj);
     System.out.println("방 존재 여부 확인 사용자 정보 : " + loginInfoObj);
+    ChatRoom chatRoom = null;
+    
+    if(memType.equals("admin")) {
+      chatRoom = chatService.selectChatRoom(roomNo);
+    } else {
+      chatRoom = chatService.selectChatRoom(loginInfoObj);
+    }
     System.out.println("memNo로 조회 한 채팅 방 : " + chatRoom);
     
     if(chatRoom == null) {
@@ -110,7 +127,11 @@ public class ChatController {
       int result = chatService.insertChatRoom(newChatRoom);
       if(result > 0) {
         ArrayList<ChatMessage> chatMessageList = new ArrayList<>();
-        newChatRoom = chatService.selectChatRoom(loginInfoObj);
+        if(memType.equals("admin")) {
+          newChatRoom = chatService.selectChatRoom(roomNo);
+        } else {
+          newChatRoom = chatService.selectChatRoom(loginInfoObj);          
+        }
         ChatDTO chatDTO = new ChatDTO(newChatRoom, chatMessageList);
         Gson gson = CommonGson.getDateFormattedGson("yyyy-MM-dd");
         String responseData = gson.toJson(chatDTO);

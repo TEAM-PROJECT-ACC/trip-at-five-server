@@ -63,8 +63,11 @@ public interface MemberService {
 	public int memberLevelSetting(int memSq);
 
 	/* 챌린지 완료 처리 */
-	public int challengeSucces(HashMap chalSuccessInfo);
+	public int challengeSuccess(HashMap chalSuccessInfo);
 
+	/* 완료된 챌린지 조회 */
+	public List<ChallengHistoryDTO> getChallengeCompletion(List<ChallengHistoryDTO> list);
+	
 	/* 쿠폰 정보 조회 */
 	public List<CouponDTO> couponSelect(String userMemSq);
 
@@ -73,5 +76,10 @@ public interface MemberService {
 
 	/* 예약 취소 수정 */
 	public int reservationCancelUpdate(ReservationSelectDTO cancelInfo);
+
+	/* 유저 레벨 조회 */
+	public int levelSearch(String userMemSq);
+
+
 
 }

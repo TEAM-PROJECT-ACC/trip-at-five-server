@@ -44,6 +44,13 @@
     	WHERE RES_CD = #{resCd}
     </update>
     
+    <select id="selectRoomPrice" resultType="_int">
+    	SELECT R.ROOM_PRICE 
+    	FROM RESERVATION_TB RES
+    		LEFT JOIN ROOM_TB ON (RES.ROOM_NO = R.ROOM_SQ)
+    	WHERE RES_CD = #{resCd}
+    </select>
+    
     <select id="findReservationByResCd" resultType="com.kh.clock.order.repository.dto.OrderResInfoDTO">
     	SELECT ACC.ACCOM_NAME, R.ROOM_NAME, RES.CHECK_IN_DT, RES.CHECK_OUT_DT, R.ROOM_PRICE, RES.RES_CD, RES.MEM_NO
     	FROM RESERVATION_TB RES

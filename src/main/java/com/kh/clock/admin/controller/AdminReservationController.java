@@ -120,14 +120,17 @@ public class AdminReservationController {
     else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("예약 상세 조회에 실패했습니다.");
   }
   
+  /**
+   * 취소 요청 수 알림
+   * @return
+   */
   @GetMapping("/cancel-count")
   public ResponseEntity<Object> getReservationCancelCnt() {
     int result = 0;
     
     result = adminReservationService.selectCancelTotalCount();
     
-    if(result > 0) return ResponseEntity.status(HttpStatus.OK).body(result);
-    else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("예약 상세 조회에 실패했습니다.");
+    return ResponseEntity.ok(result);
   
   }
 }

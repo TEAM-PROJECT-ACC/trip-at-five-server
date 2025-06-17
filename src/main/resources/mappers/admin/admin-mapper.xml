@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="adminMapper">
+    <select id="selectAdmin" resultType="AdminVO">
+        SELECT
+			ADMIN_SQ,
+			ADMIN_EMAIL_ID,
+			ADMIN_PWD,
+			ADMIN_REG_DT,
+			INQ_CTG_CD
+        FROM ADMIN_TB
+        WHERE
+        	ADMIN_SQ = #{adminSq}
+    </select>
+</mapper>

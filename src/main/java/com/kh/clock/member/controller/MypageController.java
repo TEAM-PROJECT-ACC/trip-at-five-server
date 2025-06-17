@@ -99,22 +99,30 @@ public class MypageController {
 	}
 
 	@GetMapping("/challenge")
-	public ResponseEntity<List<ChallengHistoryDTO>> getChallengeList(@RequestParam String userMemSq) {
+	public ResponseEntity<List<ChallengHistoryDTO>> getChallengeList(@RequestParam String userMemSq,
+			@RequestParam String memLvl ) {
 
 		List<ChallengHistoryDTO> list = mService.getChallengeUserList(userMemSq);
-		List<ChallengHistoryDTO> ckCouponStlist = mService.getChallengeUserList(userMemSq);
-		
-		 for(int i=0; i<list.size();i++) {
-			 list.get(i).setCkCouponSt(ckCouponStlist.get(i).getCkCouponSt());
-		 }
+		List<ChallengHistoryDTO> list2 = mService.getChallengeUserList(memLvl);
+
+		List<ChallengHistoryDTO> ckCouponStlist = mService.getChallengeCompletion(list);
+
+		for (int i = 0; i < ckCouponStlist.size(); i++) {
+			if (list.get(i).getChalHistoryNo() == ckCouponStlist.get(i).getChalHistoryNo()) {
+				list.get(i).setCkCouponSt(ckCouponStlist.get(i).getCkCouponSt());
+			} else {
+				break;
+			}
+		}
 
 		return ResponseEntity.ok(list);
+
 	}
 
 	@PutMapping("/challengeSuccess")
 	public int challengeSucces(@RequestBody HashMap chalSuccessInfo) {
 
-		int result = mService.challengeSucces(chalSuccessInfo);
+		int result = mService.challengeSuccess(chalSuccessInfo);
 
 		if (result > 0) {
 			/* 챌린지 성공 */
