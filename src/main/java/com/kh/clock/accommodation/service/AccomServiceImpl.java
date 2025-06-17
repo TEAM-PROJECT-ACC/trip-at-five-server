@@ -8,12 +8,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.clock.accommodation.repository.dao.AccomDAO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminDetailDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminImageDTO;
-import com.kh.clock.accommodation.repository.dto.AccomAdminListDTO;
+import com.kh.clock.accommodation.repository.dto.AccommodationDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminSearchDTO;
 import com.kh.clock.accommodation.repository.dto.AccomDTO;
-import com.kh.clock.accommodation.repository.dto.AccomListInfoDTO;
+import com.kh.clock.accommodation.repository.dto.AccomFilterDTO;
 import com.kh.clock.common.file.OclockFileUtils;
 import com.kh.clock.common.file.UploadFileType;
+import com.kh.clock.common.pageInfo.PageInfo;
 import com.kh.clock.room.domain.RoomVO;
 import com.kh.clock.room.repository.dto.RoomImageDTO;
 
@@ -21,8 +22,8 @@ import com.kh.clock.room.repository.dto.RoomImageDTO;
 public class AccomServiceImpl implements AccomService {
   
   private final AccomDAO accomDAO;
-  private OclockFileUtils oFileUtils;
-  private AccomImageServiceImpl accomImageService;
+  private final OclockFileUtils oFileUtils;
+  private final AccomImageServiceImpl accomImageService;
   
   public AccomServiceImpl(AccomDAO accomDAO, OclockFileUtils oFileUtils, AccomImageServiceImpl accomImageService) {
       this.accomDAO = accomDAO;
@@ -30,34 +31,37 @@ public class AccomServiceImpl implements AccomService {
       this.accomImageService = accomImageService;
   }
 
-  // 숙박 목록 조회(키워드/AccomListInfoDTO)
+  // 숙박 목록 조회(키워드/accomFilterDTO)
   @Override
-  public List<AccomDTO> selectAccomList(AccomListInfoDTO accomListInfoDTO) {
-      return accomDAO.selectAccomList(accomListInfoDTO);
+  public List<AccomDTO> selectAccomList(AccomFilterDTO accomFilterDTO) {
+      return accomDAO.selectAccomList(accomFilterDTO);
   }
   
   // 숙박 상세 페이지 조회
   @Override
-  public AccomDTO getAccommodationById(int accomSq) {
-    // 1. 숙박 업체 정보 조회
+  public AccomDTO getAccommodationById(int accomSq, Integer memNo) {
       AccomDTO accomDetail = accomDAO.selectAccomDetail(accomSq);
-      
-    // 2. 해당 숙박 업체의 객실 목록 조회
       List<RoomVO> accomRoom = accomDAO.selectRoomList(accomSq);
       accomDetail.setRoomList(accomRoom);
-      
+
+      if (memNo != null && memNo > 0) {
+          String resCd = accomDAO.findUserResCd(accomSq, memNo); // accomSq=숙박번호, memNo=회원번호
+          accomDetail.setResCd(resCd);
+      } else {
+          accomDetail.setResCd(null);
+      }
       return accomDetail;
   }
 
   // 관리자 숙박 목록 조회
   @Override
-  public List<AccomAdminListDTO> selectAdminAccomList(AccomAdminSearchDTO accomSearchDTO) {
-    return accomDAO.selectAdminAccomList(accomSearchDTO);
+  public List<AccommodationDTO> selectAdminAccomList(AccomAdminSearchDTO accomSearchDTO, PageInfo pageInfo) {
+    return accomDAO.selectAdminAccomList(accomSearchDTO, pageInfo);
   }
 
   // 관리자 숙박 상세 조회(숙박업체 번호로 조회)
   @Override
-  public AccomAdminDetailDTO selectAdminAccomDetailByAccomSq(int accomSq) {
+  public AccomAdminDetailDTO selectAdminAccomDetailByAccomSq(int accomSq ) {
     return accomDAO.selectAdminAccomDetailByAccomSq(accomSq);
   }
 
@@ -184,5 +188,11 @@ public class AccomServiceImpl implements AccomService {
         oFileUtils.deleteTempFolder(newImageList, newHashCodeList, hashCodeList, typePath);
       }
     }
+  }
+
+  @Override
+  public int selectAdminAccomCount(AccomAdminSearchDTO accomSearchDTO) {
+
+    return accomDAO.selectAdminAccomCount(accomSearchDTO);
   }
 }

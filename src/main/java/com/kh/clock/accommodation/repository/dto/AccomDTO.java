@@ -1,6 +1,7 @@
 package com.kh.clock.accommodation.repository.dto;
 
 import java.util.List;
+import com.kh.clock.review.repository.dto.ReviewDTO;
 import com.kh.clock.room.domain.RoomVO;
 import lombok.Data;
 
@@ -19,16 +20,15 @@ public class AccomDTO {
   private String etcFacInfo;
   private int accomTypeNo;
   private int locId;
-  
   private int roomPrice;
   private String roomChkIn;
   private String roomChkOut;
   private List<RoomVO> roomList;
   
   private String accomTypeName;
+  private String resCd;
+  private List<ReviewDTO> reviewList;
   
-  private int maxPrice;
-  private int minPrice;
-  
-  private int memNo;
+  private int reviewCount;
+  private String accomImgPathName;
 }

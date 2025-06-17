@@ -12,17 +12,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.kh.clock.accommodation.repository.dto.AccomAdminDetailDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminImageDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminListDTO;
+import com.kh.clock.accommodation.repository.dto.AccommodationDTO;
 import com.kh.clock.accommodation.repository.dto.AccomAdminSearchDTO;
 import com.kh.clock.accommodation.service.AccomImageServiceImpl;
 import com.kh.clock.accommodation.service.AccomService;
 import com.kh.clock.common.file.dto.DeleteImageRequestDTO;
 import com.kh.clock.common.file.dto.ImageFileDTO;
+import com.kh.clock.common.pageInfo.PageInfo;
 // 관리자 페이지 기능
 @RestController
 @RequestMapping("/admin/accommodations")
@@ -38,8 +41,17 @@ public class AdminAccommodationController {
 
   //숙박 업체 정보 목록 조회
   @GetMapping
-  public List<AccomAdminListDTO> selectAdminAccomList(@ModelAttribute AccomAdminSearchDTO accomSearchDTO) {
-    return accomService.selectAdminAccomList(accomSearchDTO);
+  public AccomAdminListDTO selectAdminAccomList(@ModelAttribute AccomAdminSearchDTO accomSearchDTO, 
+      @RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "10") int numOfRows) {
+    
+    int totalCount = accomService.selectAdminAccomCount(accomSearchDTO);
+    PageInfo pageInfo = new PageInfo(totalCount, pageNo, numOfRows);
+    
+    List<AccommodationDTO> list = accomService.selectAdminAccomList(accomSearchDTO, pageInfo);
+    
+    AccomAdminListDTO responseData = new AccomAdminListDTO(list, pageInfo);
+    return responseData;
   }
   
   // 숙박 업체 정보 상세 페이지(숙박업체 번호)
