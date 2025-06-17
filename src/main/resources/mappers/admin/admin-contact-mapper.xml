@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="adminContactMapper">
+    <select id="selectAdminContactList" resultType="AdminContactVO">
+    	SELECT
+    		CHAT_ROOM_SQ AS NO,
+		    USER_EMAIL,
+		    M.MEM_NICK AS USER_NAME,
+		    CHAT_ROOM_REG_DT
+		FROM CHAT_ROOM_TB CR
+		JOIN MEMBER_TB M ON CR.MEM_NO = M.MEM_SQ
+        WHERE
+       		ADMIN_NO = #{adminSq}
+       		AND CK_CHAT_ST = 'ACTIVE'
+       		<if test="keyword != null and keyword != ''" >
+       			AND ( 
+                    CHAT_ROOM_SQ LIKE '%' || #{keyword} || '%' 
+                    OR USER_EMAIL LIKE '%' || #{keyword} || '%' 
+                    OR M.MEM_NICK LIKE '%' || #{keyword} || '%' 
+                )
+       		</if>
+    </select>
+    <select id="selectContactListCount" resultType="_int">
+    	SELECT
+    		COUNT(*)
+    	FROM CHAT_ROOM_TB
+    	WHERE 
+    		ADMIN_NO = #{adminSq}
+    		AND CK_CHAT_ST = 'ACTIVE'
+    </select>
+</mapper>

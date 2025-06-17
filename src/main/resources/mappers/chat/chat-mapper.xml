@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chatMapper" >
+	<select id="selectChatRoom" resultType="ChatRoom" >
+		SELECT 
+			CHAT_ROOM_SQ,
+			USER_EMAIL,
+			CK_CHAT_ST,
+			CHAT_ROOM_REG_DT,
+			MEM_NO,
+			ADMIN_NO,
+			INQ_CTG_CD
+		FROM CHAT_ROOM_TB 
+		WHERE
+			CK_CHAT_ST = 'ACTIVE'
+			<choose >
+				<when test="memType == 'admin'" >
+					AND ADMIN_NO = #{adminSq}
+				</when>
+				<when test="memType == 'user'">
+					AND MEM_NO = #{memSq}
+				</when>
+				<when test="memType == 'non-m'">
+					AND USER_EMAIL = #{memEmailId}
+				</when>
+			</choose>
+	</select>
+	<select id="selectChatRoomByNo" resultType="ChatRoom" >
+		SELECT 
+			CHAT_ROOM_SQ,
+			USER_EMAIL,
+			CK_CHAT_ST,
+			CHAT_ROOM_REG_DT,
+			MEM_NO,
+			ADMIN_NO,
+			INQ_CTG_CD
+		FROM CHAT_ROOM_TB 
+		WHERE
+			CK_CHAT_ST = 'ACTIVE'
+			AND CHAT_ROOM_SQ = #{roomNo}
+	</select>
+	<select id="selectChatMessageList" resultType="ChatMessage" >
+		SELECT
+			CHAT_MSG_SQ,
+			CHAT_MSG_CONT,
+			SEND_DT,
+			CK_SENDER_TYPE,
+			SENDER_EMAIL,
+			CHAT_ROOM_NO
+		FROM CHAT_MESSAGE_TB
+		WHERE
+			CHAT_ROOM_NO = #{chatRoomSq}
+		ORDER BY CHAT_MSG_SQ ASC
+	</select>
+	<select id="selectChatMessage" resultType="ChatMessage" >
+		SELECT 
+			CHAT_MSG_SQ,
+			CHAT_MSG_CONT,
+			SEND_DT,
+			CK_SENDER_TYPE,
+			SENDER_EMAIL,
+			CHAT_ROOM_NO
+		FROM CHAT_MESSAGE_TB
+		WHERE SENDER_EMAIL = #{senderEmail}
+	</select>
+	<select id="selectChatAdminList" resultType="ChatAdminVO">
+		SELECT
+			ADMIN_SQ,
+			ADMIN_EMAIL_ID,
+			ADMIN_PWD,
+			ADMIN_REG_DT,
+			INQ_CTG_CD,
+			(
+				SELECT 
+					COUNT(*) 
+				FROM CHAT_ROOM_TB 
+				WHERE 
+					CK_CHAT_ST = 'ACTIVE'
+					AND ADMIN_NO = ADMIN_SQ
+			) AS ROOM_COUNT
+		FROM
+			ADMIN_TB
+		WHERE 
+			INQ_CTG_CD = #{inqCtgCd}
+	</select>
+	<select id="selectAdminChatRoomCount" resultType="_int" >
+		SELECT COUNT(*) 
+		FROM CHAT_ROOM_TB
+		WHERE 
+			ADMIN_NO = #{adminNo} 
+			AND CK_CHAT_ST = 'ACTIVE'
+	</select>
+	<select id="selectChatAdmin" resultType="AdminVO" >
+		SELECT
+			ADMIN_SQ,
+			ADMIN_EMAIL_ID,
+			ADMIN_PWD,
+			ADMIN_REG_DT,
+			INQ_CTG_CD
+		FROM ADMIN_TB
+		WHERE ADMIN_SQ = #{adminSq}
+	</select>
+	<insert id="insertChatRoom" >
+		INSERT INTO 
+			CHAT_ROOM_TB (
+				CHAT_ROOM_SQ,
+				MEM_NO,
+				USER_EMAIL,
+				ADMIN_NO,
+				INQ_CTG_CD
+			)
+		VALUES (
+			CHAT_ROOM_SEQ.NEXTVAL,
+			<choose >
+				<when test="memNo > 0" >
+					#{memNo},				
+				</when>
+				<when test="memNo == 0" >
+					null,
+				</when>
+			</choose>
+			#{userEmail},
+			#{adminNo},
+			#{inqCtgCd}
+		)
+	</insert>
+	<insert id="insertChatMessage" >
+		INSERT INTO
+			CHAT_MESSAGE_TB (
+				CHAT_MSG_SQ,
+				CHAT_MSG_CONT,
+				SEND_DT,
+				CK_SENDER_TYPE,
+				SENDER_EMAIL,
+				CHAT_ROOM_NO
+			)
+		VALUES (
+			CHAT_MSG_SEQ.NEXTVAL,
+			#{chatMsgCont},
+			SYSDATE,
+			#{ckSenderType},
+			#{senderEmail},
+			#{chatRoomNo}
+		)
+	</insert>
+	<update id="updateChatRoomInactive">
+		UPDATE 
+			CHAT_ROOM_TB
+		SET
+			CK_CHAT_ST = 'INACTIVE'
+		WHERE 
+			CHAT_ROOM_SQ = #{chatRoomSq}
+	</update>
+</mapper>
