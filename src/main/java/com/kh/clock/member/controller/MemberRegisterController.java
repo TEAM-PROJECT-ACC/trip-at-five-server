@@ -38,10 +38,12 @@ public class MemberRegisterController {
 
 		int result = mService.emailDuplicationCheck(email);
 
+		System.out.println(result);
 		if (result > 0) {
 			register.setEmailCount(result);
 		}
 
+		
 		return register.getEmailCount();
 	}
 
