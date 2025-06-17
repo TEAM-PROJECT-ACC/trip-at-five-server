@@ -183,7 +183,20 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.reservationCancellationUpdate(cancelInfo);
 	}
 
-	
+	@Override
+	public int reviewCount(String userMemSq) {
+		return memberDAO.reviewCount(userMemSq);
+	}
+
+	@Override
+	public int accommodationCount(String userMemSq) {
+		return memberDAO.accommodationCount(userMemSq);
+	}
+
+	@Override
+	public int locCount(String userMemSq) {
+		return memberDAO.locCount(userMemSq);
+	}
 	
 	
 }

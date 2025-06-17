@@ -100,7 +100,7 @@ public class MypageController {
 
 	@GetMapping("/challenge")
 	public ResponseEntity<List<ChallengHistoryDTO>> getChallengeList(@RequestParam String userMemSq,
-			@RequestParam String memLvl ) {
+			@RequestParam String memLvl) {
 
 		List<ChallengHistoryDTO> list = mService.getChallengeUserList(userMemSq);
 		List<ChallengHistoryDTO> list2 = mService.getChallengeUserList(memLvl);
@@ -113,6 +113,46 @@ public class MypageController {
 			} else {
 				break;
 			}
+		}
+
+		for (int i = 0; i < list.size(); i++) {
+
+			switch (list.get(i).getChalHistoryNo()) {
+			case 1: {
+
+				int result = mService.reviewCount(userMemSq);
+
+				if (result < 4) {
+
+					list.get(i).setCurrentStep(result);
+				}
+				break;
+			}
+
+			case 2: {
+				
+				int result = mService.locCount(userMemSq);
+
+				if (result < 4) {
+
+					list.get(i).setCurrentStep(result);
+				}
+				break;
+
+			}
+			case 3: {
+				
+				int result = mService.accommodationCount(userMemSq);
+				if (result < 4) {
+					list.get(i).setCurrentStep(result);
+				}
+
+				break;
+			}
+			default:
+				break;
+			}
+
 		}
 
 		return ResponseEntity.ok(list);
@@ -153,7 +193,7 @@ public class MypageController {
 		int result = mService.reservationCancelUpdate(cancelInfo);
 		return result;
 	}
-	
+
 	@PutMapping("/reservationCancellationUpdate")
 	public int reservationCancellationUpdate(@RequestBody ReservationSelectDTO cancelInfo) {
 

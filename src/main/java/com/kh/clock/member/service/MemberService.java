@@ -83,6 +83,17 @@ public interface MemberService {
 	/* 예약취소 요청 취소 */
 	public int reservationCancellationUpdate(ReservationSelectDTO cancelInfo);
 
+	
+	/* 챌린지 조건  */
+	/* 리뷰 카운트 */
+	public int reviewCount(String userMemSq);
+
+	/* 숙박 카운트 */
+	public int accommodationCount(String userMemSq);
+
+	/* 지역 카운트 */
+	public int locCount(String userMemSq);
+
 
 
 }

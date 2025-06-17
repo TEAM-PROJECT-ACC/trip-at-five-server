@@ -118,6 +118,31 @@
 		) A
 	</insert>
 
+	<select id="reviewCount" resultType="_int">
+
+		select count(*) from
+		reservation_tb
+		join review_tb using(res_cd)
+		where mem_no = #{userMemSq}
+	</select>
+
+	<select id="accommodationCount" resultType="_int">
+
+		select count(*) from
+		reservation_tb
+		where mem_no = #{userMemSq}
+	</select>
+
+	<select id="locCount" resultType="_int">
+
+		select count(distinct loc_id) from reservation_tb
+		join room_tb on room_no = room_sq
+		join accommodation_tb on accom_no = accom_sq
+		join location_tb using(loc_id)
+		where mem_no = #{userMemSq}
+	</select>
+
+
 	<select id="getChallengeUserList"
 		resultType="com.kh.clock.member.repository.ChallengHistoryDTO">
 		select
