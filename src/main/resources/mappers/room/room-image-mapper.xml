@@ -9,6 +9,13 @@
 		SELECT ROOM_IMG_HASH_CD, ROOM_IMG_ORG_NAME, ROOM_IMG_PATH_NAME, ROOM_NO FROM ROOM_IMAGE_TB WHERE ROOM_NO = #{roomSq} 
 	</select>
 	
+	<!-- 특정 객실의 이미지 한 개 조회 -->
+	<select id="findRoomImageByRoomSqOne" resultType="String">
+		SELECT ROOM_IMG_PATH_NAME
+		FROM ROOM_IMAGE_TB
+		WHERE ROOM_NO = #{roomSq} AND ROWNUM = 1
+	</select>
+	
 	<!-- 객실 이미지 등록 INSERT문 -->
  	<insert id="insertRoomImage">
     	INSERT INTO ROOM_IMAGE_TB 

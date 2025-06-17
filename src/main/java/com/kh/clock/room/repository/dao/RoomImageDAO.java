@@ -31,4 +31,8 @@ public class RoomImageDAO {
     return sqlSession.delete("roomImageMapper.deleteRoomImageByRoomSq", imageFileDTO);
   }
 
+  // 객실 이미지 경로 조회
+  public String findRoomImageByRoomSqOne(int roomSq) {
+    return sqlSession.selectOne("roomImageMapper.findRoomImageByRoomSqOne", roomSq);
+  }
 }
