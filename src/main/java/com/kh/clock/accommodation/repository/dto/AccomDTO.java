@@ -31,4 +31,6 @@ public class AccomDTO {
   
   private int reviewCount;
   private String accomImgPathName;
+  
+  private List<AccomAdminImageDTO> images; 
 }
